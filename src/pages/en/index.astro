@@ -1,0 +1,17 @@
+---
+import { changeLanguage } from "i18next";
+import Container from "@components/container.astro";
+import Hero from "@components/hero.astro";
+import Layout from "@layouts/Layout.astro";
+import Swiper from "../../components/swiper.astro";
+import FeaturesTwo from "../../components/featuresTwo.astro";
+
+changeLanguage("en");
+---
+<Layout title="">
+  <Container>
+    <Hero />
+    <FeaturesTwo />
+    <Swiper />
+  </Container>
+</Layout>

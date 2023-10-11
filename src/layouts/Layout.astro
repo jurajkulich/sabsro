@@ -3,6 +3,8 @@ import { SEO } from "astro-seo";
 import Footer from "@components/footer.astro";
 import Navbar from "@components/navbar/navbar.astro";
 import "@fontsource/inter/variable.css";
+import i18next from "i18next";
+import { HeadHrefLangs } from "astro-i18next/components";
 
 export interface Props {
   title: string;
@@ -18,17 +20,22 @@ const resolvedImageWithDomain = new URL(
 const { title } = Astro.props;
 
 const makeTitle = title
-  ? title + " | " + "Astroship"
-  : "Astroship - Starter Template for Astro with Tailwind CSS";
+  ? title + " | " + "Švehla a Blaško"
+  : "Švehla a Blaško - Kovoobrábanie";
 ---
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang={i18next.language}
+      x-data="{darkMode: localStorage.getItem('darkMode')}"
+      x-init="$watch('darkMode', val => localStorage.setItem('darkMode', val))"
+      x-bind:data-theme='darkMode'>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <HeadHrefLangs />
 
     <!-- <link rel="preload" as="image" href={src} alt="Hero" /> -->
     <SEO
@@ -58,11 +65,24 @@ const makeTitle = title
     <slot />
     <Footer />
     <style is:global>
-      /* Improve Page speed */
-      /* https://css-tricks.com/almanac/properties/c/content-visibility/ */
       img {
         content-visibility: auto;
       }
     </style>
   </body>
 </html>
+
+<script is:inline>
+  if (localStorage.getItem('darkMode') === 'dark') {
+    document.querySelector('html').dataset.theme = 'dark'
+  }
+  if (localStorage.getItem('darkMode') === 'light') {
+    document.querySelector('html').dataset.theme = 'light'
+  }
+  if (!localStorage.getItem('darkMode')) {
+    let theme = window.matchMedia('(prefers-color-scheme: dark)')
+      ? 'dark'
+      : 'light'
+    localStorage.setItem('darkMode', theme)
+  }
+</script>

@@ -1,0 +1,20 @@
+---
+import Layout from "@layouts/Layout.astro";
+import Container from "@components/container.astro";
+import Sectionhead from "@components/sectionhead.astro";
+import Contact from "../../components/contact.astro";
+import { t, changeLanguage } from "i18next";
+
+changeLanguage("en");
+---
+
+<Layout title="Kontakt">
+  <Container>
+    <Sectionhead>
+      <Fragment slot="title">{t("")}</Fragment>
+      <Fragment slot="desc"></Fragment>
+    </Sectionhead>
+
+    <Contact/>
+  </Container>
+</Layout>
