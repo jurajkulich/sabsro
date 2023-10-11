@@ -2,7 +2,7 @@
   "name": "astroship",
   "type": "module",
   "version": "0.0.1",
-  "packageManager": "npm@10.1.0",
+  "packageManager": "pnpm@10.1.0",
   "private": true,
   "scripts": {
     "dev": "astro dev",
