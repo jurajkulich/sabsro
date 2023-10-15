@@ -25,10 +25,10 @@ const makeTitle = title
 ---
 
 <!DOCTYPE html>
-<html lang={i18next.language}
-      x-data="{darkMode: localStorage.getItem('darkMode')}"
-      x-init="$watch('darkMode', val => localStorage.setItem('darkMode', val))"
-      x-bind:data-theme='darkMode'>
+<html lang={i18next.language}>
+      <!--x-data="{darkMode: localStorage.getItem('darkMode')}"-->
+      <!--x-init="$watch('darkMode', val => localStorage.setItem('darkMode', val))"-->
+      <!--x-bind:data-theme='darkMode'>-->
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
