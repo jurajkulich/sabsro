@@ -4,8 +4,7 @@ import Dropdown from "./dropdown.astro";
 import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
 import Toggle from "../toggle.astro";
 import { localizePath } from "astro-i18next";
-import svehlaLogo from "assets/svehla_logo.svg";
-import { Image } from "astro:assets";
+import logo from '../../assets/logo.svg';
 
 const menuitems = [
   {
@@ -26,10 +25,10 @@ const menuitems = [
       <div class="flex w-full lg:w-auto items-center justify-between">
         <a href={localizePath("/")} class="text-lg"
           >
-          <Image
-            src={svehlaLogo}
-            alt="image description"
-            height="100px"
+          <img
+            src={logo.src}
+            alt="Svehla a Blasko logo."
+            width="128"
           />
         </a>
         <div class="block lg:hidden">

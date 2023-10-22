@@ -40,35 +40,14 @@ const makeTitle = title
     <!-- <link rel="preload" as="image" href={src} alt="Hero" /> -->
     <SEO
       title={makeTitle}
-      description="Astroship is a starter website template for Astro built with TailwindCSS."
+      description="Švehla a Blaško s. r. o. -- podnik s hlboko zakorenenou históriou a skúsenosťami od roku 1990."
       canonical={canonicalURL}
-      twitter={{
-        creator: "@surjithctly",
-        site: "@web3templates",
-        card: "summary_large_image",
-      }}
-      openGraph={{
-        basic: {
-          url: canonicalURL,
-          type: "website",
-          title: `Astroship - Starter Template for Astro`,
-          image: resolvedImageWithDomain,
-        },
-        image: {
-          alt: "Astroship Homepage Screenshot",
-        },
-      }}
     />
   </head>
   <body>
     <Navbar />
     <slot />
     <Footer />
-    <style is:global>
-      img {
-        content-visibility: auto;
-      }
-    </style>
   </body>
 </html>
 

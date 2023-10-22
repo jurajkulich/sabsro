@@ -1,10 +1,13 @@
 ---
 import { Image } from "astro:assets";
-import car1 from "assets/carousel/carousel_1.png";
-import car2 from "assets/carousel/carousel_2.png";
+import car1 from "assets/carousel/carousel_1.jpg";
+import car2 from "assets/carousel/carousel_2.jpg";
+import car3 from "assets/carousel/carousel_3.jpg";
+import car4 from "assets/carousel/carousel_4.jpg";
+import car5 from "assets/carousel/carousel_5.jpg";
 ---
 <section class="bg-white dark:bg-gray-900">
-  <div class="container px-6 py-10 mx-auto">
+  <div class="container py-10 mx-auto">
     <div class="md:mt-0">
       <h1 class="text-2xl lg:text-4xl font-bold lg:tracking-tight">Naša práca</h1>
     </div>
@@ -19,7 +22,25 @@ import car2 from "assets/carousel/carousel_2.png";
         </div>
         <div class="swiper-slide">
           <Image src={car2}
-             alt="carousel1"
+             alt="carousel2"
+                   fit="cover"
+                 quality="high"
+          />
+        </div><div class="swiper-slide">
+          <Image src={car3}
+             alt="carousel3"
+                   fit="cover"
+                 quality="high"
+          />
+        </div><div class="swiper-slide">
+          <Image src={car4}
+             alt="carousel4"
+                   fit="cover"
+                 quality="high"
+          />
+        </div><div class="swiper-slide">
+          <Image src={car5}
+             alt="carousel5"
                    fit="cover"
                  quality="high"
           />
