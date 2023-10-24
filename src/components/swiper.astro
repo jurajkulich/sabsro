@@ -1,5 +1,6 @@
 ---
 import { Image } from "astro:assets";
+import car0 from "assets/carousel/carousel_0.jpg";
 import car1 from "assets/carousel/carousel_1.jpg";
 import car2 from "assets/carousel/carousel_2.jpg";
 import car3 from "assets/carousel/carousel_3.jpg";
@@ -16,6 +17,13 @@ import car5 from "assets/carousel/carousel_5.jpg";
         <div class="swiper-slide">
           <Image src={car1}
              alt="carousel1"
+            fit="cover"
+            quality="high"
+          />
+        </div>
+        <div class="swiper-slide">
+          <Image src={car0}
+             alt="carousel0"
             fit="cover"
             quality="high"
           />
