@@ -4,21 +4,28 @@ import { getCollection } from "astro:content";
 import Layout from "@layouts/Layout.astro";
 import Container from "@components/container.astro";
 import Sectionhead from "@components/sectionhead.astro";
-import { Image } from "astro:assets";
 import { t, changeLanguage } from "i18next";
+import { localizePath } from "astro-i18next";
+import { Image } from "astro:assets";
 
 changeLanguage("sk");
 
-// Filter team entries with 'draft: false' & date before current date
-const publishedTeamMembers = await getCollection("team", ({ data }) => {
-    return !data.draft && data.publishDate < new Date();
+const machines = await getCollection("team", ({ id }) => {
+    const loc = localizePath("/").split("/");
+    console.log(localizePath("/"));
+    let a = "sk";
+    if (loc[2] != "") {
+        a = loc[2];
+    }
+    console.log(a);
+    return id.startsWith(a);
 });
 ---
 
 <Layout title="Stroje">
   <Container>
     <Sectionhead>
-      <Fragment slot="title">Stroje</Fragment>
+      <Fragment slot="title">{t("machines.title")}</Fragment>
       <Fragment slot="desc">{t("machines.description")}</Fragment>
     </Sectionhead>
 
@@ -32,7 +39,7 @@ const publishedTeamMembers = await getCollection("team", ({ data }) => {
     </div>
     <div class="grid md:grid-cols-3 gap-10 mx-auto max-w-4xl mt-12">
       {
-        publishedTeamMembers.map((teamMemberEntry) => (
+        machines.map((teamMemberEntry) => (
           <div class="group">
             <div class="w-full rounded-md rounded transition p-5">
               <Image

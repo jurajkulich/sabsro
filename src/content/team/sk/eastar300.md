@@ -7,4 +7,5 @@ avatar: {
     alt: "Eastar CNC-300"
 }
 publishDate: "2022-11-08 15:39"
+type: 'content'
 ---

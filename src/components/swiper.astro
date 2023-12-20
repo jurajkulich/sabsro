@@ -6,21 +6,16 @@ import car2 from "assets/carousel/carousel_2.jpg";
 import car3 from "assets/carousel/carousel_3.jpg";
 import car4 from "assets/carousel/carousel_4.jpg";
 import car5 from "assets/carousel/carousel_5.jpg";
+
+import { t } from "i18next";
 ---
 <section class="bg-white dark:bg-gray-900">
   <div class="container py-10 mx-auto">
     <div class="md:mt-0">
-      <h1 class="text-2xl lg:text-4xl font-bold lg:tracking-tight">Naša práca</h1>
+      <h1 class="text-2xl lg:text-4xl font-bold lg:tracking-tight">{t("home.swiper.title")}</h1>
     </div>
     <div class="swiper my-6 mx-6">
       <div class="swiper-wrapper">
-        <div class="swiper-slide">
-          <Image src={car1}
-             alt="carousel1"
-            fit="cover"
-            quality="high"
-          />
-        </div>
         <div class="swiper-slide">
           <Image src={car0}
              alt="carousel0"
@@ -34,15 +29,22 @@ import car5 from "assets/carousel/carousel_5.jpg";
                    fit="cover"
                  quality="high"
           />
-        </div><div class="swiper-slide">
-          <Image src={car3}
-             alt="carousel3"
-                   fit="cover"
-                 quality="high"
+        </div>
+        <div class="swiper-slide">
+          <Image src={car1}
+             alt="carousel1"
+            fit="cover"
+            quality="high"
           />
         </div><div class="swiper-slide">
           <Image src={car4}
              alt="carousel4"
+                   fit="cover"
+                 quality="high"
+          />
+        </div><div class="swiper-slide">
+          <Image src={car3}
+             alt="carousel3"
                    fit="cover"
                  quality="high"
           />

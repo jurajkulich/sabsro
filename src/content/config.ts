@@ -32,6 +32,7 @@ const teamCollection = defineCollection({
 });
 
 const teamCollectionCopy = defineCollection({
+  type: 'content',
   schema: ({ image }) => z.object({
     draft: z.boolean(),
     name: z.string(),
