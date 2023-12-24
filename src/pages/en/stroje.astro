@@ -11,12 +11,12 @@ import { Image } from "astro:assets";
 changeLanguage("en");
 
 const machines = await getCollection("team", ({ id }) => {
-    const pathParts = localizePath("/").split("/");
-    let loc = "sk";
-    if (pathParts[2] != "") {
-        loc = pathParts[2];
+    const loc = localizePath("/").split("/");
+    let a = "sk";
+    if (loc[2] != "") {
+        a = loc[2];
     }
-    return id.startsWith(loc);
+    return id.startsWith(a);
 });
 ---
 
@@ -27,8 +27,6 @@ const machines = await getCollection("team", ({ id }) => {
       <Fragment slot="desc">{t("machines.description")}</Fragment>
     </Sectionhead>
 
-    <div class="flex flex-col gap-3 mx-auto max-w-4xl mt-16">
-    </div>
     <div class="grid md:grid-cols-3 gap-10 mx-auto max-w-4xl mt-12">
       {
         machines.map((teamMemberEntry) => (

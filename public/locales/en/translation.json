@@ -1,14 +1,11 @@
 {
   "navbar": {
+    "about": "About us",
     "machines": "Machines",
     "contact": "Contact us"
   },
 
   "home": {
-    "subtitle": "The company Švehla and Blaško s. r. o. was founded in 2012 under the name Švehla s.r.o., while its history began as early as 1990. Through gradual development, the company transformed into its current form.",
-    "subtitle2": "We are a Slovak family-owned manufacturing company specializing in CNC machining and classical machining. Currently, we employ approximately 20 workers, and we have also welcomed recent graduates from secondary vocational schools to our team. Our production hall spans approximately 600 square meters, and an additional 600 square meters house our bulk material warehouse, sawmill, and other storage areas.",
-    "subtitle3": "Our primary focus is to offer services in the field of chip machining for various metals and plastics. We are committed to providing our customers with a comprehensive engineering service that includes welding, surface treatments, and other tailored services based on customer requirements.",
-
     "swiper": {
       "title": "Our work"
     }
@@ -55,10 +52,22 @@
     }
   },
   "contact": {
-    "title": "Contact us"
+    "title": "Contact us",
+    "contact": "Contact info",
+    "contact-machinery": "Contact info - Machinery",
+    "contact-address": "We are here"
   },
   "machines": {
     "title": "Machines",
     "description": "Welcome to our state-of-the-art machinery section, where precision and innovation come together to bring your projects to life. At our company, we take great pride in offering a comprehensive range of services, each powered by a cutting-edge fleet of specialized machines."
+  },
+  "about": {
+    "title": "About us",
+    "subtitle": "The company Švehla and Blaško s. r. o. was founded in 2012 under the name Švehla s.r.o., while its history began as early as 1990. Through gradual development, the company transformed into its current form.",
+    "subtitle2": "We are a Slovak family-owned manufacturing company specializing in CNC machining and classical machining. Currently, we employ approximately 20 workers, and we have also welcomed recent graduates from secondary vocational schools to our team. Our production hall spans approximately 600 square meters, and an additional 600 square meters house our bulk material warehouse, sawmill, and other storage areas.",
+    "subtitle3": "Our primary focus is to offer services in the field of chip machining for various metals and plastics. We are committed to providing our customers with a comprehensive engineering service that includes welding, surface treatments, and other tailored services based on customer requirements."
+  },
+  "404": {
+    "description": "Page not found."
   }
 }
