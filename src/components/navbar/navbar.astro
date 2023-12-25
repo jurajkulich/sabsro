@@ -36,7 +36,7 @@ const menuitems = [
             width="128"
           />
         </a>
-        <div class="block lg:hidden">
+        <div class="block lg:hidden flex items-center"> <!-- Add 'flex' and 'items-center' here -->
           <MenuIcon class="text-gray-800" />
         </div>
       </div>
@@ -57,7 +57,7 @@ const menuitems = [
                   <li>
                     <a
                       href={item.path}
-                      class="flex lg:px-3 py-2 text-gray-600 hover:text-gray-900">
+                      class="text-lg flex lg:px-3 py-2 text-gray-600 hover:text-gray-900">
                       {item.title}
                     </a>
                   </li>
