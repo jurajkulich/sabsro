@@ -5,7 +5,7 @@ import sitemap from "@astrojs/sitemap";
 import astroI18next from "astro-i18next";
 
 export default defineConfig({
-  site: 'https://jurajkulich.github.io',
+  site: 'https://jurajkulich.github.io', // todo change
   base: '/sabsro',
   integrations: [
     tailwind(),
