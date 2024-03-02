@@ -8,6 +8,8 @@ import { getLocale } from "astro-i18n-aut";
 
 const locale = getLocale(Astro.url);
 
+const prefix = import.meta.env.BASE_URL;
+
 export function getStaticPaths() {
   return [
     {params: {lang: 'en'}},
@@ -36,15 +38,15 @@ const menuTitles = localizedTitles[locale] || localizedTitles.en;
 const menuitems = [
   {
     title: menuTitles.about,
-    path: `/${locale}/about`,
+    path: `${prefix}/${locale}/about`,
   },
   {
     title: menuTitles.machines,
-    path: `/${locale}/machines`,
+    path: `${prefix}/${locale}/machines`,
   },
   {
     title: menuTitles.contact,
-    path: `/${locale}/contact`,
+    path: `${prefix}/${locale}/contact`,
   },
 ];
 ---
@@ -55,8 +57,8 @@ const menuitems = [
     <Astronav>
       <div class="flex w-full lg:w-auto items-center justify-between">
         <!--todo-->
-        <a href={"/" + locale} class="text-lg"
-          >
+        <a href={prefix + "/" + locale} class="text-lg"
+        >
           <img
             src={logo.src}
             alt="Svehla a Blasko logo."
