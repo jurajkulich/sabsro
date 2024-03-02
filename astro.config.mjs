@@ -13,7 +13,6 @@ const redirectDefaultLocale = true;
 
 export default defineConfig({
   site: 'https://jurajkulich.github.io', // todo change
-  base: '/sabsro',
 
   trailingSlash: "never",
   build: {
