@@ -45,10 +45,54 @@ const teamCollectionCopy = defineCollection({
   }),
 });
 
+const featuresCollection = defineCollection({
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    features: z.array(
+      z.object({
+        title: z.string(),
+        description: z.string(),
+      }),
+    ),
+  }),
+});
+
+const aboutCollection = defineCollection({
+  schema: z.object({
+    title: z.string(),
+    subtitle1: z.string(),
+    subtitle2: z.string(),
+    subtitle3: z.string(),
+  }),
+});
+
+const machinesCollection = defineCollection({
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+  }),
+});
+
+const contactCollection = defineCollection({
+  schema: z.object({
+    title: z.string(),
+    contact: z.string(),
+    contactmachinery: z.string(),
+    contactaddress: z.string(),
+  }),
+});
+
+
+
 // 3. Export a single `collections` object to register your collection(s)
 //    This key should match your collection directory name in "src/content"
 export const collections = {
   'blog': blogCollection,
   // 'team': teamCollection,
   'team': teamCollectionCopy,
+  'about': aboutCollection,
+  'features': featuresCollection,
+  'machines': machinesCollection,
+  'contact': contactCollection,
 };

@@ -1,71 +1,11 @@
 {
-  "navbar": {
-    "about": "O nás",
-    "machines": "Stroje",
-    "contact": "Kontakt"
-  },
+
   "home": {
     "swiper": {
       "title": "Naša práca"
     }
   },
-  "features": {
-    "title": "Naše služby",
-    "description": "S našim tímom skúsených odborníkov sme pripravení poskytnúť komplexný strojársky servis v oblasti trieskového obrábania rôznych kovov a plastov, vrátane zvárania, povrchových úprav a ďalších služieb.",
 
-    "feature1": {
-      "title": "CNC obrábanie",
-      "description": "Obrábacie centrá MAS MCV 1016 Quick, FNG40 CNC"
-    },
-    "feature2": {
-      "title": "CNC sústruženie",
-      "description": "Trens SBL 300, Trens SE 520, SBX 500 CNC"
-    },
-    "feature3": {
-      "title": "Vŕtanie",
-      "description": ""
-    },
-    "feature4": {
-      "title": "Frézovanie",
-      "description": ""
-    },
-    "feature5": {
-      "title": "Rezanie",
-      "description": "Rezanie a delenie všetkých druhov materiálov. Pásové píly Bianco – 2ks, Pegas"
-    },
-    "feature6": {
-      "title": "Obrážanie (drážkovanie)",
-      "description": "Výroba priebežných drážok (do 16mm) do rôznych materiálov – ocele, nerezové ocele, Al zliatiny, Cu zliatiny"
-    },
-    "feature7": {
-      "title": "Sústruženie",
-      "description": ""
-    },
-    "feature8": {
-      "title": "Ostatné služby",
-      "description": "Rôzne povrchové úpravy (zinkovanie, pieskovanie, eloxovanie, kalenie, nitridáciu, oxinitridáciu a iné podľa potreby)"
-    },
-    "feature9": {
-      "title": "Doprava tovaru",
-      "description": "Valník Peugeot Boxer – dĺžka ložnej plochy 3300mm"
-    }
-  },
-  "contact": {
-    "title": "Kontaktujte nás",
-    "contact": "Kontakt",
-    "contact-machinery": "Kontakt - výroba",
-    "contact-address": "Sídlo a prevádzka"
-  },
-  "machines": {
-    "title": "Stroje",
-    "description": "Vitajte v našej sekcii s najmodernejšími strojmi, kde sa precíznosť a inovácia spájajú, aby priviedli vaše projekty k životu. V našej spoločnosti sme hrdí na to, že ponúkame komplexnú škálu služieb, z ktorých každá je poháňaná špičkovou flotilou špecializovaných strojov."
-  },
-  "about": {
-    "title": "O nás",
-    "subtitle": "Firma Švehla  a Blaško s. r. o. bola založená v roku 2012 pod názvom Švehla s.r.o., pričom jej história sa začala písať už v roku 1990. Postupným vývojom sa firma pretransformovala na terajšiu formu.",
-    "subtitle2": "Sme  slovenská-rodinná  výrobná firma zaoberajúca sa CNC obrábaním a klasickým obrábaním. V súčasnosti zamestnávame približne 20 pracovníkov, pričom uplatnenie u nás našli aj čerství absolventi stredných odborných škôl.  Výrobná hala má  približne  600 metrov štvorcových a ďalších približne 600 metrov štvorcových sú sklad hutného materiálu, reziareň a iné skladové priestory.",
-    "subtitle3": "Našou snahou je poskytovať služby v oblasti trieskového obrábania rôznych kovov a plastov. Pre našich zákazníkov zabezpečujeme komplexný strojársky servis (zváranie, povrchové úpravy a iné služby podľa požiadaviek zákazníka)."
-  },
   "404": {
     "description": "Stránka nebola nájdená."
   }

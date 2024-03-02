@@ -1,72 +1,11 @@
 {
-  "navbar": {
-    "about": "About us",
-    "machines": "Machines",
-    "contact": "Contact us"
-  },
 
   "home": {
     "swiper": {
       "title": "Our work"
     }
   },
-  "features": {
-    "title": "Our Services",
-    "description": "With our team of experienced professionals, we are ready to provide comprehensive mechanical services in the field of chip machining for various metals and plastics, including welding, surface treatments, and other services.",
 
-    "feature1": {
-      "title": "CNC Machining",
-      "description": "Machining centers MAS MCV 1016 Quick, FNG40 CNC"
-    },
-    "feature2": {
-      "title": "CNC Turning",
-      "description": "Trens SBL 300, Trens SE 520, SBX 500 CNC"
-    },
-    "feature3": {
-      "title": "Drilling",
-      "description": ""
-    },
-    "feature4": {
-      "title": "Milling",
-      "description": ""
-    },
-    "feature5": {
-      "title": "Cutting",
-      "description": "Cutting and dividing all types of materials. Band saws Bianco – 2 units, Pegas"
-    },
-    "feature6": {
-      "title": "Turning (grooving)",
-      "description": "Production of continuous grooves (up to 16mm) in various materials – steel, stainless steel, Al alloy, Cu alloy"
-    },
-    "feature7": {
-      "title": "Turning",
-      "description": ""
-    },
-    "feature8": {
-      "title": "Other Services",
-      "description": "Various surface treatments (galvanizing, sandblasting, anodizing, hardening, nitriding, oxynitriding, and others as needed)"
-    },
-    "feature9": {
-      "title": "Goods Transportation",
-      "description": "Peugeot Boxer truck – loading platform length 3300mm"
-    }
-  },
-  "contact": {
-    "title": "Contact us",
-    "contact": "Contact info",
-    "contact-machinery": "Contact info - Machinery",
-    "contact-address": "We are here"
-  },
-  "machines": {
-    "title": "Machines",
-    "description": "Welcome to our state-of-the-art machinery section, where precision and innovation come together to bring your projects to life. At our company, we take great pride in offering a comprehensive range of services, each powered by a cutting-edge fleet of specialized machines."
-  },
-  "about": {
-    "title": "About us",
-    "subtitle": "The company Švehla and Blaško s. r. o. was founded in 2012 under the name Švehla s.r.o., while its history began as early as 1990. Through gradual development, the company transformed into its current form.",
-    "subtitle2": "We are a Slovak family-owned manufacturing company specializing in CNC machining and classical machining. Currently, we employ approximately 20 workers, and we have also welcomed recent graduates from secondary vocational schools to our team. Our production hall spans approximately 600 square meters, and an additional 600 square meters house our bulk material warehouse, sawmill, and other storage areas.",
-    "subtitle3": "Our primary focus is to offer services in the field of chip machining for various metals and plastics. We are committed to providing our customers with a comprehensive engineering service that includes welding, surface treatments, and other tailored services based on customer requirements."
-  },
   "404": {
     "description": "Page not found."
   }

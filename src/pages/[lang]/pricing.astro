@@ -1,11 +1,17 @@
 ---
-import { changeLanguage } from "i18next";
 import Layout from "@layouts/Layout.astro";
 import Container from "@components/container.astro";
 import Sectionhead from "@components/sectionhead.astro";
 import Pricing from "@components/pricing.astro";
 
-changeLanguage("sk");
+export function getStaticPaths() {
+  return [
+    {params: {lang: 'en'}},
+    {params: {lang: 'sk'}},
+  ];
+}
+
+const { lang } = Astro.params;
 
 const pricing = [
     {
