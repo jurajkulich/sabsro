@@ -1,30 +1,33 @@
 ---
-import { changeLanguage } from "i18next";
 import { getCollection } from "astro:content";
 import Layout from "@layouts/Layout.astro";
 import Container from "@components/container.astro";
 import Sectionhead from "@components/sectionhead.astro";
-import { t, changeLanguage } from "i18next";
-import { localizePath } from "astro-i18next";
 import { Image } from "astro:assets";
+import { getLocale } from "astro-i18n-aut";
 
-changeLanguage("en");
+
+export function getStaticPaths() {
+  return [
+    {params: {lang: 'en'}},
+    {params: {lang: 'sk'}},
+  ];
+}
+
+const { lang } = Astro.params;
+
+const locale = getLocale(Astro.url);
 
 const machines = await getCollection("team", ({ id }) => {
-    const loc = localizePath("/").split("/");
-    let a = "sk";
-    if (loc[2] != "") {
-        a = loc[2];
-    }
-    return id.startsWith(a);
+    return id.startsWith(locale);
 });
 ---
 
 <Layout title="Stroje">
   <Container>
     <Sectionhead>
-      <Fragment slot="title">{t("machines.title")}</Fragment>
-      <Fragment slot="desc">{t("machines.description")}</Fragment>
+      <Fragment slot="title">{("machines.title")}</Fragment>
+      <Fragment slot="desc">{("machines.description")}</Fragment>
     </Sectionhead>
 
     <div class="grid md:grid-cols-3 gap-10 mx-auto max-w-4xl mt-12">

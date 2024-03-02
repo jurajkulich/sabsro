@@ -1,7 +1,15 @@
 ---
 import { Image } from "astro:assets";
 import heroImage from "assets/cavo.svg";
-import { t, changeLanguage } from "i18next";
+import { getCollection } from "astro:content";
+import { getCollection, getEntry } from 'astro:content';
+import { getLocale } from "astro-i18n-aut";
+
+
+const locale = getLocale(Astro.url);
+
+const blog = await getEntry('about', locale+"/about");
+console.log(blog)
 ---
 
 <!-- Container for demo purpose -->
@@ -20,17 +28,7 @@ import { t, changeLanguage } from "i18next";
         <!--    format="avif"-->
         <!--  />-->
         <!--</div>-->
-        <!--<div class="container">-->
-          <p class="text-lg mt-4 text-slate-600">
-            {t("about.subtitle")}
-          </p>
-          <p class="text-lg mt-4 text-slate-600">
-            {t("about.subtitle2")}
-          </p>
-          <p class="text-lg mt-4 text-slate-600">
-            {t("about.subtitle3")}
-          </p>
-        <!--</div>-->
+
       <!--</div>-->
     <!--</div>-->
   <!--</section>-->

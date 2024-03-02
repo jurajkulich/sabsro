@@ -3,22 +3,50 @@ import Container from "@components/container.astro";
 import Dropdown from "./dropdown.astro";
 import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
 import Toggle from "../toggle.astro";
-import { localizePath } from "astro-i18next";
 import logo from '../../assets/logo.svg';
-import { t } from "i18next";
+import { getLocale } from "astro-i18n-aut";
+
+const locale = getLocale(Astro.url);
+
+const prefix = import.meta.env.BASE_URL;
+
+export function getStaticPaths() {
+  return [
+    {params: {lang: 'en'}},
+    {params: {lang: 'sk'}},
+  ];
+}
+
+const { lang } = Astro.params;
+
+const localizedTitles = {
+  en: {
+    about: "About",
+    machines: "Machines",
+    contact: "Contact",
+  },
+  sk: {
+    about: "O nás",
+    machines: "Naše stroje",
+    contact: "Kontakt",
+  },
+};
+
+// todo
+const menuTitles = localizedTitles[locale] || localizedTitles.en;
 
 const menuitems = [
   {
-    title: t("navbar.about"),
-    path: localizePath("/o-nas"),
+    title: menuTitles.about,
+    path: `${prefix}/${locale}/about`,
   },
   {
-    title: t("navbar.machines"),
-    path: localizePath("/stroje"),
+    title: menuTitles.machines,
+    path: `${prefix}/${locale}/machines`,
   },
   {
-    title: t("navbar.contact"),
-    path: localizePath("/kontakt"),
+    title: menuTitles.contact,
+    path: `${prefix}/${locale}/contact`,
   },
 ];
 ---
@@ -28,7 +56,8 @@ const menuitems = [
   <header class="flex flex-col lg:flex-row justify-between items-center my-5">
     <Astronav>
       <div class="flex w-full lg:w-auto items-center justify-between">
-        <a href={localizePath("/")} class="text-lg"
+        <!--todo-->
+        <a href={prefix + "/" + locale} class="text-lg"
           >
           <img
             src={logo.src}

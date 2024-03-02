@@ -1,14 +1,30 @@
 ---
-import { LanguageSelector } from "astro-i18next/components";
-import { languages } from "../i18n/ui";
+import { languages } from '../i18n/ui';
+import { getLocale } from "astro-i18n-aut";
+import "/node_modules/flag-icons/css/flag-icons.min.css";
+
+const prefix = import.meta.env.BASE_URL;
+const locale = getLocale(Astro.url);
+const path = Astro.url.pathname.split('/');
+
+let currentPage = path[path.length - 1];
+if (currentPage == 'en' || currentPage == '') {
+  currentPage = ''
+} else {
+  currentPage = '/' + currentPage
+}
+
+const otherLocale = locale === 'en' ? 'sk' : 'en';
+const localeFlags = {
+  en: 'us',
+  sk: 'sk'
+}
 ---
 
-<!-- LanguageSelector with custom language naming -->
-<LanguageSelector
-  showFlag={true}
-  languageMapping={{
-    en: languages.en,
-    sk: languages.sk,
-  }}
-  class="my-select-class"
-/>
+<span class={`fi fi-${localeFlags[otherLocale]}`}></span>
+<a href={`${prefix}/${otherLocale}${currentPage}`}>
+  {languages[otherLocale]}
+  <!--<span class={`fi fi-${localeFlags[locale]}`}></span>-->
+</a>
+
+<!--astro preferences disable devToolbar-->

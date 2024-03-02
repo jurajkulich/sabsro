@@ -1,0 +1,127 @@
+---
+import Layout from "@layouts/Layout.astro";
+import Container from "@components/container.astro";
+import Sectionhead from "@components/sectionhead.astro";
+import { getCollection, getEntry } from 'astro:content';
+import { getLocale } from "astro-i18n-aut";
+
+export function getStaticPaths() {
+  return [
+    {params: {lang: 'en'}},
+    {params: {lang: 'sk'}},
+  ];
+}
+
+const { lang } = Astro.params;
+
+const locale = getLocale(Astro.url);
+const contact = await getEntry('contact', locale+"/contact");
+
+console.log(contact);
+---
+
+<Layout title="Kontakt">
+  <Container>
+    <Sectionhead>
+      <Fragment slot="title">{contact.data.title}</Fragment>
+      <Fragment slot="desc"></Fragment>
+    </Sectionhead>
+
+    <div class="container mx-auto">
+      <!-- Section: Design Block -->
+      <section class="mb-2">
+        <div class="">
+          <div class="flex flex-wrap items-center">
+            <div class="w-full shrink-0 grow-0 basis-auto lg:w-6/12 xl:w-8/12">
+              <div class="flex flex-wrap px-3 pt-12 pb-12 md:pb-0 lg:pt-0">
+                <div class="mb-12 w-full shrink-0 grow-0 basis-auto px-3 md:w-6/12 md:px-6 lg:w-full xl:w-6/12 xl:px-12">
+                  <div class="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M798-120q-125 0-247-54.5T329-329Q229-429 174.5-551T120-798q0-18 12-30t30-12h162q14 0 25 9.5t13 22.5l26 140q2 16-1 27t-11 19l-97 98q20 37 47.5 71.5T387-386q31 31 65 57.5t72 48.5l94-94q9-9 23.5-13.5T670-390l138 28q14 4 23 14.5t9 23.5v162q0 18-12 30t-30 12ZM241-600l66-66-17-94h-89q5 41 14 81t26 79Zm358 358q39 17 79.5 27t81.5 13v-88l-94-19-67 67ZM241-600Zm358 358Z"/></svg>
+                    <div class="ml-6 grow">
+                      <p class="mb-1 font-bold dark:text-white">
+                        {contact.data.contact}
+                      </p>
+                      <p class="mb-2 text-neutral-500 dark:text-neutral-200">
+                        <a href = "mailto:info@svehlasro.sk">info@svehlasro.sk</a>
+                      </p>
+                      <p class="text-neutral-500 dark:text-neutral-200 font-bold">
+                        Ing. Boris Blaško<span style="font-weight:normal"> (konateľ)</span>
+                      </p>
+                      <p class="mb-4 text-neutral-500 dark:text-neutral-200">
+                        <a href="tel:+421918601675">+421 918 601 675</a>
+                      </p>
+                      <p class="text-neutral-500 dark:text-neutral-200 font-bold">
+                        Ján Švehla<span style="font-weight:normal"> (konateľ)</span>
+                      </p>
+                      <p class="text-neutral-500 dark:text-neutral-200">
+                        <a href="tel:+421907794370">+421 907 794 370</a>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-12 w-full shrink-0 grow-0 basis-auto px-3 md:w-6/12 md:px-6 lg:w-full xl:w-6/12 xl:px-12">
+                  <div class="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M798-120q-125 0-247-54.5T329-329Q229-429 174.5-551T120-798q0-18 12-30t30-12h162q14 0 25 9.5t13 22.5l26 140q2 16-1 27t-11 19l-97 98q20 37 47.5 71.5T387-386q31 31 65 57.5t72 48.5l94-94q9-9 23.5-13.5T670-390l138 28q14 4 23 14.5t9 23.5v162q0 18-12 30t-30 12ZM241-600l66-66-17-94h-89q5 41 14 81t26 79Zm358 358q39 17 79.5 27t81.5 13v-88l-94-19-67 67ZM241-600Zm358 358Z"/></svg>
+                    <div class="ml-6 grow">
+                      <p class="mb-2 font-bold dark:text-white">
+                        {contact.data.contactmachinery}
+                      </p>
+                      <p class="mb-2 text-neutral-500 dark:text-neutral-200">
+                        <a href = "mailto:vyroba@svehlasro.sk">vyroba@svehlasro.sk</a>
+                      </p>
+                      <p class="text-neutral-500 dark:text-neutral-200 font-bold">
+                        Ing. Juraj Nemček
+                      </p>
+                      <p class="mb-4 text-neutral-500 dark:text-neutral-200">
+                        <a href="tel:+421905691366">+421 905 691 366</a>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="mb-12 w-full shrink-0 grow-0 basis-auto px-3 md:w-6/12 md:px-6 lg:w-full xl:mb-0 xl:w-6/12 xl:px-12">
+                  <div class="align-start flex">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M120-120v-560h160v-160h400v320h160v400H520v-160h-80v160H120Zm80-80h80v-80h-80v80Zm0-160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm160 160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm160 320h80v-80h-80v80Zm0-160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm160 480h80v-80h-80v80Zm0-160h80v-80h-80v80Z"/></svg>
+                    <!--
+                    <div class="shrink-0">
+                      <div class="inline-block rounded-md bg-primary-100 p-4 text-primary dark:bg-neutral-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                             stroke="currentColor" class="h-6 w-6">
+                          <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z" />
+                        </svg>
+                      </div>
+                    </div>
+                    -->
+                    <div class="ml-6 grow">
+                      <p class="mb-2 font-bold dark:text-white">{contact.data.contactaddress}</p>
+                      <p class="mb-4 text-neutral-500 dark:text-neutral-200">
+                        Švehla a Blaško s.r.o.<br>
+                        Kočovská 2583/22<br>
+                        915 01 Nové Mesto nad Váhom
+                      </p>
+                      <p class="text-neutral-500 dark:text-neutral-200 font-bold">
+                        IČO:<span style="font-weight:normal"> 47419181</span>
+                      </p>
+                      <p class="text-neutral-500 dark:text-neutral-200 font-bold">
+                        DIČ:<span style="font-weight:normal"> SK2023864601</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="block w-full shrink-0 grow-0 basis-auto lg:flex lg:w-6/12 xl:w-4/12">
+              <div class="h-[500px] w-full">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2630.8721528963933!2d17.842833576841596!3d48.74613890859892!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4714a82d6f578e57%3A0x7dd63b0688b42144!2s%C5%A0vehla%20a%20Bla%C5%A1ko%20s.%20r.%20o.!5e0!3m2!1ssk!2ssk!4v1703425557175!5m2!1ssk!2ssk"
+                        class="left-0 top-0 h-full w-full rounded-t-lg lg:rounded-tr-none lg:rounded-bl-lg" frameborder="0">
+                </iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Section: Design Block -->
+    </div>
+  </Container>
+</Layout>

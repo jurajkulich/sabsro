@@ -1,66 +1,28 @@
 ---
-import { t } from "i18next";
-// @ts-ignore
-const features = [
-  {
-    title: t("features.feature1.title"),
-    description: t("features.feature1.description"),
-    icon: "bx:bxs-briefcase",
-  },
-  {
-    title: t("features.feature2.title"),
-    description: t("features.feature2.description"),
-    icon: "bx:bxs-window-alt",
-  },
-  {
-    title: t("features.feature3.title"),
-    description: t("features.feature3.description"),
-    icon: "bx:bxs-data",
-  },
-  {
-    title: t("features.feature4.title"),
-    description: t("features.feature4.description"),
-    icon: "bx:bxs-bot",
-  },
-  {
-    title: t("features.feature5.title"),
-    description: t("features.feature5.description"),
-    icon: "bx:bxs-file-find",
-  },
-  {
-    title: t("features.feature6.title"),
-    description: t("features.feature6.description"),
-    icon: "bx:bxs-user",
-  },
-  {
-    title: t("features.feature7.title"),
-    description: t("features.feature7.description"),
-    icon: "bx:bxs-user",
-  },
-  {
-    title: t("features.feature8.title"),
-    description: t("features.feature8.description"),
-    icon: "bx:bxs-user",
-  },
-  {
-    title: t("features.feature9.title"),
-    description: t("features.feature9.description"),
-    icon: "bx:bxs-user",
-  },
-];
+import { getCollection, getEntry } from 'astro:content';
+import { getLocale } from "astro-i18n-aut";
+
+const locale = getLocale(Astro.url);
+const features = await getEntry('features', locale+"/features");
+
+// const features = await getCollection("features", ({ id }) => {
+//   return id.startsWith(locale);
+// });
+
+console.log(features);
 ---
 
 <section class="bg-white dark:bg-gray-900 pb-4 md:pb-12">
   <div class="container py-10 mx-auto">
-    <h1 class="text-2xl lg:text-4xl font-bold lg:tracking-tight">{t("features.title")}</h1>
+    <h1 class="text-2xl lg:text-4xl font-bold lg:tracking-tight">{features.data.title}</h1>
 
     <p class="text-lg mt-4 text-slate-600">
-      {t("features.description")}
+      {features.data.description}
     </p>
 
     <div class="grid grid-cols-1 gap-6 mt-8 xl:mt-12 xl:gap-16 md:grid-cols-2 xl:grid-cols-3">
       {
-        features.map((item) => (
+        features.data.features.map((item) => (
           <div class="space-y-0">
             <h2 class="text-lg font-semibold text-gray-800 dark:text-white">{item.title}</h2>
             <p class="text-slate-500 mt-0 leading-relaxed dark:text-gray-300">
