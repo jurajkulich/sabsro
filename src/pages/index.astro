@@ -17,6 +17,8 @@ export function getStaticPaths() {
 }
 const { lang } = Astro.params;
 
+export const prerender = true;
+
 ---
 <Layout title="">
   <Hero />

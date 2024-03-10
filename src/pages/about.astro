@@ -21,6 +21,8 @@ import { getLocale } from "astro-i18n-aut";
 const locale = getLocale(Astro.url);
 
 const about = await getEntry('about', locale+"/about");
+
+export const prerender = true;
 ---
 
 <Layout title="O nás">

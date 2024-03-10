@@ -9,6 +9,7 @@ import { getLocale } from "astro-i18n-aut";
 
 const locale = getLocale(Astro.url);
 
+export const prerender = true;
 export function getStaticPaths() {
   return [
     {params: {lang: 'en'}},

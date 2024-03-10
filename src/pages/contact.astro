@@ -17,7 +17,7 @@ const { lang } = Astro.params;
 const locale = getLocale(Astro.url);
 const contact = await getEntry('contact', locale+"/contact");
 
-console.log(contact);
+export const prerender = true;
 ---
 
 <Layout title="Kontakt">
