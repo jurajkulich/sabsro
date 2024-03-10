@@ -39,4 +39,6 @@ export default defineConfig({
       filter: filterSitemapByDefaultLocale({ defaultLocale }),
     }),
   ],
+
+  output: 'static'
 });
