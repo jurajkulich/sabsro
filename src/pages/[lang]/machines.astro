@@ -1,5 +1,5 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, getEntry } from "astro:content";
 import Layout from "@layouts/Layout.astro";
 import Container from "@components/container.astro";
 import Sectionhead from "@components/sectionhead.astro";
@@ -23,13 +23,14 @@ const locale = getLocale(Astro.url);
 const machines = await getCollection("team", ({ id }) => {
     return id.startsWith(locale);
 });
+const machs = await getEntry('machines', locale+"/machines");
 ---
 
 <Layout title="Stroje">
   <Container>
     <Sectionhead>
-      <Fragment slot="title">{("machines.title")}</Fragment>
-      <Fragment slot="desc">{("machines.description")}</Fragment>
+      <Fragment slot="title">{machs.data.title}</Fragment>
+      <Fragment slot="desc">{machs.data.description}</Fragment>
     </Sectionhead>
 
     <div class="grid md:grid-cols-3 gap-10 mx-auto max-w-4xl mt-12">
