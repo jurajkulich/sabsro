@@ -10,7 +10,7 @@ const locales = {
   sk: "sk-SK",
   en: "en-US",
 };
-const redirectDefaultLocale = true;
+const redirectDefaultLocale = false;
 
 export default defineConfig({
   site: 'https://jurajkulich.github.io', // todo change
