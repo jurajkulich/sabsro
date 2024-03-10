@@ -8,7 +8,7 @@ const locale = getLocale(Astro.url);
 const path = Astro.url.pathname.split('/');
 
 let currentPage = path[path.length - 1];
-if (currentPage == 'en' || currentPage == '') {
+if (currentPage == 'en' || currentPage == '' || currentPage == 'sk') {
   currentPage = ''
 } else {
   currentPage = '/' + currentPage
