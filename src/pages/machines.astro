@@ -1,0 +1,65 @@
+---
+import { getCollection,getEntry } from "astro:content";
+import Layout from "@layouts/Layout.astro";
+import Container from "@components/container.astro";
+import Sectionhead from "@components/sectionhead.astro";
+import { Image } from "astro:assets";
+import { getLocale } from "astro-i18n-aut";
+
+
+export function getStaticPaths() {
+  return [
+    {params: {lang: 'en'}},
+    {params: {lang: 'sk'}},
+  ];
+}
+
+export const prerender = true;
+
+const { lang } = Astro.params;
+
+const locale = getLocale(Astro.url);
+
+const machines = await getCollection("team", ({ id }) => {
+    return id.startsWith(locale);
+});
+
+const machs = await getEntry('machines', locale+"/machines");
+---
+
+<Layout title="Stroje">
+  <Container>
+    <Sectionhead>
+      <Fragment slot="title">{machs.data.title}</Fragment>
+      <Fragment slot="desc">{machs.data.description}</Fragment>
+    </Sectionhead>
+
+    <div class="grid md:grid-cols-3 gap-10 mx-auto max-w-4xl mt-12">
+      {
+        machines.map((machineEntry) => (
+          <div class="group">
+            <div class="w-full rounded-md rounded transition p-5">
+              <Image
+                src={machineEntry.data.avatar.src}
+                alt={machineEntry.data.avatar.alt}
+                background="#ffffff"
+                fit="contain"
+                position="center"
+              />
+              <!--sizes="(max-width: 800px) 100vw, 400px"-->
+              <!--widths={[200, 400]}-->
+              <div class="mt-5 text-center">
+                <h2 class="text-lg text-gray-800">
+                  {machineEntry.data.name}
+                </h2>
+                <h3 class="text-sm text-slate-500">
+                  {machineEntry.data.title}
+                </h3>
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </Container>
+</Layout>
