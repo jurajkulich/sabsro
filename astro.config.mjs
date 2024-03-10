@@ -39,9 +39,4 @@ export default defineConfig({
       filter: filterSitemapByDefaultLocale({ defaultLocale }),
     }),
   ],
-
-  output: 'server',
-  adapter: node({
-    mode: 'standalone',
-  }),
 });
