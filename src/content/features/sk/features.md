@@ -1,4 +1,5 @@
 ---
+layouttitle: "Služby"
 title: "Naše služby"
 description: "S našim tímom skúsených odborníkov sme pripravení poskytnúť komplexný strojársky servis v oblasti trieskového obrábania rôznych kovov a plastov, vrátane zvárania, povrchových úprav a ďalších služieb."
 

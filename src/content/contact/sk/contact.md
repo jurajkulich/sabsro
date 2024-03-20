@@ -1,4 +1,5 @@
 ---
+layouttitle: "Kontakt"
 title: "Kontaktujte nás"
 contact: "Kontakt"
 contactmachinery: "Kontakt - výroba"

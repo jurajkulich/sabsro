@@ -1,4 +1,5 @@
 ---
+layouttitle: "Services"
 title: "Our Services"
 description: "With our team of experienced professionals, we are ready to provide comprehensive mechanical services in the field of chip machining for various metals and plastics, including welding, surface treatments, and other services."
 

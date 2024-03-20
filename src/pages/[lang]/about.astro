@@ -25,7 +25,7 @@ const about = await getEntry('about', locale+"/about");
 export const prerender = true;
 ---
 
-<Layout title="O nás">
+<Layout title={about.data.layouttitle}}>
   <Container>
     <Sectionhead>
       <Fragment slot="title">{about.data.title}</Fragment>

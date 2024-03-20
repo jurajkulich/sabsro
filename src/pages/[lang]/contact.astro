@@ -20,7 +20,7 @@ const contact = await getEntry('contact', locale+"/contact");
 export const prerender = true;
 ---
 
-<Layout title="Kontakt">
+<Layout title={contact.data.layouttitle}>
   <Container>
     <Sectionhead>
       <Fragment slot="title">{contact.data.title}</Fragment>

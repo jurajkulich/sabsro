@@ -60,6 +60,7 @@ const featuresCollection = defineCollection({
 
 const aboutCollection = defineCollection({
   schema: z.object({
+    layouttitle: z.string(),
     title: z.string(),
     subtitle1: z.string(),
     subtitle2: z.string(),
@@ -69,6 +70,7 @@ const aboutCollection = defineCollection({
 
 const machinesCollection = defineCollection({
   schema: z.object({
+    layouttitle: z.string(),
     title: z.string(),
     description: z.string(),
   }),
@@ -76,6 +78,7 @@ const machinesCollection = defineCollection({
 
 const contactCollection = defineCollection({
   schema: z.object({
+    layouttitle: z.string(),
     title: z.string(),
     contact: z.string(),
     contactmachinery: z.string(),
