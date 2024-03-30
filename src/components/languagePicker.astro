@@ -8,17 +8,22 @@ const locale = getLocale(Astro.url)
 const path = Astro.url.pathname.split('/')
 
 let currentPage = path[path.length - 1]
+
 if (currentPage == 'en' || currentPage == '' || currentPage == 'sk') {
   currentPage = ''
 } else {
   currentPage = '/' + currentPage
 }
+// todo astro preferences disable devToolbar
+console.log(currentPage)
 
 const otherLocale = locale === 'en' ? 'sk' : 'en'
 const localeFlags = {
   en: 'us',
   sk: 'sk',
 }
+
+console.log("/" + otherLocale + currentPage)
 ---
 
 <span class={`fi fi-${localeFlags[otherLocale]}`}></span>
