@@ -8,6 +8,7 @@ const locale = getLocale(Astro.url)
 const path = Astro.url.pathname.split('/')
 
 let currentPage = path[path.length - 1]
+currentPage = currentPage.split(".")[0]
 
 if (currentPage == 'en' || currentPage == '' || currentPage == 'sk') {
   currentPage = ''
@@ -27,7 +28,7 @@ console.log("/" + otherLocale)
 ---
 
 <span class={`fi fi-${localeFlags[otherLocale]}`}></span>
-<a href={`${prefix}/${otherLocale}`}>
+<a href={`${prefix}/${otherLocale}${currentPage}`}>
   {languages[otherLocale]}
   <!--<span class={`fi fi-${localeFlags[locale]}`}></span>-->
 </a>
