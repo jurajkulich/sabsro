@@ -16,15 +16,12 @@ if (currentPage == 'en' || currentPage == '' || currentPage == 'sk') {
   currentPage = '/' + currentPage
 }
 // todo astro preferences disable devToolbar
-console.log(currentPage)
 
 const otherLocale = locale === 'en' ? 'sk' : 'en'
 const localeFlags = {
   en: 'us',
   sk: 'sk',
 }
-
-console.log("/" + otherLocale)
 ---
 
 <span class={`fi fi-${localeFlags[otherLocale]}`}></span>
