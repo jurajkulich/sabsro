@@ -1,26 +1,23 @@
 ---
-import { getCollection } from "astro:content";
-import Container from "@components/container.astro";
-import Hero from "@components/hero.astro";
-import Layout from "@layouts/Layout.astro";
-import Swiper from "../components/swiper.astro";
-import FeaturesTwo from "../components/featuresTwo.astro";
-import { getLocale } from "astro-i18n-aut";
-import Layout_Index from "../layouts/Layout_Index.astro";
+import { getCollection } from 'astro:content'
+import Container from '@components/container.astro'
+import Hero from '@components/hero.astro'
+import Layout from '@layouts/Layout.astro'
+import Swiper from '../components/swiper.astro'
+import FeaturesTwo from '../components/featuresTwo.astro'
+import { getLocale } from 'astro-i18n-aut'
+import Layout_Index from '../layouts/Layout_Index.astro'
 
-const locale = getLocale(Astro.url);
+const locale = getLocale(Astro.url)
 
 export function getStaticPaths() {
-  return [
-    {params: {lang: 'en'}},
-    {params: {lang: 'sk'}},
-  ];
+  return [{ params: { lang: 'en' } }, { params: { lang: 'sk' } }]
 }
-const { lang } = Astro.params;
+const { lang } = Astro.params
 
-export const prerender = true;
-
+export const prerender = true
 ---
+
 <Layout_Index title="">
   <Hero />
   <Container>
@@ -28,6 +25,3 @@ export const prerender = true;
   </Container>
   <Swiper />
 </Layout_Index>
-
-
-

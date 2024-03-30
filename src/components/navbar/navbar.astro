@@ -1,39 +1,36 @@
 ---
-import Container from "@components/container.astro";
-import Dropdown from "./dropdown.astro";
-import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
-import Toggle from "../toggle.astro";
-import logo from '../../assets/logo.svg';
-import { getLocale } from "astro-i18n-aut";
+import Container from '@components/container.astro'
+import Dropdown from './dropdown.astro'
+import { Astronav, MenuItems, MenuIcon } from 'astro-navbar'
+import Toggle from '../toggle.astro'
+import logo from '../../assets/logo.svg'
+import { getLocale } from 'astro-i18n-aut'
 
-const locale = getLocale(Astro.url);
+const locale = getLocale(Astro.url)
 
-const prefix = import.meta.env.BASE_URL;
+const prefix = import.meta.env.BASE_URL
 
 export function getStaticPaths() {
-  return [
-    {params: {lang: 'en'}},
-    {params: {lang: 'sk'}},
-  ];
+  return [{ params: { lang: 'en' } }, { params: { lang: 'sk' } }]
 }
 
-const { lang } = Astro.params;
+const { lang } = Astro.params
 
 const localizedTitles = {
   en: {
-    about: "About",
-    machines: "Machines",
-    contact: "Contact",
+    about: 'About',
+    machines: 'Machines',
+    contact: 'Contact',
   },
   sk: {
-    about: "O nás",
-    machines: "Naše stroje",
-    contact: "Kontakt",
+    about: 'O nás',
+    machines: 'Naše stroje',
+    contact: 'Kontakt',
   },
-};
+}
 
 // todo
-const menuTitles = localizedTitles[locale] || localizedTitles.en;
+const menuTitles = localizedTitles[locale] || localizedTitles.en
 
 const menuitems = [
   {
@@ -48,24 +45,19 @@ const menuitems = [
     title: menuTitles.contact,
     path: `${prefix}/${locale}/contact`,
   },
-];
+]
 ---
-
 
 <Container>
   <header class="flex flex-col lg:flex-row justify-between items-center my-5">
     <Astronav>
       <div class="flex w-full lg:w-auto items-center justify-between">
         <!--todo-->
-        <a href={prefix + "/" + locale} class="text-lg"
-        >
-          <img
-            src={logo.src}
-            alt="Svehla a Blasko logo."
-            width="128"
-          />
+        <a href={prefix + '/' + locale} class="text-lg">
+          <img src={logo.src} alt="Svehla a Blasko logo." width="128" />
         </a>
-        <div class="block lg:hidden flex items-center"> <!-- Add 'flex' and 'items-center' here -->
+        <div class="block lg:hidden flex items-center">
+          <!-- Add 'flex' and 'items-center' here -->
           <MenuIcon class="text-gray-800" />
         </div>
       </div>

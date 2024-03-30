@@ -1,181 +1,166 @@
 ---
-import { Image } from "astro:assets";
-import car0 from "assets/carousel/carousel_0.jpg";
-import car1 from "assets/carousel/carousel_1.jpg";
-import car2 from "assets/carousel/carousel_2.jpg";
-import car3 from "assets/carousel/carousel_3.jpg";
-import car4 from "assets/carousel/carousel_4.jpg";
-import car5 from "assets/carousel/carousel_5.jpg";
+import { Image } from 'astro:assets'
+import car0 from 'assets/carousel/carousel_0.jpg'
+import car1 from 'assets/carousel/carousel_1.jpg'
+import car2 from 'assets/carousel/carousel_2.jpg'
+import car3 from 'assets/carousel/carousel_3.jpg'
+import car4 from 'assets/carousel/carousel_4.jpg'
+import car5 from 'assets/carousel/carousel_5.jpg'
 
 ---
-<section class="bg-white dark:bg-gray-900 pt-10">
-  <!--<div class="container py-10 mx-auto">-->
-  <!--  <div class="md:mt-0">-->
-  <!--    <h1 class="text-2xl lg:text-4xl font-bold lg:tracking-tight">{t("home.swiper.title")}</h1>-->
-  <!--  </div>-->
-  <!--</div>-->
-    <div class="swiper mx-6">
-      <div class="swiper-wrapper">
-        <div class="swiper-slide">
-          <Image src={car0}
-             alt="carousel0"
-            fit="cover"
-            quality="high"
-          />
-        </div>
-        <div class="swiper-slide">
-          <Image src={car2}
-             alt="carousel2"
-                   fit="cover"
-                 quality="high"
-          />
-        </div>
-        <div class="swiper-slide">
-          <Image src={car1}
-             alt="carousel1"
-            fit="cover"
-            quality="high"
-          />
-        </div><div class="swiper-slide">
-          <Image src={car4}
-             alt="carousel4"
-                   fit="cover"
-                 quality="high"
-          />
-        </div><div class="swiper-slide">
-          <Image src={car3}
-             alt="carousel3"
-                   fit="cover"
-                 quality="high"
-          />
-        </div><div class="swiper-slide">
-          <Image src={car5}
-             alt="carousel5"
-                   fit="cover"
-                 quality="high"
-          />
-        </div>
-      </div>
-      <!-- If we need pagination -->
-      <div class="swiper-pagination"></div>
 
-      <!-- If we need navigation buttons -->
-      <div class="swiper-button-prev swiper-button-white"></div>
-      <div class="swiper-button-next swiper-button-white"></div>
-      <div class="autoplay-progress">
-        <svg viewBox="0 0 48 48">
-          <circle cx="24" cy="24" r="20"></circle>
-        </svg>
-        <span></span>
+<section class="bg-white dark:bg-gray-900 pt-10">
+  <div class="swiper mySwiper mx-6">
+    <div class="swiper-wrapper">
+      <div class="swiper-slide">
+        <Image src={car0} alt="carousel0" fit="cover" quality="high" loading="lazy"/>
+        <div class="swiper-lazy-preloader"></div>
+      </div>
+      <div class="swiper-slide">
+        <Image src={car2} alt="carousel2" fit="cover" quality="high" loading="lazy" />
+        <div class="swiper-lazy-preloader"></div>
+      </div>
+      <div class="swiper-slide">
+        <Image src={car1} alt="carousel1" fit="cover" quality="high" loading="lazy" />
+        <div class="swiper-lazy-preloader"></div>
+      </div><div class="swiper-slide">
+        <Image src={car4} alt="carousel4" fit="cover" quality="high" loading="lazy" />
+      <div class="swiper-lazy-preloader"></div>
+      </div><div class="swiper-slide">
+        <Image src={car3} alt="carousel3" fit="cover" quality="high" loading="lazy" />
+      <div class="swiper-lazy-preloader"></div>
+      </div><div class="swiper-slide">
+        <Image src={car5} alt="carousel5" fit="cover" quality="high" loading="lazy" />
+      <div class="swiper-lazy-preloader"></div>
       </div>
     </div>
+    <!-- If we need pagination -->
+    <div class="swiper-pagination"></div>
+
+    <!-- If we need navigation buttons -->
+    <div class="swiper-button-prev swiper-button-white"></div>
+    <div class="swiper-button-next swiper-button-white"></div>
+    <div class="autoplay-progress">
+      <svg viewBox="0 0 48 48">
+        <circle cx="24" cy="24" r="20"></circle>
+      </svg>
+      <span></span>
+    </div>
+  </div>
 </section>
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"/>
-<script is:inline src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
-<script is:inline>
-  const progressCircle = document.querySelector(".autoplay-progress svg");
-  const progressContent = document.querySelector(".autoplay-progress span");
+<script>
+  import Swiper from 'swiper';
+  import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+  import 'swiper/css';
+  import 'swiper/css/navigation';
+  import 'swiper/css/pagination';
 
-  const swiper = new Swiper(".swiper", {
-    lazy: true,
+  const progressCircle = document.querySelector('.autoplay-progress svg')
+  const progressContent = document.querySelector('.autoplay-progress span')
+
+  var swiper = new Swiper('.mySwiper', {
+
+    modules: [Navigation, Pagination, Autoplay],
+    // lazy: true,
     loop: true,
     centeredSlides: true,
     spaceBetween: 30,
     autoplay: {
       delay: 4000,
-      disableOnInteraction: false
+      disableOnInteraction: false,
     },
     pagination: {
-      el: ".swiper-pagination"
+      el: '.swiper-pagination',
     },
-
     keyboard: {
-      enabled: true
+      enabled: true,
     },
     grabCursor: true,
 
     // Navigation arrows
     navigation: {
-      nextEl: ".swiper-button-next",
-      prevEl: ".swiper-button-prev"
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
     },
+
     on: {
       autoplayTimeLeft(s, time, progress) {
-        progressCircle.style.setProperty("--progress", 1 - progress);
-        progressContent.textContent = `${Math.ceil(time / 1000)}s`;
-      }
-    }
-  });</script>
+        progressCircle.style.setProperty('--progress', 1 - progress)
+        progressContent.textContent = `${Math.ceil(time / 1000)}s`
+      },
+    },
+  });
+</script>
 
 <style>
-    .swiper {
-        //width: 600px;
-        height: 600px;
-    }
+  .swiper {
+    //width: 600px;
+    height: 600px;
+  }
 
-    .swiper-slide {
-        text-align: center;
-        font-size: 18px;
-        background: #fff;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 60%;
-        height: auto !important;
-    }
+  .swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60%;
+    height: auto !important;
+  }
 
-    .swiper-slide img {
-        display: block;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
+  .swiper-slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 
-    .swiper-slide:nth-child(2n) {
-        width: 40%;
-    }
+  .swiper-slide:nth-child(2n) {
+    width: 40%;
+  }
 
-    .swiper-slide:nth-child(3n) {
-        width: 20%;
-    }
+  .swiper-slide:nth-child(3n) {
+    width: 20%;
+  }
 
-    .autoplay-progress {
-        position: absolute;
-        right: 16px;
-        bottom: 16px;
-        z-index: 10;
-        width: 48px;
-        height: 48px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-        color: white;
-    }
+  .autoplay-progress {
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+    z-index: 10;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+  }
 
-    .autoplay-progress svg {
-        --progress: 0;
-        position: absolute;
-        left: 0;
-        top: 0px;
-        z-index: 10;
-        width: 100%;
-        height: 100%;
-        stroke-width: 4px;
-        stroke: white;
-        fill: none;
-        stroke-dashoffset: calc(125.6 * (1 - var(--progress)));
-        stroke-dasharray: 125.6;
-        transform: rotate(-90deg);
-    }
+  .autoplay-progress svg {
+    --progress: 0;
+    position: absolute;
+    left: 0;
+    top: 0px;
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+    stroke-width: 4px;
+    stroke: white;
+    fill: none;
+    stroke-dashoffset: calc(125.6 * (1 - var(--progress)));
+    stroke-dasharray: 125.6;
+    transform: rotate(-90deg);
+  }
 
-    div.swiper-button-prev,
-    div.swiper-button-next {
-        color: white;
-    }
+  div.swiper-button-prev,
+  div.swiper-button-next {
+    color: white;
+  }
 
-    .swiper-pagination-bullet-active {
-        background-color: white !important;
-    }
+  .swiper-pagination-bullet-active {
+    background-color: white !important;
+  }
 </style>

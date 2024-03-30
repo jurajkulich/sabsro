@@ -1,15 +1,12 @@
 ---
-import Layout from "@layouts/Layout.astro";
-import Container from "@components/container.astro";
+import Layout from '@layouts/Layout.astro'
+import Container from '@components/container.astro'
 
 export function getStaticPaths() {
-  return [
-    {params: {lang: 'en'}},
-    {params: {lang: 'sk'}},
-  ];
+  return [{ params: { lang: 'en' } }, { params: { lang: 'sk' } }]
 }
-const { lang } = Astro.params;
-export const prerender = true;
+const { lang } = Astro.params
+export const prerender = true
 ---
 
 <Layout title="404 Not Found">
@@ -17,7 +14,7 @@ export const prerender = true;
     <div class="min-h-[calc(100vh-16rem)] flex items-center justify-center">
       <div class="mt-16 text-center">
         <h1 class="text-4xl lg:text-5xl font-bold lg:tracking-tight">404</h1>
-        <p class="text-lg mt-4 text-slate-600">{("404.description")}</p>
+        <p class="text-lg mt-4 text-slate-600">{'404.description'}</p>
       </div>
     </div>
   </Container>

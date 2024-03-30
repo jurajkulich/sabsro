@@ -1,28 +1,24 @@
 ---
-import Layout from "@layouts/Layout.astro";
-import Container from "@components/container.astro";
-import Sectionhead from "@components/sectionhead.astro";
-import Contact from "../../components/contact.astro";
-import About from "../../components/about.astro";
+import Layout from '@layouts/Layout.astro'
+import Container from '@components/container.astro'
+import Sectionhead from '@components/sectionhead.astro'
+import Contact from '../../components/contact.astro'
+import About from '../../components/about.astro'
 
 export function getStaticPaths() {
-  return [
-    {params: {lang: 'en'}},
-    {params: {lang: 'sk'}},
-  ];
+  return [{ params: { lang: 'en' } }, { params: { lang: 'sk' } }]
 }
 
-const { lang } = Astro.params;
+const { lang } = Astro.params
 
-import { getCollection, getEntry } from 'astro:content';
-import { getLocale } from "astro-i18n-aut";
+import { getCollection, getEntry } from 'astro:content'
+import { getLocale } from 'astro-i18n-aut'
 
+const locale = getLocale(Astro.url)
 
-const locale = getLocale(Astro.url);
+const about = await getEntry('about', locale + '/about')
 
-const about = await getEntry('about', locale+"/about");
-
-export const prerender = true;
+export const prerender = true
 ---
 
 <Layout title={about.data.layouttitle}>

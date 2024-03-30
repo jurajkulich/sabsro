@@ -1,44 +1,44 @@
 ---
-import { SEO } from "astro-seo";
-import Footer from "@components/footer.astro";
-import Navbar from "@components/navbar/navbar.astro";
-import "@fontsource/inter";
-import { HeadHrefLangs } from "astro-i18next/components";
-import { getLocale } from "astro-i18n-aut";
+import { SEO } from 'astro-seo'
+import Footer from '@components/footer.astro'
+import Navbar from '@components/navbar/navbar.astro'
+import '@fontsource/inter'
+import { HeadHrefLangs } from 'astro-i18next/components'
+import { getLocale } from 'astro-i18n-aut'
 
 export interface Props {
-  title: string;
+  title: string
 }
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString()
 
-const resolvedImageWithDomain = new URL(
-  "/opengraph.jpg",
-  Astro.site
-).toString();
+const resolvedImageWithDomain = new URL('/opengraph.jpg', Astro.site).toString()
 
-const { title } = Astro.props;
+const { title } = Astro.props
+
+const locale = getLocale(Astro.url)
+const metalworkingTranslation =
+  locale === 'en' ? 'Metalworking' : 'Kovoobrábanie'
 
 const makeTitle = title
-  ? title + " | " + "Švehla a Blaško"
-  : "Švehla a Blaško - Kovoobrábanie";
-
-const locale = getLocale(Astro.url);
-const prefix = import.meta.env.BASE_URL;
+  ? title + ' | ' + 'Švehla a Blaško'
+  : 'Švehla a Blaško - ' + metalworkingTranslation
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang={locale}>
-      <!--x-data="{darkMode: localStorage.getItem('darkMode')}"-->
-      <!--x-init="$watch('darkMode', val => localStorage.setItem('darkMode', val))"-->
-      <!--x-bind:data-theme='darkMode'>-->
+  <!--x-data="{darkMode: localStorage.getItem('darkMode')}"-->
+  <!--x-init="$watch('darkMode', val => localStorage.setItem('darkMode', val))"-->
+  <!--x-bind:data-theme='darkMode'>-->
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <!--<meta http-equiv="refresh" content={`0;url=kokot`}/>-->
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
     <!--todo href -->
 
     <!-- <link rel="preload" as="image" href={src} alt="Hero" /> -->
@@ -52,20 +52,18 @@ const prefix = import.meta.env.BASE_URL;
     <Navbar />
     <slot />
     <Footer />
-  </body>
+  </body><script is:inline>
+    // if (localStorage.getItem('darkMode') === 'dark') {
+    //   document.querySelector('html').dataset.theme = 'dark'
+    // }
+    // if (localStorage.getItem('darkMode') === 'light') {
+    //   document.querySelector('html').dataset.theme = 'light'
+    // }
+    // if (!localStorage.getItem('darkMode')) {
+    //   let theme = window.matchMedia('(prefers-color-scheme: dark)')
+    //     ? 'dark'
+    //     : 'light'
+    //   localStorage.setItem('darkMode', theme)
+    // }
+  </script>
 </html>
-
-<script is:inline>
-  // if (localStorage.getItem('darkMode') === 'dark') {
-  //   document.querySelector('html').dataset.theme = 'dark'
-  // }
-  // if (localStorage.getItem('darkMode') === 'light') {
-  //   document.querySelector('html').dataset.theme = 'light'
-  // }
-  // if (!localStorage.getItem('darkMode')) {
-  //   let theme = window.matchMedia('(prefers-color-scheme: dark)')
-  //     ? 'dark'
-  //     : 'light'
-  //   localStorage.setItem('darkMode', theme)
-  // }
-</script>
