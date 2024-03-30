@@ -23,11 +23,11 @@ const localeFlags = {
   sk: 'sk',
 }
 
-console.log("/" + otherLocale + currentPage)
+console.log("/" + otherLocale)
 ---
 
 <span class={`fi fi-${localeFlags[otherLocale]}`}></span>
-<a href={`${prefix}/${otherLocale}${currentPage}`}>
+<a href={`${prefix}/${otherLocale}`}>
   {languages[otherLocale]}
   <!--<span class={`fi fi-${localeFlags[locale]}`}></span>-->
 </a>
