@@ -1,27 +1,38 @@
 ---
-import { getCollection } from 'astro:content'
 import Container from '@components/container.astro'
 import Hero from '@components/hero.astro'
-import Layout from '@layouts/Layout.astro'
 import Swiper from '../components/swiper.astro'
 import FeaturesTwo from '../components/featuresTwo.astro'
-import { getLocale } from 'astro-i18n-aut'
 import Layout_Index from '../layouts/Layout_Index.astro'
-
-const locale = getLocale(Astro.url)
+import ProcessFlow from '../components/processFlow.astro'
+import TrustTicker from '../components/trustTicker.astro'
+import CapabilityLab from '../components/capabilityLab.astro'
+import Certifications from '../components/certifications.astro'
+import { getLocale } from 'astro-i18n-aut'
 
 export function getStaticPaths() {
   return [{ params: { lang: 'en' } }, { params: { lang: 'sk' } }]
 }
-const { lang } = Astro.params
-
 export const prerender = true
+const locale = getLocale(Astro.url)
+const homeTitle =
+  locale === 'en'
+    ? 'CNC Milling and Turning in Slovakia'
+    : 'CNC frézovanie a sústruženie na Slovensku'
+const homeDescription =
+  locale === 'en'
+    ? 'CNC milling and turning services in Slovakia for prototypes and small batches. Precision machining, documented quality control, and reliable lead times.'
+    : 'CNC frézovanie a sústruženie na Slovensku pre prototypy a menšie série. Presné obrábanie, zdokumentovaná kontrola kvality a spoľahlivé termíny dodania.'
 ---
 
-<Layout_Index title="">
+<Layout_Index title={homeTitle} description={homeDescription}>
   <Hero />
   <Container>
     <FeaturesTwo />
   </Container>
+  <TrustTicker />
+  <Certifications />
+  <CapabilityLab />
+  <ProcessFlow />
   <Swiper />
 </Layout_Index>

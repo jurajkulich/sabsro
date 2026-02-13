@@ -1,0 +1,110 @@
+---
+import { Image } from 'astro:assets'
+import car2 from 'assets/carousel/carousel_2.jpg'
+
+const { about, locale } = Astro.props
+
+const stats =
+  locale === 'sk'
+    ? [
+        { value: '20+', label: 'členov tímu' },
+        { value: '1200 m2', label: 'výroba + sklady' },
+        { value: '1990', label: 'začiatok histórie' },
+      ]
+    : [
+        { value: '20+', label: 'team members' },
+        { value: '1200 m2', label: 'production + storage' },
+        { value: '1990', label: 'history starts' },
+      ]
+
+const labels =
+  locale === 'sk'
+    ? { p1: 'História', p2: 'Kapacity', p3: 'Služby' }
+    : { p1: 'History', p2: 'Capacity', p3: 'Services' }
+---
+
+<section class="pt-10 pb-16">
+  <div class="mx-auto max-w-screen-xl px-5">
+    <div class="grid items-start gap-8 lg:grid-cols-[1.05fr_0.95fr]">
+      <div class="space-y-6">
+        <h1 class="text-4xl font-display font-semibold tracking-tight text-slate-900 lg:text-6xl">
+          {about.data.title}
+        </h1>
+        <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
+          {
+            stats.map((item) => (
+              <div class="rounded-xl border border-slate-200/70 bg-white/70 px-4 py-3">
+                <p class="text-2xl font-display font-semibold text-slate-900">{item.value}</p>
+                <p class="text-xs uppercase tracking-[0.12em] text-slate-600">{item.label}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+      <div class="about-media">
+        <Image src={car2} alt={about.data.title} width={900} height={580} fit="cover" />
+      </div>
+    </div>
+
+    <div class="mt-10 grid grid-cols-1 gap-4 lg:grid-cols-3">
+      <article class="about-card">
+        <p class="about-label">{labels.p1}</p>
+        <p>{about.data.subtitle1}</p>
+      </article>
+      <article class="about-card">
+        <p class="about-label">{labels.p2}</p>
+        <p>{about.data.subtitle2}</p>
+      </article>
+      <article class="about-card">
+        <p class="about-label">{labels.p3}</p>
+        <p>{about.data.subtitle3}</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about-media {
+    overflow: hidden;
+    border-radius: 22px;
+    border: 1px solid rgba(148, 163, 184, 0.28);
+    box-shadow: 0 30px 60px -45px rgba(15, 23, 42, 0.55);
+    transform: rotate(0.45deg);
+    transition: transform 280ms ease;
+  }
+
+  .about-media:hover {
+    transform: rotate(0deg) scale(1.01);
+  }
+
+  .about-media img {
+    width: 100%;
+    height: 100%;
+    min-height: 280px;
+    object-fit: cover;
+  }
+
+  .about-card {
+    border-radius: 16px;
+    border: 1px solid rgba(148, 163, 184, 0.34);
+    background: rgba(255, 255, 255, 0.82);
+    padding: 18px;
+    color: #475569;
+    box-shadow: 0 18px 34px -35px rgba(15, 23, 42, 0.45);
+    transition: transform 220ms ease, box-shadow 220ms ease;
+  }
+
+  .about-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 24px 38px -34px rgba(15, 23, 42, 0.58);
+  }
+
+  .about-label {
+    margin-bottom: 8px;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-weight: 700;
+    color: #334155;
+  }
+</style>

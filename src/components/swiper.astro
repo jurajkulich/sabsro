@@ -1,5 +1,6 @@
 ---
 import { Image } from 'astro:assets'
+import { getLocale } from 'astro-i18n-aut'
 import car0 from 'assets/carousel/carousel_0.jpg'
 import car1 from 'assets/carousel/carousel_1.jpg'
 import car2 from 'assets/carousel/carousel_2.jpg'
@@ -7,161 +8,351 @@ import car3 from 'assets/carousel/carousel_3_copy.jpeg'
 import car4 from 'assets/carousel/carousel_4.jpg'
 import car5 from 'assets/carousel/carousel_5.jpg'
 
-import { Picture } from 'astro:assets';
+const locale = getLocale(Astro.url)
+
+const slidesEn = [
+  {
+    src: car0,
+    alt: 'Milling bed close-up',
+    title: 'Precision Milling',
+    note: 'Tight-tolerance setups and repeatable finishes.',
+  },
+  {
+    src: car2,
+    alt: 'CNC machine cutting metal',
+    title: 'CNC Machining',
+    note: 'MAS MCV 1016 quick-change fixtures.',
+  },
+  {
+    src: car1,
+    alt: 'Turning operations',
+    title: 'Turning & Grooving',
+    note: 'Trens CNC with live tooling.',
+  },
+  {
+    src: car4,
+    alt: 'Shop equipment',
+    title: 'Small-Batch Flow',
+    note: 'Prototype-to-production-ready sequencing.',
+  },
+  {
+    src: car3,
+    alt: 'Machining detail',
+    title: 'Surface Finish',
+    note: 'Clean edges, consistent tolerances.',
+  },
+  {
+    src: car5,
+    alt: 'Finished metal parts',
+    title: 'Quality Control',
+    note: 'Documented checks on every run.',
+  },
+]
+
+const slidesSk = [
+  {
+    src: car0,
+    alt: 'Detail frézovania',
+    title: 'Presné frézovanie',
+    note: 'Stabilné tolerancie a opakovateľný povrch.',
+  },
+  {
+    src: car2,
+    alt: 'CNC obrábanie kovu',
+    title: 'CNC obrábanie',
+    note: 'MAS MCV 1016 s rýchlou prípravou.',
+  },
+  {
+    src: car1,
+    alt: 'Sústruženie dielov',
+    title: 'Sústruženie',
+    note: 'Trens CNC so živým náradím.',
+  },
+  {
+    src: car4,
+    alt: 'Vybavenie dielne',
+    title: 'Malé série',
+    note: 'Plynulý tok od prototypu po opakované série.',
+  },
+  {
+    src: car3,
+    alt: 'Detail povrchu',
+    title: 'Povrchová kvalita',
+    note: 'Čisté hrany a konzistentná presnosť.',
+  },
+  {
+    src: car5,
+    alt: 'Hotové diely',
+    title: 'Kontrola kvality',
+    note: 'Meranie a záznamy pri každom behu.',
+  },
+]
+
+const slides = locale === 'sk' ? slidesSk : slidesEn
+
+const headings = {
+  en: {
+    title: 'Precision milling you can rely on.',
+    body:
+      'A closer look at the machines, materials, and finishing standards we rely on every day.',
+    meta:
+      'Small team, clear ownership: quick decisions, direct communication, and parts delivered on schedule.',
+  },
+  sk: {
+    title: 'Presné frézovanie, na ktoré sa môžete spoľahnúť.',
+    body:
+      'Bližší pohľad na stroje, materiály a štandardy povrchovej úpravy, na ktoré sa spoliehame každý deň.',
+    meta:
+      'Malý tím, jasná zodpovednosť: rýchle rozhodnutia, priama komunikácia a zákazky dodané načas.',
+  },
+}
+
+const heading = headings[locale] || headings.en
 ---
 
-<section class="bg-white dark:bg-gray-900 pt-10">
-  <div class="swiper mySwiper mx-6">
-    <div class="swiper-wrapper">
-      <div class="swiper-slide">
-        <Image src={car0} alt="carousel0" fit="cover" quality="high" loading="lazy"/>
-        <div class="swiper-lazy-preloader"></div>
-      </div>
-      <div class="swiper-slide">
-        <Image src={car2} alt="carousel2" fit="cover" quality="high" loading="lazy" />
-        <div class="swiper-lazy-preloader"></div>
-      </div>
-      <div class="swiper-slide">
-        <Image src={car1} alt="carousel1" fit="cover" quality="high" loading="lazy" />
-        <div class="swiper-lazy-preloader"></div>
-      </div><div class="swiper-slide">
-        <Image src={car4} alt="carousel4" fit="cover" quality="high" loading="lazy" />
-      <div class="swiper-lazy-preloader"></div>
-      </div><div class="swiper-slide">
-        <Image src={car3} alt="carousel3" fit="cover" quality="high" loading="lazy" />
-      <div class="swiper-lazy-preloader"></div>
-      </div><div class="swiper-slide">
-        <Image src={car5} alt="carousel5" fit="cover" quality="high" loading="lazy" />
-      <div class="swiper-lazy-preloader"></div>
-      </div>
+<section id="gallery" class="pt-6 pb-16">
+  <div class="mx-auto max-w-screen-xl px-5">
+    <div class="max-w-3xl">
+      <h2 class="mt-4 text-3xl font-display font-semibold tracking-tight text-slate-900 lg:text-5xl">
+        {heading.title}
+      </h2>
+      <p class="mt-4 max-w-2xl text-lg text-slate-600">
+        {heading.body}
+      </p>
+      <p class="mt-6 max-w-2xl text-sm font-medium uppercase tracking-[0.08em] text-slate-500">
+        {heading.meta}
+      </p>
     </div>
-    <!-- If we need pagination -->
-    <div class="swiper-pagination"></div>
+  </div>
 
-    <!-- If we need navigation buttons -->
-    <div class="swiper-button-prev swiper-button-white"></div>
-    <div class="swiper-button-next swiper-button-white"></div>
-    <div class="autoplay-progress">
-      <svg viewBox="0 0 48 48">
-        <circle cx="24" cy="24" r="20"></circle>
-      </svg>
-      <span></span>
+  <div id="gallery-carousel" class="relative mx-auto mt-10 max-w-[1800px] overflow-hidden px-2 sm:px-4 [touch-action:pan-y]">
+    <button
+      id="gallery-prev"
+      type="button"
+      class="absolute left-3 top-1/2 z-20 -translate-y-1/2 rounded-full border border-slate-300/70 bg-white/90 p-3 text-slate-800 shadow-sm transition hover:bg-white"
+      aria-label="Previous slide">
+      <span aria-hidden="true">&#8249;</span>
+    </button>
+
+    <div
+      id="gallery-track"
+      class="flex gap-4 px-1 transition-transform duration-500 ease-out select-none cursor-grab active:cursor-grabbing">
+      {
+        slides.map((slide, idx) => (
+          <article
+            data-slide-index={idx}
+            class:list={[
+              'gallery-slide shrink-0 basis-[82%] sm:basis-[62%] lg:basis-[48%] xl:basis-[38%] transition-all duration-300',
+              idx === 0 ? 'is-active' : '',
+            ]}>
+            <figure class="overflow-hidden rounded-2xl border border-white/70 bg-white/85 shadow-[0_20px_45px_-35px_rgba(10,20,30,0.55)]">
+              <Image
+                src={slide.src}
+                alt={slide.alt}
+                fit="cover"
+                quality="high"
+                loading={idx === 0 ? 'eager' : 'lazy'}
+                class="pointer-events-none block h-60 w-full object-cover sm:h-64 lg:h-72"
+              />
+              <figcaption class="grid gap-2 bg-white/95 px-5 py-4">
+                <p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#7c6b5c]">{slide.title}</p>
+                <p class="text-sm text-slate-600 sm:text-base">{slide.note}</p>
+              </figcaption>
+            </figure>
+          </article>
+        ))
+      }
+    </div>
+
+    <button
+      id="gallery-next"
+      type="button"
+      class="absolute right-3 top-1/2 z-20 -translate-y-1/2 rounded-full border border-slate-300/70 bg-white/90 p-3 text-slate-800 shadow-sm transition hover:bg-white"
+      aria-label="Next slide">
+      <span aria-hidden="true">&#8250;</span>
+    </button>
+  </div>
+
+  <div class="mt-6 flex justify-center">
+    <div id="gallery-pagination" class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-3 py-2">
+      {
+        slides.map((_, idx) => (
+          <button
+            type="button"
+            data-bullet-index={idx}
+            class:list={[
+              'gallery-bullet h-2.5 w-2.5 rounded-full border border-slate-300 bg-slate-300/50 transition-all duration-200',
+              idx === 0 ? 'is-active' : '',
+            ]}
+            aria-label={`Go to slide ${idx + 1}`}
+          />
+        ))
+      }
     </div>
   </div>
 </section>
 
 <script>
-  import Swiper from 'swiper';
-  import { Navigation, Pagination, Autoplay } from 'swiper/modules';
-  import 'swiper/css';
-  import 'swiper/css/navigation';
-  import 'swiper/css/pagination';
+  const root = document.querySelector('#gallery-carousel')
+  const track = document.querySelector('#gallery-track')
+  const prevBtn = document.querySelector('#gallery-prev')
+  const nextBtn = document.querySelector('#gallery-next')
+  const slides = Array.from(document.querySelectorAll('.gallery-slide'))
+  const bullets = Array.from(document.querySelectorAll('.gallery-bullet'))
 
-  const progressCircle = document.querySelector('.autoplay-progress svg')
-  const progressContent = document.querySelector('.autoplay-progress span')
+  if (root && track && slides.length > 0) {
+    let activeIndex = 0
+    let currentX = 0
+    let dragStartX = 0
+    let dragStartTranslate = 0
+    let isDragging = false
+    let hasDragged = false
+    let autoplayTimer = null
+    const autoplayDelay = 4000
 
-  var swiper = new Swiper('.mySwiper', {
+    const mod = (n, m) => ((n % m) + m) % m
 
-    modules: [Navigation, Pagination, Autoplay],
-    // lazy: true,
-    loop: true,
-    centeredSlides: true,
-    spaceBetween: 30,
-    autoplay: {
-      delay: 4000,
-      disableOnInteraction: false,
-    },
-    pagination: {
-      el: '.swiper-pagination',
-    },
-    keyboard: {
-      enabled: true,
-    },
-    grabCursor: true,
+    const minTranslate = () => Math.min(root.clientWidth - track.scrollWidth, 0)
 
-    // Navigation arrows
-    navigation: {
-      nextEl: '.swiper-button-next',
-      prevEl: '.swiper-button-prev',
-    },
+    const clampX = (x) => Math.min(Math.max(x, minTranslate()), 0)
 
-    on: {
-      autoplayTimeLeft(s, time, progress) {
-        progressCircle.style.setProperty('--progress', 1 - progress)
-        progressContent.textContent = `${Math.ceil(time / 1000)}s`
-      },
-    },
-  });
+    const setX = (x, animate = true) => {
+      currentX = clampX(x)
+      track.style.transitionDuration = animate ? '500ms' : '0ms'
+      track.style.transform = `translate3d(${currentX}px,0,0)`
+    }
+
+    const slideTargetX = (idx) => {
+      const slide = slides[idx]
+      const rootCenter = root.clientWidth / 2
+      const slideCenter = slide.offsetLeft + slide.offsetWidth / 2
+      return clampX(rootCenter - slideCenter)
+    }
+
+    const paint = (idx, animate = true) => {
+      activeIndex = mod(idx, slides.length)
+      slides.forEach((slide, i) => {
+        const isActive = i === activeIndex
+        slide.classList.toggle('is-active', isActive)
+        slide.classList.toggle('opacity-45', !isActive)
+        slide.classList.toggle('scale-[0.84]', !isActive)
+        slide.classList.toggle('opacity-100', isActive)
+        slide.classList.toggle('scale-100', isActive)
+      })
+      bullets.forEach((bullet, i) => {
+        const isActive = i === activeIndex
+        bullet.classList.toggle('is-active', isActive)
+        bullet.classList.toggle('bg-slate-300/50', !isActive)
+        bullet.classList.toggle('border-slate-300', !isActive)
+        bullet.classList.toggle('bg-slate-800', isActive)
+        bullet.classList.toggle('border-slate-800', isActive)
+        bullet.classList.toggle('scale-125', isActive)
+      })
+      setX(slideTargetX(activeIndex), animate)
+    }
+
+    const closestIndexForCurrentX = () => {
+      let best = 0
+      let bestDist = Number.POSITIVE_INFINITY
+      slides.forEach((_, i) => {
+        const d = Math.abs(currentX - slideTargetX(i))
+        if (d < bestDist) {
+          bestDist = d
+          best = i
+        }
+      })
+      return best
+    }
+
+    const stopAutoplay = () => {
+      if (autoplayTimer) clearInterval(autoplayTimer)
+      autoplayTimer = null
+    }
+
+    const startAutoplay = () => {
+      stopAutoplay()
+      autoplayTimer = setInterval(() => {
+        paint(activeIndex + 1, true)
+      }, autoplayDelay)
+    }
+
+    prevBtn?.addEventListener('click', () => {
+      paint(activeIndex - 1, true)
+      startAutoplay()
+    })
+
+    nextBtn?.addEventListener('click', () => {
+      paint(activeIndex + 1, true)
+      startAutoplay()
+    })
+
+    bullets.forEach((bullet, i) => {
+      bullet.addEventListener('click', () => {
+        paint(i, true)
+        startAutoplay()
+      })
+    })
+
+    const onPointerDown = (event) => {
+      if (event.button !== 0) return
+      const target = event.target
+      if (
+        target instanceof Element &&
+        target.closest('#gallery-prev, #gallery-next, #gallery-pagination')
+      ) {
+        return
+      }
+      isDragging = true
+      hasDragged = false
+      dragStartX = event.clientX
+      dragStartTranslate = currentX
+      stopAutoplay()
+      root.setPointerCapture?.(event.pointerId)
+    }
+
+    const onPointerMove = (event) => {
+      if (!isDragging) return
+      const deltaX = event.clientX - dragStartX
+      if (Math.abs(deltaX) > 4) hasDragged = true
+      setX(dragStartTranslate + deltaX, false)
+    }
+
+    const onPointerUp = () => {
+      if (!isDragging) return
+      isDragging = false
+      paint(hasDragged ? closestIndexForCurrentX() : activeIndex, true)
+      startAutoplay()
+    }
+
+    root.addEventListener('pointerdown', onPointerDown)
+    root.addEventListener('pointermove', onPointerMove)
+    root.addEventListener('pointerup', onPointerUp)
+    root.addEventListener('pointercancel', onPointerUp)
+    root.addEventListener('mouseenter', stopAutoplay)
+    root.addEventListener('mouseleave', startAutoplay)
+    window.addEventListener('resize', () => paint(activeIndex, false))
+
+    paint(0, false)
+    startAutoplay()
+  }
 </script>
 
 <style>
-  .swiper {
-    //width: 600px;
-    height: 600px;
+  .gallery-slide {
+    opacity: 0.45;
+    transform: scale(0.84);
   }
 
-  .swiper-slide {
-    text-align: center;
-    font-size: 18px;
-    background: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 60%;
-    height: auto !important;
+  .gallery-slide.is-active {
+    opacity: 1;
+    transform: scale(1);
   }
 
-  .swiper-slide img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .swiper-slide:nth-child(2n) {
-    width: 40%;
-  }
-
-  .swiper-slide:nth-child(3n) {
-    width: 20%;
-  }
-
-  .autoplay-progress {
-    position: absolute;
-    right: 16px;
-    bottom: 16px;
-    z-index: 10;
-    width: 48px;
-    height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    color: white;
-  }
-
-  .autoplay-progress svg {
-    --progress: 0;
-    position: absolute;
-    left: 0;
-    top: 0px;
-    z-index: 10;
-    width: 100%;
-    height: 100%;
-    stroke-width: 4px;
-    stroke: white;
-    fill: none;
-    stroke-dashoffset: calc(125.6 * (1 - var(--progress)));
-    stroke-dasharray: 125.6;
-    transform: rotate(-90deg);
-  }
-
-  div.swiper-button-prev,
-  div.swiper-button-next {
-    color: white;
-  }
-
-  .swiper-pagination-bullet-active {
-    background-color: white !important;
+  @media (prefers-reduced-motion: reduce) {
+    #gallery-track,
+    .gallery-slide,
+    .gallery-bullet {
+      transition: none !important;
+    }
   }
 </style>

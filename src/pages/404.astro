@@ -1,21 +1,28 @@
 ---
 import Layout from '@layouts/Layout.astro'
 import Container from '@components/container.astro'
+import { getLocale } from 'astro-i18n-aut'
 
 export function getStaticPaths() {
   return [{ params: { lang: 'en' } }, { params: { lang: 'sk' } }]
 }
-const { lang } = Astro.params
+const locale = getLocale(Astro.url)
+const notFoundDescription =
+  locale === 'en'
+    ? 'The requested page could not be found.'
+    : 'Požadovanú stránku sa nepodarilo nájsť.'
+const notFoundBody =
+  locale === 'en' ? 'The page you are looking for does not exist.' : 'Stránka, ktorú hľadáte, neexistuje.'
 
 export const prerender = true
 ---
 
-<Layout title="404 Not Found">
+<Layout title="404 Not Found" description={notFoundDescription} noindex={true}>
   <Container>
     <div class="min-h-[calc(100vh-16rem)] flex items-center justify-center">
       <div class="mt-16 text-center">
         <h1 class="text-4xl lg:text-5xl font-bold lg:tracking-tight">404</h1>
-        <p class="text-lg mt-4 text-slate-600">{'404.description'}</p>
+        <p class="text-lg mt-4 text-slate-600">{notFoundBody}</p>
       </div>
     </div>
   </Container>

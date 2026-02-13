@@ -3,7 +3,6 @@ import tailwind from "@astrojs/tailwind";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import { i18n, filterSitemapByDefaultLocale } from "astro-i18n-aut/integration";
-import node from "@astrojs/node";
 
 const defaultLocale = "sk";
 const locales = {
@@ -11,10 +10,21 @@ const locales = {
   en: "en-US",
 };
 const redirectDefaultLocale = false;
+const site = process.env.SITE_URL || "https://jurajkulich.github.io";
+const configuredBase = process.env.BASE_PATH || "/sabsro";
+const base = configuredBase.startsWith("/")
+  ? configuredBase.replace(/\/+$/, "") || "/"
+  : `/${configuredBase.replace(/\/+$/, "")}`;
 
 export default defineConfig({
-  site: "https://jurajkulich.github.io", // todo change
-  base: "/sabsro",
+  site,
+  base,
+  redirects: {
+    "/sk": "/",
+    "/sk/about": "/about",
+    "/sk/contact": "/contact",
+    "/sk/machines": "/machines",
+  },
 
   trailingSlash: "never",
   build: {

@@ -1,0 +1,316 @@
+---
+import { Image } from 'astro:assets'
+import { getLocale } from 'astro-i18n-aut'
+import car1 from 'assets/carousel/carousel_1.jpg'
+import car2 from 'assets/carousel/carousel_2.jpg'
+import car3 from 'assets/carousel/carousel_3_copy.jpeg'
+import car5 from 'assets/carousel/carousel_5.jpg'
+
+const locale = getLocale(Astro.url)
+
+const data =
+  locale === 'sk'
+    ? {
+        title: 'Laboratórium možností',
+        subtitle:
+          'Interaktívny prehľad výrobných možností. Doplňte finálne dáta neskôr, štruktúra je pripravená.',
+        tabs: [
+          {
+            id: 'milling',
+            label: 'Frézovanie',
+            image: car2,
+            points: ['3-osé CNC obrábanie', 'Sériová opakovateľnosť', 'Komplexné upínanie'],
+            metricA: 'prototypy + série',
+            metricB: 'frézované plochy, kapsy, drážky',
+          },
+          {
+            id: 'turning',
+            label: 'Sústruženie',
+            image: car1,
+            points: ['Presné valcové diely', 'Drážkovanie', 'Závitové operácie'],
+            metricA: 'hriadele + prstence',
+            metricB: 'vonkajšie aj vnútorné operácie',
+          },
+          {
+            id: 'materials',
+            label: 'Materiály',
+            image: car3,
+            points: ['Oceľ a nerez', 'Hliník a Cu zliatiny', 'Technické plasty'],
+            metricA: 'bežné + zákaznícke vstupy',
+            metricB: 'dodané s certifikátom materiálu',
+          },
+          {
+            id: 'qc',
+            label: 'Kontrola kvality',
+            image: car5,
+            points: ['Medzioperačné meranie', 'Výstupný protokol', 'Kontrola povrchu'],
+            metricA: 'protokol ku každej zákazke',
+            metricB: 'sledovanie série podľa požiadavky',
+          },
+        ],
+      }
+    : {
+        title: 'Capability Lab',
+        subtitle:
+          'Interactive view of production capabilities. Placeholder-ready so you can finalize exact specs later.',
+        tabs: [
+          {
+            id: 'milling',
+            label: 'Milling',
+            image: car2,
+            points: ['3-axis CNC machining', 'Repeatable batch output', 'Complex fixturing support'],
+            metricA: 'prototypes + small batches',
+            metricB: 'faces, pockets, grooves',
+          },
+          {
+            id: 'turning',
+            label: 'Turning',
+            image: car1,
+            points: ['Precision cylindrical parts', 'Grooving operations', 'Thread-ready outputs'],
+            metricA: 'shafts + rings',
+            metricB: 'external and internal operations',
+          },
+          {
+            id: 'materials',
+            label: 'Materials',
+            image: car3,
+            points: ['Steel and stainless', 'Aluminum and Cu alloys', 'Engineering plastics'],
+            metricA: 'stock + customer-supplied',
+            metricB: 'material certificate capable',
+          },
+          {
+            id: 'qc',
+            label: 'Quality Control',
+            image: car5,
+            points: ['In-process checks', 'Final QC protocol', 'Surface and dimensional review'],
+            metricA: 'protocol per order',
+            metricB: 'batch traceability on request',
+          },
+        ],
+      }
+---
+
+<section class="pb-16">
+  <div class="mx-auto max-w-screen-xl px-5">
+    <div class="lab-shell">
+      <div class="lab-head">
+        <h2 class="text-3xl font-display font-semibold tracking-tight text-slate-900 lg:text-5xl">
+          {data.title}
+        </h2>
+        <p class="max-w-2xl text-lg text-slate-600">{data.subtitle}</p>
+      </div>
+
+      <div class="lab-tabs" role="tablist" aria-label={data.title}>
+        {
+          data.tabs.map((tab, idx) => (
+            <button
+              type="button"
+              role="tab"
+              data-tab={tab.id}
+              aria-selected={idx === 0 ? 'true' : 'false'}
+              class:list={['lab-tab', idx === 0 && 'is-active']}>
+              {tab.label}
+            </button>
+          ))
+        }
+      </div>
+
+      <div class="lab-panels">
+        {
+          data.tabs.map((tab, idx) => (
+            <article
+              role="tabpanel"
+              data-panel={tab.id}
+              class:list={['lab-panel', idx === 0 && 'is-active']}>
+              <div class="lab-media">
+                <Image src={tab.image} alt={tab.label} width={860} height={420} fit="cover" />
+              </div>
+              <div class="lab-content">
+                <h3 class="text-2xl font-display font-semibold text-slate-900">{tab.label}</h3>
+                <ul class="space-y-2 text-sm text-slate-600">
+                  {tab.points.map((point) => <li>{point}</li>)}
+                </ul>
+                <div class="lab-metrics">
+                  <div>
+                    <p class="lab-metric-value">{tab.metricA}</p>
+                    <p class="lab-metric-label">{locale === 'sk' ? 'Použitie' : 'Use-case'}</p>
+                  </div>
+                  <div>
+                    <p class="lab-metric-value">{tab.metricB}</p>
+                    <p class="lab-metric-label">{locale === 'sk' ? 'Výstup' : 'Output'}</p>
+                  </div>
+                </div>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const tabs = Array.from(document.querySelectorAll('.lab-tab'))
+  const panels = Array.from(document.querySelectorAll('.lab-panel'))
+  const activate = (id) => {
+    tabs.forEach((tab) => {
+      const isActive = tab.dataset.tab === id
+      tab.classList.toggle('is-active', isActive)
+      tab.setAttribute('aria-selected', isActive ? 'true' : 'false')
+    })
+    panels.forEach((panel) => {
+      const isActive = panel.dataset.panel === id
+      panel.classList.toggle('is-active', isActive)
+    })
+  }
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => activate(tab.dataset.tab))
+  })
+</script>
+
+<style>
+  .lab-shell {
+    border-radius: 24px;
+    border: 1px solid rgba(148, 163, 184, 0.32);
+    padding: 28px;
+    background:
+      radial-gradient(480px 200px at 8% 0%, rgba(184, 116, 58, 0.13), transparent),
+      radial-gradient(440px 220px at 95% 100%, rgba(41, 93, 112, 0.12), transparent),
+      rgba(255, 255, 255, 0.78);
+    box-shadow: 0 26px 56px -46px rgba(15, 23, 42, 0.62);
+  }
+
+  .lab-head {
+    display: grid;
+    gap: 10px;
+  }
+
+  .lab-tabs {
+    margin-top: 22px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .lab-tab {
+    border: 1px solid rgba(148, 163, 184, 0.42);
+    background: rgba(255, 255, 255, 0.76);
+    color: #334155;
+    border-radius: 999px;
+    padding: 10px 16px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-weight: 700;
+    transition: all 180ms ease;
+  }
+
+  .lab-tab:hover,
+  .lab-tab.is-active {
+    background: #0f172a;
+    color: white;
+    border-color: #0f172a;
+  }
+
+  .lab-panels {
+    margin-top: 20px;
+    position: relative;
+    min-height: 380px;
+  }
+
+  .lab-panel {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 16px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(10px);
+    transition: opacity 260ms ease, transform 260ms ease;
+  }
+
+  .lab-panel.is-active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .lab-media {
+    overflow: hidden;
+    border-radius: 16px;
+  }
+
+  .lab-media img {
+    width: 100%;
+    height: 100%;
+    min-height: 320px;
+    object-fit: cover;
+  }
+
+  .lab-content {
+    border-radius: 16px;
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    background: rgba(255, 255, 255, 0.84);
+    padding: 20px;
+    display: grid;
+    align-content: start;
+    gap: 14px;
+  }
+
+  .lab-content ul {
+    margin: 0;
+    padding-left: 18px;
+  }
+
+  .lab-metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .lab-metrics > div {
+    border-radius: 10px;
+    border: 1px solid rgba(148, 163, 184, 0.32);
+    background: rgba(248, 250, 252, 0.75);
+    padding: 12px;
+  }
+
+  .lab-metric-value {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #0f172a;
+  }
+
+  .lab-metric-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #64748b;
+  }
+
+  @media (max-width: 1024px) {
+    .lab-panels {
+      min-height: 620px;
+    }
+
+    .lab-panel {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .lab-shell {
+      border-radius: 16px;
+      padding: 20px;
+    }
+
+    .lab-panels {
+      min-height: 560px;
+    }
+
+    .lab-media img {
+      min-height: 210px;
+    }
+  }
+</style>

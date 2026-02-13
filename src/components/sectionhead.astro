@@ -1,12 +1,24 @@
 ---
-const { align = 'center' } = Astro.props
+const { align = 'center', label = 'Section' } = Astro.props
 ---
 
-<div class="container pt-10 mx-auto">
-  <h1 class="text-2xl lg:text-4xl font-bold lg:tracking-tight">
+<div
+  class:list={[
+    'container pt-10 mx-auto',
+    align === 'center' ? 'text-center' : 'text-left',
+  ]}>
+  <h1
+    class:list={[
+      'mt-4 text-3xl font-display font-semibold tracking-tight text-slate-900 lg:text-5xl',
+      align === 'center' ? 'mx-auto' : '',
+    ]}>
     <slot name="title">Title</slot>
   </h1>
-  <p class="text-lg mt-4 text-slate-600">
+  <p
+    class:list={[
+      'mt-4 max-w-2xl text-lg text-slate-600',
+      align === 'center' ? 'mx-auto' : '',
+    ]}>
     <slot name="desc">Some description goes here</slot>
   </p>
 </div>

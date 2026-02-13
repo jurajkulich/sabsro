@@ -1,16 +1,223 @@
 ---
-import { Image } from 'astro:assets'
-import heroImage from 'assets/cavo.svg'
+import { getLocale } from 'astro-i18n-aut'
+
+const locale = getLocale(Astro.url)
+
+const copy = {
+  en: {
+    title: 'Precision milling you can rely on.',
+    body:
+      'We are a family-run machining shop delivering prototype-to-small-batch milling, turning, and finishing. Fast feedback, consistent quality, and a partner who answers the phone.',
+    statOneLabel: 'Established in Slovakia',
+    statTwoLabel: 'mm tolerance focus',
+    statThreeLabel: 'day delivery for batches',
+    videoEyebrow: 'Live Shop Footage',
+    videoNote: 'MAS MCV 1016 and Trens CNC turning in action.',
+    stats: [
+      { value: 1990, suffix: '', label: 'Established in Slovakia' },
+      { value: 0.01, suffix: 'mm', label: 'Tolerance focus' },
+      { value: 20, suffix: 'd', label: 'Batch lead time' },
+    ],
+  },
+  sk: {
+    title: 'Presné frézovanie, na ktoré sa môžete spoľahnúť.',
+    body:
+      'Sme rodinná firma zameraná na prototypy a menšie série. Rýchla spätná väzba, stabilná kvalita a partner, ktorý je dostupný.',
+    statOneLabel: 'Založené na Slovensku',
+    statTwoLabel: 'mm tolerancia',
+    statThreeLabel: 'dní dodania série',
+    videoEyebrow: 'Priamo z výroby',
+    videoNote: 'MAS MCV 1016 a Trens CNC v prevádzke.',
+    stats: [
+      { value: 1990, suffix: '', label: 'Založené na Slovensku' },
+      { value: 0.01, suffix: 'mm', label: 'Tolerancia' },
+      { value: 20, suffix: 'd', label: 'Dodanie série' },
+    ],
+  },
+}
+
+const t = copy[locale] || copy.en
 ---
 
-<main class="grid lg:grid-cols-1 place-items-center pb-8 md:pb-24">
-  <div style="overflow: hidden; width: 100%;">
-    <video id="wing" autoplay muted loop playsinline preload="metadata" style="width: 100%;">
-      <source
-        src="https://raw.githubusercontent.com/jurajkulich/sabsro/main/src/assets/hero.mp4"
-        type="video/mp4"
-      />
-      Your browser does not support the video tag.
-    </video>
+<section class="relative overflow-hidden">
+  <div class="absolute left-[-12rem] top-12 h-72 w-72 rounded-full bg-[#c58f5b]/20 blur-3xl"></div>
+  <div class="absolute right-[-10rem] top-36 h-64 w-64 rounded-full bg-[#295d70]/16 blur-3xl"></div>
+  <div class="mx-auto max-w-screen-xl px-5 pb-14 pt-10 lg:pt-16">
+    <div class="grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr]">
+      <div class="space-y-6 hero-fade hero-fade--1">
+        <h1 class="text-4xl font-display font-semibold leading-[1.05] tracking-tight text-slate-900 sm:text-5xl lg:text-[3.6rem]">
+          {t.title}
+        </h1>
+        <p class="max-w-xl text-lg text-slate-600">
+          {t.body}
+        </p>
+        <div class="grid max-w-xl grid-cols-2 gap-3 text-sm text-slate-600 sm:grid-cols-3">
+          {
+            t.stats.map((stat) => (
+              <div class="rounded-2xl border border-slate-200/70 bg-white/65 p-4 shadow-[0_10px_30px_-25px_rgba(15,23,42,0.55)] transition hover:-translate-y-0.5">
+                <p
+                  class="hero-counter text-2xl font-display font-semibold text-slate-900"
+                  data-target={String(stat.value)}
+                  data-suffix={stat.suffix}>
+                  0
+                </p>
+                <p>{stat.label}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="relative hero-fade hero-fade--2 hero-tilt-wrap">
+        <div class="hero-tilt overflow-hidden rounded-[1.4rem] border border-white/70 bg-white/85 shadow-[0_32px_70px_-46px_rgba(22,32,40,0.55)]">
+          <video
+            id="wing"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="metadata"
+            class="aspect-[4/3] w-full object-cover">
+            <source
+              src="https://raw.githubusercontent.com/jurajkulich/sabsro/main/src/assets/hero.mp4"
+              type="video/mp4"
+            />
+            Your browser does not support the video tag.
+          </video>
+          <div class="border-t border-white/60 bg-white/92 px-6 py-4">
+            <p class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+              {t.videoEyebrow}
+            </p>
+            <p class="text-sm text-slate-600">{t.videoNote}</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-</main>
+</section>
+
+<script>
+  const counters = Array.from(document.querySelectorAll('.hero-counter'))
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const animateCounter = (el) => {
+    const target = Number(el.dataset.target || 0)
+    const suffix = el.dataset.suffix || ''
+    const isDecimal = String(target).includes('.')
+    const duration = 900
+    const start = performance.now()
+    const step = (ts) => {
+      const p = Math.min((ts - start) / duration, 1)
+      const eased = 1 - Math.pow(1 - p, 3)
+      const value = target * eased
+      el.textContent = `${isDecimal ? value.toFixed(2) : Math.round(value)}${suffix}`
+      if (p < 1) requestAnimationFrame(step)
+    }
+    requestAnimationFrame(step)
+  }
+  const setCounterFinal = (el) => {
+    const target = Number(el.dataset.target || 0)
+    const suffix = el.dataset.suffix || ''
+    const isDecimal = String(target).includes('.')
+    el.textContent = `${isDecimal ? target.toFixed(2) : Math.round(target)}${suffix}`
+  }
+
+  if (reduceMotion) {
+    counters.forEach((el) => setCounterFinal(el))
+  } else {
+    const counterObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return
+          animateCounter(entry.target)
+          counterObserver.unobserve(entry.target)
+        })
+      },
+      { threshold: 0.4 },
+    )
+
+    counters.forEach((el) => counterObserver.observe(el))
+  }
+
+  const tiltCard = document.querySelector('.hero-tilt')
+  const tiltWrap = document.querySelector('.hero-tilt-wrap')
+  const hasFinePointer = window.matchMedia('(pointer:fine)').matches
+
+  if (tiltCard && tiltWrap && hasFinePointer && !reduceMotion) {
+    const handleMouseMove = (event) => {
+      const rect = tiltWrap.getBoundingClientRect()
+      const x = (event.clientX - rect.left) / rect.width - 0.5
+      const y = (event.clientY - rect.top) / rect.height - 0.5
+      tiltCard.style.transform = `perspective(1200px) rotateY(${x * 4}deg) rotateX(${y * -4}deg)`
+    }
+    const handleMouseLeave = () => {
+      tiltCard.style.transform = 'perspective(1200px) rotateY(0deg) rotateX(0deg)'
+    }
+    let tiltActive = false
+
+    const enableTilt = () => {
+      if (tiltActive) return
+      tiltWrap.addEventListener('mousemove', handleMouseMove)
+      tiltWrap.addEventListener('mouseleave', handleMouseLeave)
+      tiltActive = true
+    }
+    const disableTilt = () => {
+      if (!tiltActive) return
+      tiltWrap.removeEventListener('mousemove', handleMouseMove)
+      tiltWrap.removeEventListener('mouseleave', handleMouseLeave)
+      handleMouseLeave()
+      tiltActive = false
+    }
+
+    const tiltObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            enableTilt()
+            return
+          }
+          disableTilt()
+        })
+      },
+      { threshold: 0.35 },
+    )
+
+    tiltObserver.observe(tiltWrap)
+  }
+</script>
+
+<style>
+  @keyframes heroFade {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .hero-fade {
+    animation: heroFade 0.7s ease-out both;
+  }
+
+  .hero-fade--2 {
+    animation-delay: 0.12s;
+  }
+
+  .hero-tilt {
+    transition: transform 260ms ease;
+    transform-style: preserve-3d;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-fade {
+      animation: none;
+    }
+
+    .hero-tilt {
+      transition: none;
+      transform: none !important;
+    }
+  }
+</style>

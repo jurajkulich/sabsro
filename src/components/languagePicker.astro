@@ -3,18 +3,21 @@ import { languages } from '../i18n/ui'
 import { getLocale } from 'astro-i18n-aut'
 import '/node_modules/flag-icons/css/flag-icons.min.css'
 
-const prefix = import.meta.env.BASE_URL
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, '')
+const defaultLocale = 'sk'
 const locale = getLocale(Astro.url)
-const path = Astro.url.pathname.split('/')
-
-let currentPage = path[path.length - 1]
-currentPage = currentPage.split(".")[0]
-
-if (currentPage == 'en' || currentPage == '' || currentPage == 'sk') {
-  currentPage = ''
-} else {
-  currentPage = '/' + currentPage
-}
+const routePath = Astro.url.pathname.startsWith(basePath)
+  ? Astro.url.pathname.slice(basePath.length) || '/'
+  : Astro.url.pathname
+const cleanRoutePath = routePath
+  .replace(/\/index\.html$/, '/')
+  .replace(/\.html$/, '')
+  .replace(/\/+$/, '') || '/'
+const normalizedRoutePath = cleanRoutePath.replace(/^\/(en|sk)(?=\/|$)/, '') || '/'
+const localizedPath = (lang: string) =>
+  lang === defaultLocale
+    ? `${basePath}${normalizedRoutePath === '/' ? '' : normalizedRoutePath}`
+    : `${basePath}/${lang}${normalizedRoutePath === '/' ? '' : normalizedRoutePath}`
 // todo astro preferences disable devToolbar
 
 const otherLocale = locale === 'en' ? 'sk' : 'en'
@@ -25,7 +28,7 @@ const localeFlags = {
 ---
 
 <span class={`fi fi-${localeFlags[otherLocale]}`}></span>
-<a href={`${prefix}/${otherLocale}${currentPage}`}>
+<a href={localizedPath(otherLocale)}>
   {languages[otherLocale]}
   <!--<span class={`fi fi-${localeFlags[locale]}`}></span>-->
 </a>

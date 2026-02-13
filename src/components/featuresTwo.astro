@@ -1,39 +1,159 @@
 ---
-import { getCollection, getEntry } from 'astro:content'
+import { Image } from 'astro:assets'
+import { getEntry } from 'astro:content'
 import { getLocale } from 'astro-i18n-aut'
+import car0 from 'assets/carousel/carousel_0.jpg'
+import car2 from 'assets/carousel/carousel_2.jpg'
+import car4 from 'assets/carousel/carousel_4.jpg'
+import car5 from 'assets/carousel/carousel_5.jpg'
 
 const locale = getLocale(Astro.url)
 const features = await getEntry('features', locale + '/features')
+
+const copy = {
+  en: {
+    meta:
+      'Typical deliverables: jigs, housings, brackets, shafts, and replacement components for maintenance and production lines.',
+  },
+  sk: {
+    meta:
+      'Typické výstupy: prípravky, kryty, konzoly, hriadele a náhradné diely pre údržbu a výrobné linky.',
+  },
+}
+
+const t = copy[locale] || copy.en
+
+const materials = [
+  {
+    src: car0,
+    label: locale === 'sk' ? 'Oceľ' : 'Steel',
+  },
+  {
+    src: car2,
+    label: locale === 'sk' ? 'Hliník' : 'Aluminum',
+  },
+  {
+    src: car4,
+    label: locale === 'sk' ? 'Nerez' : 'Stainless',
+  },
+  {
+    src: car5,
+    label: locale === 'sk' ? 'Plasty' : 'Plastics',
+  },
+]
 
 // const features = await getCollection("features", ({ id }) => {
 //   return id.startsWith(locale);
 // });
 ---
 
-<section class="bg-white dark:bg-gray-900 pb-4 md:pb-12">
+<section class="pb-10 md:pb-16">
   <div class="container py-10 mx-auto">
-    <h1 class="text-2xl lg:text-4xl font-bold lg:tracking-tight">
-      {features.data.title}
-    </h1>
+    <div class="max-w-3xl">
+      <div>
+        <h2 class="mt-4 text-3xl font-display font-semibold tracking-tight text-slate-900 lg:text-5xl">
+          {features.data.title}
+        </h2>
+        <p class="mt-4 max-w-2xl text-lg text-slate-600">
+          {features.data.description}
+        </p>
+        <p class="mt-6 max-w-2xl text-sm font-medium uppercase tracking-[0.08em] text-slate-500">
+          {t.meta}
+        </p>
+      </div>
+    </div>
 
-    <p class="text-lg mt-4 text-slate-600">
-      {features.data.description}
-    </p>
-
-    <div
-      class="grid grid-cols-1 gap-6 mt-8 xl:mt-12 xl:gap-16 md:grid-cols-2 xl:grid-cols-3">
+    <div class="grid grid-cols-1 gap-5 mt-10 md:grid-cols-2 xl:grid-cols-3">
       {
-        features.data.features.map((item) => (
-          <div class="space-y-0">
-            <h2 class="text-lg font-semibold text-gray-800 dark:text-white">
-              {item.title}
-            </h2>
-            <p class="text-slate-500 mt-0 leading-relaxed dark:text-gray-300">
-              {item.description}
+        features.data.features.map((item, idx) => (
+          <div
+            class={`service-card service-card-${idx + 1} service-reveal group rounded-[1.1rem] border border-slate-200/70 bg-white/75 p-6 shadow-[0_18px_35px_-36px_rgba(20,30,40,0.55)] transition hover:-translate-y-1 hover:border-slate-300`}
+            style={`--card-rotate:${idx % 2 === 0 ? '-0.35deg' : '0.35deg'};`}>
+            <div class="flex items-center justify-between">
+              <h2 class="text-lg font-semibold text-slate-900">
+                {item.title}
+              </h2>
+              <span class="h-9 w-9 rounded-full border border-slate-200/80 bg-white/90 text-center text-xs font-semibold uppercase leading-9 tracking-[0.16em] text-slate-500">
+                CNC
+              </span>
+            </div>
+            <p class="mt-3 text-sm leading-relaxed text-slate-600">
+              {item.description || 'Custom setups available on request.'}
             </p>
           </div>
         ))
       }
     </div>
+
+    <div class="mt-10">
+      <div class="flex gap-4 overflow-x-auto pb-2">
+        {
+          materials.map((item) => (
+            <div class="min-w-[170px] overflow-hidden rounded-lg border border-slate-200/70 bg-white/75">
+              <Image
+                src={item.src}
+                alt={item.label}
+                fit="cover"
+                width={320}
+                height={200}
+                loading="lazy"
+              />
+              <div class="px-3 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-slate-600">
+                {item.label}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
   </div>
 </section>
+
+<script>
+  const cards = document.querySelectorAll('.service-reveal')
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('service-visible')
+          observer.unobserve(entry.target)
+        }
+      })
+    },
+    { threshold: 0.2 }
+  )
+  cards.forEach((card) => observer.observe(card))
+</script>
+
+<style>
+  .service-card {
+    opacity: 0;
+    transform: translateY(10px) scale(0.985) rotate(var(--card-rotate, 0deg));
+    transition: transform 360ms ease, opacity 360ms ease;
+  }
+
+  .service-card.service-visible {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(var(--card-rotate, 0deg));
+  }
+
+  .service-card-2,
+  .service-card-5,
+  .service-card-8 {
+    animation-delay: 0.07s;
+  }
+
+  .service-card-3,
+  .service-card-6,
+  .service-card-9 {
+    animation-delay: 0.14s;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .service-card {
+      opacity: 1;
+      transform: none !important;
+      transition: none;
+    }
+  }
+</style>

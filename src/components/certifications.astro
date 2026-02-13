@@ -1,0 +1,170 @@
+---
+import { getLocale } from 'astro-i18n-aut'
+
+const locale = getLocale(Astro.url)
+
+const copy = {
+  en: {
+    title: 'Standards and Certifications',
+    subtitle:
+      'Add your exact certificate numbers and issuing bodies below. This block is production-ready with placeholders.',
+    cta: 'Request certificate copy',
+    certs: [
+      {
+        name: 'ISO 9001:2015',
+        issuer: 'Certification Body (placeholder)',
+        certId: 'CERT-0000-0000',
+        validTo: 'Valid through: 2027-12-31',
+      },
+      {
+        name: 'ISO 14001:2015',
+        issuer: 'Certification Body (placeholder)',
+        certId: 'CERT-0000-0001',
+        validTo: 'Valid through: 2027-12-31',
+      },
+      {
+        name: 'ISO 45001:2018',
+        issuer: 'Certification Body (placeholder)',
+        certId: 'CERT-0000-0002',
+        validTo: 'Valid through: 2027-12-31',
+      },
+    ],
+  },
+  sk: {
+    title: 'Normy a certifikácie',
+    subtitle:
+      'Nižšie doplňte presné čísla certifikátov a certifikačný orgán. Sekcia je pripravená na produkciu.',
+    cta: 'Vyžiadať kópiu certifikátu',
+    certs: [
+      {
+        name: 'ISO 9001:2015',
+        issuer: 'Certifikačný orgán (placeholder)',
+        certId: 'CERT-0000-0000',
+        validTo: 'Platnosť do: 31.12.2027',
+      },
+      {
+        name: 'ISO 14001:2015',
+        issuer: 'Certifikačný orgán (placeholder)',
+        certId: 'CERT-0000-0001',
+        validTo: 'Platnosť do: 31.12.2027',
+      },
+      {
+        name: 'ISO 45001:2018',
+        issuer: 'Certifikačný orgán (placeholder)',
+        certId: 'CERT-0000-0002',
+        validTo: 'Platnosť do: 31.12.2027',
+      },
+    ],
+  },
+}
+
+const t = copy[locale] || copy.en
+---
+
+<section class="pb-14">
+  <div class="mx-auto max-w-screen-xl px-5">
+    <div class="cert-shell">
+      <div class="cert-head">
+        <h2 class="text-3xl font-display font-semibold tracking-tight text-slate-900 lg:text-5xl">
+          {t.title}
+        </h2>
+        <p class="max-w-3xl text-lg text-slate-600">{t.subtitle}</p>
+      </div>
+
+      <div class="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
+        {
+          t.certs.map((cert, idx) => (
+            <article class={`cert-card cert-card-${idx + 1}`}>
+              <div class="cert-top">
+                <span class="cert-badge">Verified</span>
+                <span class="cert-dot"></span>
+              </div>
+              <h3 class="mt-3 text-xl font-display font-semibold text-slate-900">
+                {cert.name}
+              </h3>
+              <p class="mt-2 text-sm text-slate-600">{cert.issuer}</p>
+              <dl class="mt-4 grid gap-2 text-xs uppercase tracking-[0.12em] text-slate-500">
+                <div class="flex items-center justify-between gap-4">
+                  <dt>ID</dt>
+                  <dd class="font-semibold text-slate-700">{cert.certId}</dd>
+                </div>
+                <div class="flex items-center justify-between gap-4">
+                  <dt>Status</dt>
+                  <dd class="font-semibold text-emerald-700">Active</dd>
+                </div>
+              </dl>
+              <p class="mt-4 text-sm text-slate-600">{cert.validTo}</p>
+              <a
+                href={`/${locale}/contact`}
+                class="mt-4 inline-flex rounded-md border border-slate-300 px-3 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-slate-700 transition hover:border-slate-900 hover:text-slate-900">
+                {t.cta}
+              </a>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cert-shell {
+    border-radius: 22px;
+    border: 1px solid rgba(148, 163, 184, 0.28);
+    padding: 28px;
+    background:
+      linear-gradient(140deg, rgba(255, 255, 255, 0.82), rgba(245, 250, 255, 0.78)),
+      radial-gradient(440px 180px at 90% 10%, rgba(41, 93, 112, 0.09), transparent);
+    box-shadow: 0 22px 46px -42px rgba(15, 23, 42, 0.55);
+  }
+
+  .cert-head {
+    display: grid;
+    gap: 10px;
+  }
+
+  .cert-card {
+    border-radius: 14px;
+    border: 1px solid rgba(148, 163, 184, 0.34);
+    background: rgba(255, 255, 255, 0.86);
+    padding: 16px;
+    transition: transform 240ms ease, box-shadow 240ms ease;
+  }
+
+  .cert-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 22px 40px -34px rgba(15, 23, 42, 0.55);
+  }
+
+  .cert-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .cert-badge {
+    border-radius: 999px;
+    border: 1px solid rgba(148, 163, 184, 0.4);
+    padding: 4px 9px;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #475569;
+  }
+
+  .cert-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 999px;
+    background: #10b981;
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.14);
+  }
+
+  @media (max-width: 640px) {
+    .cert-shell {
+      padding: 20px;
+      border-radius: 16px;
+    }
+  }
+</style>

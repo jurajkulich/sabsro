@@ -1,0 +1,158 @@
+---
+const { contact, locale } = Astro.props
+
+const copy =
+  locale === 'sk'
+    ? {
+        subtitle: 'Napíšte nám projekt, materiál a počet kusov. Odpovieme s návrhom postupu.',
+        officeHours: 'Pracovné dni',
+        officeHoursValue: 'Po-Pia 07:00-15:30',
+        locationTitle: 'Sídlo firmy',
+        ids: {
+          ico: 'IČO',
+          dic: 'DIČ',
+        },
+      }
+    : {
+        subtitle: 'Send your project brief, material and quantity. We will respond with a production proposal.',
+        officeHours: 'Working Days',
+        officeHoursValue: 'Mon-Fri 07:00-15:30',
+        locationTitle: 'Company location',
+        ids: {
+          ico: 'Company ID (IČO)',
+          dic: 'Tax ID (DIČ)',
+        },
+      }
+
+const details = {
+  email: 'info@svehlasro.sk',
+  owners: [
+    { name: 'Ing. Boris Blaško', phone: '+421 918 601 675', href: 'tel:+421918601675' },
+    { name: 'Ján Švehla', phone: '+421 907 794 370', href: 'tel:+421907794370' },
+  ],
+  production: {
+    name: 'Ing. Juraj Nemček',
+    email: 'vyroba@svehlasro.sk',
+    phone: '+421 905 691 366',
+    phoneHref: 'tel:+421905691366',
+  },
+  address: ['Švehla a Blaško s.r.o.', 'Kočovská 2583/22', '915 01 Nové Mesto nad Váhom'],
+  ids: {
+    ico: '47419181',
+    dic: 'SK2023864601',
+  },
+}
+---
+
+<section class="pt-10 pb-16">
+  <div class="mx-auto max-w-screen-xl px-5">
+    <div class="max-w-3xl">
+      <h1 class="text-4xl font-display font-semibold tracking-tight text-slate-900 lg:text-6xl">
+        {contact.data.title}
+      </h1>
+      <p class="mt-4 text-lg text-slate-600">{copy.subtitle}</p>
+    </div>
+
+    <div class="mt-8 grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
+      <div class="grid gap-5 sm:grid-cols-2">
+        <article class="contact-card sm:col-span-2">
+          <p class="contact-label">{contact.data.contact}</p>
+          <a class="contact-link" href={`mailto:${details.email}`}>{details.email}</a>
+          <div class="mt-4 grid gap-3 sm:grid-cols-2">
+            {
+              details.owners.map((owner) => (
+                <div>
+                  <p class="font-semibold text-slate-800">{owner.name}</p>
+                  <a class="contact-link" href={owner.href}>{owner.phone}</a>
+                </div>
+              ))
+            }
+          </div>
+        </article>
+
+        <article class="contact-card">
+          <p class="contact-label">{contact.data.contactmachinery}</p>
+          <p class="font-semibold text-slate-800">{details.production.name}</p>
+          <a class="contact-link" href={`mailto:${details.production.email}`}>{details.production.email}</a>
+          <a class="contact-link" href={details.production.phoneHref}>{details.production.phone}</a>
+        </article>
+
+        <article class="contact-card">
+          <p class="contact-label">{contact.data.contactaddress}</p>
+          <p class="text-slate-700">
+            {details.address.map((line) => (
+              <>
+                {line}
+                <br />
+              </>
+            ))}
+          </p>
+          <p class="mt-3 text-sm text-slate-600">
+            {copy.ids.ico}: {details.ids.ico}
+          </p>
+          <p class="text-sm text-slate-600">
+            {copy.ids.dic}: {details.ids.dic}
+          </p>
+        </article>
+      </div>
+
+      <div class="contact-map-wrap">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2630.8721528963933!2d17.842833576841596!3d48.74613890859892!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4714a82d6f578e57%3A0x7dd63b0688b42144!2s%C5%A0vehla%20a%20Bla%C5%A1ko%20s.%20r.%20o.!5e0!3m2!1ssk!2ssk!4v1703425557175!5m2!1ssk!2ssk"
+          title={copy.locationTitle}
+          loading="eager"
+          referrerpolicy="no-referrer-when-downgrade"
+          class="h-full min-h-[360px] w-full"></iframe>
+        <div class="contact-map-caption">
+          <p class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">{copy.officeHours}</p>
+          <p class="text-sm text-slate-700">{copy.officeHoursValue}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact-card {
+    border-radius: 16px;
+    border: 1px solid rgba(148, 163, 184, 0.34);
+    background: rgba(255, 255, 255, 0.84);
+    padding: 18px;
+    box-shadow: 0 18px 34px -35px rgba(15, 23, 42, 0.5);
+    transition: transform 220ms ease, box-shadow 220ms ease;
+  }
+
+  .contact-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 24px 38px -34px rgba(15, 23, 42, 0.6);
+  }
+
+  .contact-label {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-weight: 700;
+    color: #334155;
+    margin-bottom: 8px;
+  }
+
+  .contact-link {
+    display: block;
+    color: #1d4ed8;
+    margin-top: 4px;
+  }
+
+  .contact-map-wrap {
+    overflow: hidden;
+    border-radius: 18px;
+    border: 1px solid rgba(148, 163, 184, 0.34);
+    background: rgba(255, 255, 255, 0.84);
+    box-shadow: 0 20px 38px -36px rgba(15, 23, 42, 0.58);
+  }
+
+  .contact-map-caption {
+    border-top: 1px solid rgba(148, 163, 184, 0.24);
+    padding: 12px 14px;
+    background: rgba(255, 255, 255, 0.9);
+  }
+</style>

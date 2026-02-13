@@ -1,0 +1,90 @@
+---
+import { getLocale } from 'astro-i18n-aut'
+
+const locale = getLocale(Astro.url)
+
+const items =
+  locale === 'sk'
+    ? [
+        'Energetika',
+        'Potravinárske stroje',
+        'Automatizačné linky',
+        'Servisné náhradné diely',
+        'Prípravky a upínanie',
+        'Jednoúčelové diely',
+      ]
+    : [
+        'Energy sector',
+        'Food processing machinery',
+        'Automation lines',
+        'Maintenance spare parts',
+        'Fixtures and clamping tools',
+        'Custom one-off components',
+      ]
+---
+
+<section class="pb-12">
+  <div class="mx-auto max-w-screen-xl px-5">
+    <div class="ticker-shell">
+      <div class="ticker-track">
+        {[...items, ...items].map((item) => (
+          <div class="ticker-item">
+            <span class="ticker-dot"></span>
+            <span>{item}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ticker-shell {
+    overflow: hidden;
+    border-radius: 14px;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.88));
+  }
+
+  .ticker-track {
+    display: flex;
+    width: max-content;
+    animation: tickerMove 34s linear infinite;
+  }
+
+  .ticker-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 22px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #334155;
+    white-space: nowrap;
+  }
+
+  .ticker-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: #b8743a;
+    box-shadow: 0 0 0 4px rgba(184, 116, 58, 0.15);
+  }
+
+  @keyframes tickerMove {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ticker-track {
+      animation: none;
+    }
+  }
+</style>
