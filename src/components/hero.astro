@@ -1,223 +1,424 @@
 ---
+import { getImage } from 'astro:assets'
 import { getLocale } from 'astro-i18n-aut'
+import posterSrc from 'assets/hero-poster.jpg'
+import Intake from './ui/intake.astro'
+import { assetPath } from '../data/company'
+import { plateLabel } from '../data/machines'
 
-const locale = getLocale(Astro.url)
+const locale = getLocale(Astro.url) === 'en' ? 'en' : 'sk'
+// The source footage is 960 px wide; the poster is served at its native size, never upscaled.
+const poster = await getImage({ src: posterSrc, width: 960, format: 'webp', quality: 82 })
 
 const copy = {
   en: {
-    title: 'Precision milling you can rely on.',
-    body:
-      'We are a family-run machining shop delivering prototype-to-small-batch milling, turning, and finishing. Fast feedback, consistent quality, and a partner who answers the phone.',
-    statOneLabel: 'Established in Slovakia',
-    statTwoLabel: 'mm tolerance focus',
-    statThreeLabel: 'day delivery for batches',
-    videoEyebrow: 'Live Shop Footage',
-    videoNote: 'MAS MCV 1016 and Trens CNC turning in action.',
-    stats: [
-      { value: 1990, suffix: '', label: 'Established in Slovakia' },
-      { value: 0.01, suffix: 'mm', label: 'Tolerance focus' },
-      { value: 20, suffix: 'd', label: 'Batch lead time' },
+    head: ['Sheet 01 · CNC machining', 'Nové Mesto nad Váhom · since 1990'],
+    title: ['Your drawing.', 'Our part.'],
+    body: 'A family machining shop in Nové Mesto nad Váhom. CNC milling and turning for prototypes and small series, steel to technical plastics.',
+    facts: [
+      ['Machining since', '1990'],
+      ['People', 'about 20'],
+      ['Production hall', '600 m²'],
+      ['Machines', '12'],
+      ['Certified', 'ISO 9001 · 14001 · 45001'],
     ],
+    videoNote: 'Footage from our workshop.',
+    play: 'Play footage',
+    pause: 'Pause footage',
   },
   sk: {
-    title: 'Presné frézovanie, na ktoré sa môžete spoľahnúť.',
-    body:
-      'Sme rodinná firma zameraná na prototypy a menšie série. Rýchla spätná väzba, stabilná kvalita a partner, ktorý je dostupný.',
-    statOneLabel: 'Založené na Slovensku',
-    statTwoLabel: 'mm tolerancia',
-    statThreeLabel: 'dní dodania série',
-    videoEyebrow: 'Priamo z výroby',
-    videoNote: 'MAS MCV 1016 a Trens CNC v prevádzke.',
-    stats: [
-      { value: 1990, suffix: '', label: 'Založené na Slovensku' },
-      { value: 0.01, suffix: 'mm', label: 'Tolerancia' },
-      { value: 20, suffix: 'd', label: 'Dodanie série' },
+    head: ['List 01 · CNC obrábanie', 'Nové Mesto nad Váhom · od 1990'],
+    title: ['Váš výkres.', 'Náš diel.'],
+    body: 'Rodinná strojárska dielňa v Novom Meste nad Váhom. CNC frézovanie a sústruženie pre prototypy a menšie série, od ocele po technické plasty.',
+    facts: [
+      ['Obrábame od roku', '1990'],
+      ['Ľudia', 'približne 20'],
+      ['Výrobná hala', '600 m²'],
+      ['Stroje', '12'],
+      ['Certifikáty', 'ISO 9001 · 14001 · 45001'],
     ],
+    videoNote: 'Zábery z našej dielne.',
+    play: 'Prehrať video',
+    pause: 'Zastaviť video',
   },
 }
 
-const t = copy[locale] || copy.en
+const t = copy[locale]
 ---
 
-<section class="relative overflow-hidden">
-  <div class="absolute left-[-12rem] top-12 h-72 w-72 rounded-full bg-[#c58f5b]/20 blur-3xl"></div>
-  <div class="absolute right-[-10rem] top-36 h-64 w-64 rounded-full bg-[#295d70]/16 blur-3xl"></div>
-  <div class="mx-auto max-w-screen-xl px-5 pb-14 pt-10 lg:pt-16">
-    <div class="grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr]">
-      <div class="space-y-6 hero-fade hero-fade--1">
-        <h1 class="text-4xl font-display font-semibold leading-[1.05] tracking-tight text-slate-900 sm:text-5xl lg:text-[3.6rem]">
-          {t.title}
-        </h1>
-        <p class="max-w-xl text-lg text-slate-600">
-          {t.body}
+<div class="hero-wrap">
+  <section class="hero">
+    <div class="hero-field">
+      <div class="hero-head" aria-hidden="true">
+        <div class="hero-ticks">{Array.from({ length: 7 }, () => <span></span>)}</div>
+        <p class="hero-run label">
+          <span data-short={t.head[0].split(' · ')[0]}>{t.head[0]}</span>
+          <span>{t.head[1]}</span>
         </p>
-        <div class="grid max-w-xl grid-cols-2 gap-3 text-sm text-slate-600 sm:grid-cols-3">
-          {
-            t.stats.map((stat) => (
-              <div class="rounded-2xl border border-slate-200/70 bg-white/65 p-4 shadow-[0_10px_30px_-25px_rgba(15,23,42,0.55)] transition hover:-translate-y-0.5">
-                <p
-                  class="hero-counter text-2xl font-display font-semibold text-slate-900"
-                  data-target={String(stat.value)}
-                  data-suffix={stat.suffix}>
-                  0
-                </p>
-                <p>{stat.label}</p>
-              </div>
-            ))
-          }
-        </div>
       </div>
 
-      <div class="relative hero-fade hero-fade--2 hero-tilt-wrap">
-        <div class="hero-tilt overflow-hidden rounded-[1.4rem] border border-white/70 bg-white/85 shadow-[0_32px_70px_-46px_rgba(22,32,40,0.55)]">
-          <video
-            id="wing"
-            autoplay
-            muted
-            loop
-            playsinline
-            preload="metadata"
-            class="aspect-[4/3] w-full object-cover">
-            <source
-              src="https://raw.githubusercontent.com/jurajkulich/sabsro/main/src/assets/hero.mp4"
-              type="video/mp4"
-            />
-            Your browser does not support the video tag.
-          </video>
-          <div class="border-t border-white/60 bg-white/92 px-6 py-4">
-            <p class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
-              {t.videoEyebrow}
-            </p>
-            <p class="text-sm text-slate-600">{t.videoNote}</p>
-          </div>
-        </div>
-      </div>
+      <h1 class="display hero-title" style={`--title-em: ${locale === 'en' ? 8.1 : 7.1}`}>
+        {t.title.map((line) => <span>{line}</span>)}
+      </h1>
+
+      <p class="hero-body">{t.body}</p>
     </div>
-  </div>
-</section>
+
+    <!-- The primary action follows the headline in reading order, on every screen. -->
+    <Intake class="hero-intake" />
+
+    <div class="hero-register">
+      <dl class="hero-facts">
+        {
+          t.facts.map(([k, v]) => (
+            <div>
+              <dt>{k}</dt>
+              <dd class="num">{v}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+
+    <figure class="hero-photo">
+      <div class="hero-media">
+        <video
+          muted
+          loop
+          playsinline
+          preload="none"
+          poster={poster.src}
+          aria-label={t.videoNote}
+          class="hero-video plate">
+          <source src={assetPath('hero.mp4')} type="video/mp4" />
+        </video>
+      </div>
+      <figcaption>
+        <span><span class="num">{plateLabel(locale, 1)}</span> · {t.videoNote}</span>
+        <button
+          type="button"
+          class="video-toggle"
+          aria-label={t.play}
+          data-play={t.play}
+          data-pause={t.pause}>
+          <svg viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true">
+            <path class="i-play" d="M6 4.5v11l9-5.5z"></path>
+            <path class="i-pause" d="M7 4.5v11M13 4.5v11"></path>
+          </svg>
+        </button>
+      </figcaption>
+    </figure>
+  </section>
+</div>
 
 <script>
-  const counters = Array.from(document.querySelectorAll('.hero-counter'))
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  const animateCounter = (el) => {
-    const target = Number(el.dataset.target || 0)
-    const suffix = el.dataset.suffix || ''
-    const isDecimal = String(target).includes('.')
-    const duration = 900
-    const start = performance.now()
-    const step = (ts) => {
-      const p = Math.min((ts - start) / duration, 1)
-      const eased = 1 - Math.pow(1 - p, 3)
-      const value = target * eased
-      el.textContent = `${isDecimal ? value.toFixed(2) : Math.round(value)}${suffix}`
-      if (p < 1) requestAnimationFrame(step)
-    }
-    requestAnimationFrame(step)
-  }
-  const setCounterFinal = (el) => {
-    const target = Number(el.dataset.target || 0)
-    const suffix = el.dataset.suffix || ''
-    const isDecimal = String(target).includes('.')
-    el.textContent = `${isDecimal ? target.toFixed(2) : Math.round(target)}${suffix}`
+  // Footage autoplays only on wide screens, with motion welcome and no data saver.
+  // Everyone else keeps the poster plate and can start it with the control.
+  const video = document.querySelector<HTMLVideoElement>('.hero-video')
+  const toggle = document.querySelector<HTMLButtonElement>('.video-toggle')
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)')
+  const wide = window.matchMedia('(min-width: 1024px)')
+  const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData
+  let userChoice: 'play' | 'pause' | null = null
+
+  const render = () => {
+    if (!video || !toggle) return
+    const playing = !video.paused
+    toggle.classList.toggle('is-playing', playing)
+    toggle.setAttribute('aria-label', (playing ? toggle.dataset.pause : toggle.dataset.play) ?? '')
   }
 
-  if (reduceMotion) {
-    counters.forEach((el) => setCounterFinal(el))
-  } else {
-    const counterObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return
-          animateCounter(entry.target)
-          counterObserver.unobserve(entry.target)
-        })
-      },
-      { threshold: 0.4 },
-    )
-
-    counters.forEach((el) => counterObserver.observe(el))
+  const sync = () => {
+    if (!video) return
+    const auto = !reduce.matches && wide.matches && !saveData
+    const want = userChoice ? userChoice === 'play' : auto
+    if (want && video.paused) video.play().catch(() => {})
+    else if (!want && !video.paused) video.pause()
   }
 
-  const tiltCard = document.querySelector('.hero-tilt')
-  const tiltWrap = document.querySelector('.hero-tilt-wrap')
-  const hasFinePointer = window.matchMedia('(pointer:fine)').matches
-
-  if (tiltCard && tiltWrap && hasFinePointer && !reduceMotion) {
-    const handleMouseMove = (event) => {
-      const rect = tiltWrap.getBoundingClientRect()
-      const x = (event.clientX - rect.left) / rect.width - 0.5
-      const y = (event.clientY - rect.top) / rect.height - 0.5
-      tiltCard.style.transform = `perspective(1200px) rotateY(${x * 4}deg) rotateX(${y * -4}deg)`
-    }
-    const handleMouseLeave = () => {
-      tiltCard.style.transform = 'perspective(1200px) rotateY(0deg) rotateX(0deg)'
-    }
-    let tiltActive = false
-
-    const enableTilt = () => {
-      if (tiltActive) return
-      tiltWrap.addEventListener('mousemove', handleMouseMove)
-      tiltWrap.addEventListener('mouseleave', handleMouseLeave)
-      tiltActive = true
-    }
-    const disableTilt = () => {
-      if (!tiltActive) return
-      tiltWrap.removeEventListener('mousemove', handleMouseMove)
-      tiltWrap.removeEventListener('mouseleave', handleMouseLeave)
-      handleMouseLeave()
-      tiltActive = false
-    }
-
-    const tiltObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            enableTilt()
-            return
-          }
-          disableTilt()
-        })
-      },
-      { threshold: 0.35 },
-    )
-
-    tiltObserver.observe(tiltWrap)
-  }
+  video?.addEventListener('play', render)
+  video?.addEventListener('pause', render)
+  toggle?.addEventListener('click', () => {
+    userChoice = video?.paused ? 'play' : 'pause'
+    sync()
+  })
+  reduce.addEventListener('change', sync)
+  wide.addEventListener('change', sync)
+  sync()
+  render()
 </script>
 
 <style>
-  @keyframes heroFade {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  .hero-wrap {
+    container-type: inline-size;
   }
 
-  .hero-fade {
-    animation: heroFade 0.7s ease-out both;
+  .hero {
+    /* Same 12-column grid as .frame, measured on the full-bleed hero. */
+    --w: min(100cqw, 1440px);
+    --col: calc((var(--w) - 13 * var(--gutter)) / 12);
+    --edge: calc((100cqw - var(--w)) / 2 + var(--gutter));
+    display: grid;
+    grid-template-columns: 1fr;
   }
 
-  .hero-fade--2 {
-    animation-delay: 0.12s;
+  /* The headline field is paper and ink. Red owns one contained module, the facts register,
+     so the first view carries the logo red without the red flooding half the screen. */
+  .hero-field {
+    background: #fff;
+    color: var(--color-ink);
   }
 
-  .hero-tilt {
-    transition: transform 260ms ease;
-    transform-style: preserve-3d;
+  .hero-register {
+    background: var(--color-red);
+    color: #fff;
+  }
+
+  .hero-field {
+    padding: 0 var(--gutter) clamp(28px, 4vw, 40px);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(28px, 4.5vw, 48px);
+  }
+
+  .hero-head {
+    display: grid;
+    gap: 10px;
+  }
+
+  /* The one motion: the grid's tick line draws across the field once. Everything else paints from frame 0. */
+  .hero-ticks {
+    animation: wipe 1100ms cubic-bezier(0.16, 1, 0.3, 1) 120ms both;
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    column-gap: var(--gutter);
+    height: 10px;
+  }
+
+  .hero-ticks span {
+    border-left: 1px solid var(--color-ink);
+  }
+
+  .hero-ticks span:last-child {
+    border-right: 1px solid var(--color-ink);
+  }
+
+  .hero-run {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 4px 24px;
+  }
+
+  /*
+    Display size, capped so the longest line ("Your drawing." / "Váš výkres.") stays on one line
+    inside the field. --title-em is that line's width in ems, per locale.
+  */
+  .hero-title {
+    --field: calc(100cqw - 2 * var(--gutter));
+    font-size: max(2rem, min(var(--text-display), calc(var(--field) / var(--title-em))));
+  }
+
+  .hero-title span {
+    display: block;
+    white-space: nowrap;
+  }
+
+  .hero-body {
+    max-width: 36rem;
+    color: var(--color-ink);
+    font-size: var(--text-lead);
+    line-height: 1.45;
+  }
+
+  /* Facts register: white rules on the red module. */
+  .hero-register {
+    padding: 24px var(--gutter) 32px;
+  }
+
+  .hero-facts {
+    border-top: 2px solid #fff;
+  }
+
+  .hero-facts > div {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--gutter);
+    padding: 9px 0;
+    border-bottom: 1px solid #fff;
+    font-size: var(--text-body);
+  }
+
+  .hero-facts dd {
+    margin: 0;
+    font-weight: 750;
+  }
+
+  /* Plate: footage over an ink caption bar carrying the plate number and the play/pause control. */
+  .hero-photo {
+    position: relative;
+    margin: 0;
+    background: var(--color-ink);
+  }
+
+  /* The box is sized by the layout only; the video (poster or playing) never sizes the hero. */
+  .hero-media {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+  }
+
+  .hero-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hero-photo figcaption {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 0 0 0 var(--gutter);
+    background: var(--color-ink);
+    color: #fff;
+    font-size: var(--text-small);
+    font-weight: 600;
+  }
+
+  .video-toggle {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    color: #fff;
+    background: var(--color-ink);
+    border: 0;
+    border-left: 1px solid #fff;
+    transition: background-color 120ms linear;
+  }
+
+  .video-toggle:hover {
+    background: var(--color-red);
+  }
+
+  .video-toggle:focus-visible {
+    outline-color: #fff;
+    outline-offset: -4px;
+  }
+
+  .video-toggle .i-pause,
+  .video-toggle.is-playing .i-play {
+    display: none;
+  }
+
+  .video-toggle.is-playing .i-pause {
+    display: inline;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .hero-fade {
+    .hero-ticks {
       animation: none;
     }
+  }
 
-    .hero-tilt {
-      transition: none;
-      transform: none !important;
+  /* Narrow screens: only the sheet number, on the tick line; never a label stacked above the headline. */
+  @media (max-width: 639px) {
+    .hero-run {
+      justify-content: flex-end;
+    }
+
+    .hero-run span:last-child {
+      display: none;
+    }
+
+    .hero-run span:first-child {
+      font-size: 0;
+    }
+
+    .hero-run span:first-child::before {
+      content: attr(data-short);
+      font-size: var(--text-label);
+    }
+  }
+
+  @keyframes wipe {
+    from {
+      clip-path: inset(0 100% 0 0);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+
+  @media (min-width: 640px) {
+    .hero-facts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: var(--gutter);
+    }
+
+    /* The long certificate row spans both halves; its value column stays on the same line as the others. */
+    .hero-facts > div:last-child:nth-child(odd) {
+      grid-column: 1 / -1;
+      grid-template-columns: calc((100% - 3 * var(--gutter)) / 4) 1fr;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    /*
+      Field ends in the gutter between columns 7 and 8 of the page grid.
+      Row 1: headline field | footage. Row 2: facts register | intake, both opening on the same rule line.
+    */
+    .hero {
+      grid-template-columns:
+        calc(var(--edge) + 7 * var(--col) + 6.5 * var(--gutter))
+        1fr;
+      grid-template-rows: 1fr auto;
+      min-height: clamp(640px, calc(100vh - 78px), 920px);
+    }
+
+    .hero-title {
+      --field: calc(min(100cqw, 1440px) * 7 / 12 - 1.6 * var(--gutter));
+    }
+
+    .hero-field {
+      grid-column: 1;
+      grid-row: 1;
+      padding-left: var(--edge);
+      padding-right: calc(var(--gutter) / 2);
+    }
+
+    .hero-register {
+      grid-column: 1;
+      grid-row: 2;
+      padding: clamp(24px, 2.4vw, 32px) calc(var(--gutter) / 2) clamp(28px, 3vw, 40px) var(--edge);
+    }
+
+    .hero-photo {
+      grid-column: 2;
+      grid-row: 1;
+      display: grid;
+      grid-template-rows: 1fr auto;
+    }
+
+    .hero-media {
+      aspect-ratio: auto;
+      min-height: 0;
+    }
+
+    .hero :global(.hero-intake) {
+      grid-column: 2;
+      grid-row: 2;
+      --intake-pad-l: calc(var(--gutter) / 2);
+      --intake-pad-r: var(--edge);
+    }
+
+    .hero-photo figcaption {
+      padding-left: calc(var(--gutter) / 2);
     }
   }
 </style>

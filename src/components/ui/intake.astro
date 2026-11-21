@@ -1,0 +1,313 @@
+---
+// The primary action pair, one component for every page: an ink cell (send a drawing)
+// and a white cell (call production) under a 2px rule, then a note saying what to send,
+// who answers and what comes back. `tone="red"` is for use inside a red field.
+// `note="brief"` keeps only the what-to-send line, for places whose own copy already
+// names the person and the reply, so the page does not say it twice.
+import { getLocale } from 'astro-i18n-aut'
+import Arrow from './arrow.astro'
+import { company, telHref, mailHref, localizedPath } from '../../data/company'
+
+interface Props {
+  tone?: 'paper' | 'red'
+  allContacts?: boolean
+  note?: 'full' | 'brief'
+  class?: string
+}
+
+const { tone = 'paper', allContacts = true, note = 'full', class: className } = Astro.props
+const locale = getLocale(Astro.url) === 'en' ? 'en' : 'sk'
+const contact = company.production
+const [mailUser, mailDomain] = contact.email.split('@')
+// Filled in by the client in company.ts; unfilled lines never render.
+const assurances = Object.values(company.assurances).filter((line): line is { sk: string; en: string } => Boolean(line))
+
+const t = {
+  en: {
+    send: 'Send a drawing',
+    call: 'Call production',
+    subject: 'Quote request – drawing attached',
+    sendWhat: 'STEP, DXF or PDF · material · quantity · deadline',
+    who: `${contact.name}, production`,
+    reply: 'We reply with a proposed process and a lead time.',
+    copyMail: 'Copy address',
+    copied: 'Address copied',
+    copyFailed: `Copying is blocked here. The address is ${contact.email}`,
+    allContacts: 'All contacts',
+  },
+  sk: {
+    send: 'Poslať výkres',
+    call: 'Zavolať do výroby',
+    subject: 'Dopyt – výkres v prílohe',
+    sendWhat: 'STEP, DXF alebo PDF · materiál · počet kusov · termín',
+    who: `${contact.name}, výroba`,
+    reply: 'Odpovieme s návrhom postupu a termínom.',
+    copyMail: 'Kopírovať adresu',
+    copied: 'Adresa skopírovaná',
+    copyFailed: `Kopírovanie je tu zablokované. Adresa je ${contact.email}`,
+    allContacts: 'Všetky kontakty',
+  },
+}[locale]
+---
+
+<div class:list={['intake', tone === 'red' && 'on-red', className]}>
+  <div class="cells">
+    <a href={mailHref(contact.email, t.subject)} class="cell cell-ink">
+      <span class="label">{t.send}</span>
+      <span class="cell-value">{mailUser}<wbr />@{mailDomain}</span>
+      <Arrow class="cell-arrow" />
+    </a>
+    <a href={telHref(contact.phone)} class="cell">
+      <span class="label">{t.call}</span>
+      <span class="cell-value cell-phone num">{contact.phone}</span>
+      <Arrow class="cell-arrow" />
+    </a>
+  </div>
+  <div class="note">
+    <p>{t.sendWhat}</p>
+    {
+      note === 'full' && (
+        <>
+          <p>
+            {t.who} · <span class="hours num">{company.hours[locale]}</span>
+          </p>
+          <p>{t.reply}</p>
+          {assurances.map((line) => <p>{line[locale]}</p>)}
+        </>
+      )
+    }
+    <p class="aux">
+      <button
+        type="button"
+        class="aux-link"
+        data-copy={contact.email}
+        data-done={t.copied}
+        data-fail={t.copyFailed}
+        hidden>
+        {t.copyMail}
+      </button>
+      {
+        allContacts && (
+          <a href={localizedPath(locale, 'contact')} class="aux-link">
+            {t.allContacts}
+            <Arrow class="aux-arrow" />
+          </a>
+        )
+      }
+      <span class="copy-status" role="status" data-copy-status></span>
+    </p>
+  </div>
+</div>
+
+<script>
+  // Copy the drawing address for buyers whose mail client does not open.
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((btn) => {
+    if (!navigator.clipboard) return
+    const status = btn.parentElement?.querySelector<HTMLElement>('[data-copy-status]')
+    const idle = btn.textContent
+    let timer = 0
+    btn.hidden = false
+    btn.addEventListener('click', async () => {
+      window.clearTimeout(timer)
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy ?? '')
+        btn.textContent = btn.dataset.done ?? ''
+        if (status) status.textContent = ''
+        timer = window.setTimeout(() => {
+          btn.textContent = idle
+        }, 2400)
+      } catch {
+        // Say so and spell the address out; never fail silently.
+        if (status) status.textContent = btn.dataset.fail ?? ''
+      }
+    })
+  })
+</script>
+
+<style>
+  .intake {
+    --pad-l: var(--intake-pad-l, var(--gutter));
+    --pad-r: var(--intake-pad-r, var(--gutter));
+    container-type: inline-size;
+  }
+
+  .cells {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .cell {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: auto auto;
+    align-items: end;
+    align-content: center;
+    gap: 6px 16px;
+    min-height: 96px;
+    padding: 20px var(--pad-r) 20px var(--pad-l);
+    color: var(--color-ink);
+    background: #fff;
+    border-top: var(--rule);
+    transition:
+      background-color 120ms linear,
+      color 120ms linear;
+  }
+
+  .cell .label {
+    grid-column: 1;
+  }
+
+  .cell-value {
+    grid-column: 1;
+    font-size: var(--text-title);
+    font-weight: 750;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+    overflow-wrap: anywhere;
+  }
+
+  .cell-phone {
+    white-space: nowrap;
+  }
+
+  .cell :global(.cell-arrow) {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    align-self: center;
+    width: 24px;
+    height: 24px;
+  }
+
+  .cell-ink {
+    background: var(--color-ink);
+    color: #fff;
+  }
+
+  .cell:hover {
+    background: var(--color-red);
+    color: #fff;
+  }
+
+  .note {
+    display: grid;
+    gap: 4px;
+    padding: 14px var(--pad-r) 18px var(--pad-l);
+    border-top: var(--hair);
+    font-size: var(--text-small);
+    line-height: 1.45;
+    color: var(--color-mid);
+  }
+
+  .hours {
+    white-space: nowrap;
+  }
+
+  .aux {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 24px;
+  }
+
+  .aux-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 0;
+    font: inherit;
+    font-weight: 650;
+    color: var(--color-ink);
+    background: none;
+    border: 0;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+  }
+
+  .aux-link:hover {
+    text-decoration-color: var(--color-red);
+    text-decoration-thickness: 2px;
+  }
+
+  .aux-link :global(.aux-arrow) {
+    width: 16px;
+    height: 16px;
+  }
+
+  .copy-status:empty {
+    display: none;
+  }
+
+  .copy-status {
+    flex-basis: 100%;
+    padding-bottom: 6px;
+    color: var(--color-ink);
+    font-weight: 650;
+  }
+
+  /* Inside a red field: the cells invert on hover instead of turning red, and the note is white. */
+  .on-red .cell {
+    border-top-color: #fff;
+  }
+
+  .on-red .cell:hover {
+    background: var(--color-ink);
+    border-top-color: var(--color-ink);
+    color: #fff;
+  }
+
+  .on-red .cell-ink {
+    border-top-color: var(--color-ink);
+  }
+
+  .on-red .cell-ink:hover {
+    background: #fff;
+    border-top-color: #fff;
+    color: var(--color-ink);
+  }
+
+  .on-red .note {
+    border-top-color: #fff;
+    padding-inline: 0;
+  }
+
+  .on-red .note,
+  .on-red .aux-link,
+  .on-red .copy-status {
+    color: #fff;
+  }
+
+  .on-red .aux-link:hover {
+    text-decoration-color: #fff;
+  }
+
+  /* Two-up as soon as the intake itself is wide enough, wherever it sits. */
+  @container (min-width: 520px) {
+    .cells {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+
+    .cell {
+      min-height: 112px;
+    }
+
+    .cell:first-child {
+      padding-right: var(--gutter);
+    }
+
+    .cell + .cell {
+      padding-left: var(--gutter);
+      border-left: var(--hair);
+    }
+
+    .cell-value {
+      font-size: var(--text-lead);
+    }
+  }
+
+  @container (min-width: 720px) {
+    .cell-value {
+      font-size: var(--text-title);
+    }
+  }
+</style>

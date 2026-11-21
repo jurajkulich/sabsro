@@ -1,97 +1,264 @@
 ---
-import Container from '@components/container.astro'
-import { Astronav, MenuItems, MenuIcon } from 'astro-navbar'
 import logo from '../../assets/logo.svg'
 import { getLocale } from 'astro-i18n-aut'
+import LanguagePicker from '../languagePicker.astro'
+import { company, telHref, localizedPath } from '../../data/company'
 
-const locale = getLocale(Astro.url)
-const basePath = import.meta.env.BASE_URL.replace(/\/$/, '')
-const defaultLocale = 'sk'
-const localizedPath = (lang: string, slug = '') => {
-  const normalizedSlug = slug ? `/${slug.replace(/^\/+|\/+$/g, '')}` : ''
-  if (lang === defaultLocale) {
-    return `${basePath}${normalizedSlug}` || '/'
-  }
-  return `${basePath}/${lang}${normalizedSlug}`
-}
+const locale = getLocale(Astro.url) === 'en' ? 'en' : 'sk'
 
-const localizedTitles = {
-  en: {
-    home: 'Home',
-    about: 'About',
-    machines: 'Machines',
-    contact: 'Contact',
-  },
-  sk: {
-    home: 'Domov',
-    about: 'O nás',
-    machines: 'Naše stroje',
-    contact: 'Kontakt',
-  },
-}
+const titles = {
+  en: { home: 'Home', machines: 'Machines', about: 'About', contact: 'Contact', call: 'Call production', menu: 'Menu', nav: 'Main' },
+  sk: { home: 'Domov', machines: 'Stroje', about: 'O nás', contact: 'Kontakt', call: 'Zavolať do výroby', menu: 'Menu', nav: 'Hlavná' },
+}[locale]
 
-// todo
-const menuTitles = localizedTitles[locale] || localizedTitles.en
-
-const menuitems = [
-  {
-    title: menuTitles.home,
-    path: localizedPath(locale),
-  },
-  {
-    title: menuTitles.about,
-    path: localizedPath(locale, 'about'),
-  },
-  {
-    title: menuTitles.machines,
-    path: localizedPath(locale, 'machines'),
-  },
-  {
-    title: menuTitles.contact,
-    path: localizedPath(locale, 'contact'),
-  },
+const items = [
+  { title: titles.home, path: localizedPath(locale) },
+  { title: titles.machines, path: localizedPath(locale, 'machines') },
+  { title: titles.about, path: localizedPath(locale, 'about') },
+  { title: titles.contact, path: localizedPath(locale, 'contact') },
 ]
+const currentPath = Astro.url.pathname.replace(/\.html$/, '').replace(/\/+$/, '') || '/'
+const isCurrent = (path: string) => (path.replace(/\/+$/, '') || '/') === currentPath
 ---
 
-<div class="sticky top-0 z-50">
-  <div class="bg-[#f7f4ef]/95 backdrop-blur">
-    <Container>
-      <div class="flex items-center justify-between py-2 text-[11px] uppercase tracking-[0.2em] text-slate-500">
-        <span>{locale === 'sk' ? 'Presné frézovanie od roku 1990' : 'Precision milling since 1990'}</span>
-        <span class="hidden sm:inline">{locale === 'sk' ? 'Nové Mesto nad Váhom' : 'Nové Mesto nad Váhom'}</span>
+<!-- Without JavaScript the menu simply stays open on small screens. -->
+<script is:inline>
+  document.documentElement.classList.add('js')
+</script>
+
+<header class="site-header">
+  <div class="frame">
+    <div class="bar">
+      <a href={localizedPath(locale)} class="brand" aria-label="Švehla a Blaško s.r.o.">
+        <img src={logo.src} alt="" width="86" height="64" />
+      </a>
+
+      <nav id="site-menu" class="menu" aria-label={titles.nav}>
+        <ul>
+          {
+            items.map((item, i) => (
+              <li>
+                <a href={item.path} aria-current={isCurrent(item.path) ? 'page' : undefined}>
+                  <span class="nav-no num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                  {item.title}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <div class="tools">
+        <LanguagePicker />
+        <a href={telHref(company.production.phone)} class="phone num">
+          <span class="sr-only">{titles.call}: </span>
+          <svg class="lg:hidden" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true">
+            <path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z"></path>
+          </svg>
+          <span class="hidden lg:inline">{company.production.phone}</span>
+        </a>
+        <button type="button" class="menu-btn label" aria-expanded="false" aria-controls="site-menu">
+          {titles.menu}
+        </button>
       </div>
-      <header class="border-t border-b border-slate-200/70">
-        <Astronav>
-          <div class="flex w-full items-center justify-between py-5">
-            <a
-              href={localizedPath(locale)}
-              class="flex items-center gap-4 text-base font-semibold tracking-tight">
-              <img src={logo.src} alt="Svehla a Blasko logo." class="w-[94px] sm:w-[110px]" />
-            </a>
-            <div class="flex items-center lg:hidden">
-              <MenuIcon class="text-slate-800" />
-            </div>
-          </div>
-          <MenuItems class="hidden w-full lg:flex lg:w-auto">
-            <div class="w-full pb-4">
-              <ul class="flex flex-col items-start gap-4 border-t border-slate-200/70 pt-4 lg:flex-row lg:items-center lg:gap-8 lg:border-t-0 lg:pt-0">
-                {
-                  menuitems.map((item) => (
-                    <li>
-                      <a
-                        href={item.path}
-                        class="group relative whitespace-nowrap text-sm font-semibold uppercase tracking-[0.14em] text-slate-600 transition hover:text-slate-900 lg:text-xs lg:tracking-[0.22em]">
-                        {item.title}
-                        <span class="absolute -bottom-3 left-0 h-[2px] w-0 bg-slate-900 transition-all duration-300 group-hover:w-full"></span>
-                      </a>
-                    </li>
-                  ))
-                }
-              </ul>
-            </div>
-          </MenuItems>
-        </Astronav>
-      </header>
-    </Container>
+    </div>
   </div>
-</div>
+</header>
+
+<script>
+  const btn = document.querySelector<HTMLButtonElement>('.menu-btn')
+  const menu = document.getElementById('site-menu')
+  const desktop = window.matchMedia('(min-width: 1024px)')
+  const setOpen = (open: boolean) => {
+    btn?.setAttribute('aria-expanded', String(open))
+    menu?.classList.toggle('is-open', open)
+  }
+  btn?.addEventListener('click', () => setOpen(btn.getAttribute('aria-expanded') !== 'true'))
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && btn?.getAttribute('aria-expanded') === 'true') {
+      setOpen(false)
+      btn.focus()
+    }
+  })
+  desktop.addEventListener('change', () => setOpen(false))
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: #fff;
+    border-bottom: var(--rule);
+  }
+
+  .bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 var(--gutter);
+    min-height: 76px;
+  }
+
+  .brand {
+    display: block;
+    padding-block: 8px;
+  }
+
+  .brand img {
+    width: 74px;
+    height: auto;
+  }
+
+  .tools {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .menu {
+    order: 3;
+    width: 100%;
+    padding: 8px 0 20px;
+    border-top: var(--hair);
+  }
+
+  .menu ul {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .menu a {
+    display: block;
+    padding: 12px 0;
+    font-size: var(--text-lead);
+    font-weight: 650;
+    color: var(--color-ink);
+    border-bottom: var(--soft);
+  }
+
+  .menu a[aria-current='page'] {
+    color: var(--color-red);
+  }
+
+  .nav-no {
+    display: inline-block;
+    min-width: 2.25em;
+    font-size: var(--text-small);
+    font-weight: 700;
+    vertical-align: 0.08em;
+  }
+
+  .phone {
+    display: inline-grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    background: var(--color-red);
+    color: #fff;
+    font-weight: 750;
+    font-size: var(--text-body);
+  }
+
+  /* The menu control is a word, not a glyph: a square label cell that fills ink while open. */
+  .menu-btn {
+    height: 44px;
+    padding: 0 10px;
+    color: var(--color-ink);
+    background: #fff;
+    border: var(--hair);
+    transition:
+      background-color 120ms linear,
+      color 120ms linear;
+  }
+
+  .menu-btn:hover {
+    background: var(--color-stone);
+  }
+
+  .menu-btn[aria-expanded='true'] {
+    background: var(--color-ink);
+    color: #fff;
+  }
+
+  /* The narrowest phones: a smaller mark keeps logo, language, phone and menu on one line. */
+  @media (max-width: 359px) {
+    .brand img {
+      width: 56px;
+    }
+
+    .tools {
+      gap: 6px;
+    }
+  }
+
+  @media (max-width: 1023px) {
+    :global(.js) .menu:not(.is-open) {
+      display: none;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .menu {
+      order: 0;
+      width: auto;
+      margin-left: clamp(24px, 8vw, 160px);
+      padding: 0;
+      border-top: 0;
+    }
+
+    .menu-btn {
+      display: none;
+    }
+
+    .menu ul {
+      flex-direction: row;
+      gap: clamp(20px, 2.6vw, 44px);
+    }
+
+    .menu a {
+      position: relative;
+      padding: 26px 0 24px;
+      font-size: var(--text-body);
+      border-bottom: 0;
+    }
+
+    .menu a::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -2px;
+      height: 4px;
+      background: var(--color-red);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 160ms ease-out;
+    }
+
+    .menu a:hover::after,
+    .menu a[aria-current='page']::after {
+      transform: scaleX(1);
+    }
+
+    .menu a[aria-current='page'] {
+      color: var(--color-ink);
+    }
+
+    .tools {
+      gap: 28px;
+    }
+
+    .phone {
+      width: auto;
+      height: 76px;
+      margin-right: calc(var(--gutter) * -1);
+      padding: 0 var(--gutter);
+    }
+
+    .phone:hover {
+      background: var(--color-ink);
+    }
+  }
+</style>

@@ -1,0 +1,340 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-16T21:00:00Z",
+  "title": "Design System: Švehla a Blaško",
+  "extensions": {
+    "colorMeta": {
+      "logo-red": {
+        "role": "primary",
+        "displayName": "Logo Red",
+        "purpose": "Whole fields and action, at full strength only. Ramp shown for reference; the system never uses tints.",
+        "tonalRamp": [
+          "#3d0005",
+          "#650009",
+          "#8e000e",
+          "#b50012",
+          "#e30016",
+          "#f2707b",
+          "#f8b0b6",
+          "#fde6e8"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "purpose": "Text, rules, ink actions.",
+        "tonalRamp": [
+          "#0b0a0a",
+          "#1b1918",
+          "#2f2c2a",
+          "#45413e",
+          "#5d5955",
+          "#8a8580",
+          "#bdb8b2",
+          "#ecebe8"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "purpose": "Page stock; type on red and ink.",
+        "tonalRamp": [
+          "#3a3836",
+          "#5f5a55",
+          "#8a8580",
+          "#b3aea8",
+          "#d9d6d0",
+          "#ecebe8",
+          "#f7f6f4",
+          "#ffffff"
+        ]
+      },
+      "stone": {
+        "role": "neutral",
+        "displayName": "Stone",
+        "purpose": "Default border, soft rules, segment hover.",
+        "tonalRamp": [
+          "#3d3a36",
+          "#5f5a55",
+          "#7f7a74",
+          "#a39e97",
+          "#c4c0b9",
+          "#d9d6d0",
+          "#e9e7e3",
+          "#f6f5f3"
+        ]
+      },
+      "mid-grey": {
+        "role": "neutral",
+        "displayName": "Mid Grey",
+        "purpose": "Secondary text only.",
+        "tonalRamp": [
+          "#1f1d1b",
+          "#34312e",
+          "#4a4642",
+          "#5f5a55",
+          "#7a756f",
+          "#9a958f",
+          "#c2beb8",
+          "#e6e4e0"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display (wide)",
+        "purpose": "Hero statement and page titles only; wdth 125, up to 7rem on page titles."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Sheet headings; wdth 118, balanced wrap."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Operation titles, machine names, people, certificate standards; wdth 112."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Reading text, 1rem to 1.1875rem, measure about 34-36rem."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Uppercase register keys, intake captions, folios, sub-list headings."
+      },
+      "figure": {
+        "displayName": "Figures",
+        "purpose": "Every number in tabular figures."
+      }
+    },
+    "shadows": [],
+    "rules": [
+      {
+        "name": "sheet-rule",
+        "value": "2px solid #1b1918",
+        "purpose": "Opens every sheet, register, index and the header bottom."
+      },
+      {
+        "name": "hairline",
+        "value": "1px solid #1b1918",
+        "purpose": "Row separators and cell dividers."
+      },
+      {
+        "name": "soft-rule",
+        "value": "1px solid #d9d6d0",
+        "purpose": "Default border; quiet dividers in the mobile menu."
+      },
+      {
+        "name": "column-tick",
+        "value": "1px x 10px, 12 per sheet (7 on the hero field)",
+        "purpose": "Makes the 12-column grid visible."
+      }
+    ],
+    "motion": [
+      {
+        "name": "tick-wipe",
+        "value": "clip-path inset(0 100% 0 0) to inset(0); 1100ms cubic-bezier(0.16, 1, 0.3, 1), 120ms delay, once",
+        "purpose": "The single load motion: the hero tick line draws across the red field."
+      },
+      {
+        "name": "procession-track",
+        "value": "transform scaleX(0) to scaleX(1); 1600ms steps(4, jump-start), once on 50% intersection",
+        "purpose": "Red track runs across the four operations."
+      },
+      {
+        "name": "spec-deploy",
+        "value": "clip-path inset(0 0 100% 0) to inset(0); 320ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Spec sheet opening in place from a machine index row."
+      },
+      {
+        "name": "state-linear",
+        "value": "120ms linear",
+        "purpose": "Button and intake-cell background/color changes."
+      },
+      {
+        "name": "underline-bar",
+        "value": "transform scaleX 160ms ease-out",
+        "purpose": "Desktop nav hover/current red bar; index arrow nudge 4px."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "all animation and transition durations 0.01ms; tick wipe off; procession never armed (track shows complete); hero video paused on poster",
+        "purpose": "prefers-reduced-motion: reduce."
+      }
+    ],
+    "focus": {
+      "value": "outline 3px solid #e30016, offset 2px; white outline inside red fields",
+      "purpose": "All interactive elements."
+    },
+    "photography": {
+      "treatment": "natural colour, no filter",
+      "caption": "FOTO NN / PHOTO NN in tabular figures, then a dot and the caption",
+      "cutouts": "machine cutouts multiplied onto paper (mix-blend-mode multiply)"
+    },
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "index",
+        "value": "900px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "frame-max",
+        "value": "1440px"
+      }
+    ],
+    "openItems": [
+      "Certificate numbers, issuers and validity dates pending.",
+      "Real shop photography pending from the client; current photos are placeholders.",
+      "Machine images are manufacturer cutouts."
+    ]
+  },
+  "components": [
+    {
+      "name": "Ink Button",
+      "kind": "button",
+      "refersTo": "button-ink",
+      "description": "Default solid action; turns logo red on hover.",
+      "html": "<a href=\"#\" class=\"ds-btn ds-btn-ink\">Send a drawing <svg viewBox=\"0 0 20 20\" width=\"20\" height=\"20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"square\" aria-hidden=\"true\"><path d=\"M3 10h13M11 4.5 16.5 10 11 15.5\"/></svg></a>",
+      "css": ":host{--color-red:#e30016;--color-ink:#1b1918;--color-paper:#fff;--color-stone:#d9d6d0;--color-mid:#5f5a55;--gutter:clamp(16px,2.2vw,32px);--font:'Archivo Variable',ui-sans-serif,system-ui,sans-serif}.ds-btn{display:inline-flex;align-items:center;justify-content:space-between;gap:1.25em;min-height:52px;padding:14px 20px;border:2px solid #1b1918;border-radius:0;font-family:'Archivo Variable',ui-sans-serif,system-ui,sans-serif;font-weight:700;line-height:1.2;text-decoration:none;transition:background-color 120ms linear,color 120ms linear,border-color 120ms linear}.ds-btn:focus-visible{outline:3px solid #e30016;outline-offset:2px}.ds-btn-ink{background:#1b1918;color:#fff}.ds-btn-ink:hover{background:#e30016;border-color:#e30016}"
+    },
+    {
+      "name": "Line Button",
+      "kind": "button",
+      "refersTo": "button-line",
+      "description": "Secondary action on paper; fills ink on hover.",
+      "html": "<a href=\"#\" class=\"ds-btn ds-btn-line\">All machines <svg viewBox=\"0 0 20 20\" width=\"20\" height=\"20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"square\" aria-hidden=\"true\"><path d=\"M3 10h13M11 4.5 16.5 10 11 15.5\"/></svg></a>",
+      "css": ":host{--color-red:#e30016;--color-ink:#1b1918;--color-paper:#fff;--color-stone:#d9d6d0;--color-mid:#5f5a55;--gutter:clamp(16px,2.2vw,32px);--font:'Archivo Variable',ui-sans-serif,system-ui,sans-serif}.ds-btn{display:inline-flex;align-items:center;justify-content:space-between;gap:1.25em;min-height:52px;padding:14px 20px;border:2px solid #1b1918;border-radius:0;font-family:'Archivo Variable',ui-sans-serif,system-ui,sans-serif;font-weight:700;line-height:1.2;text-decoration:none;transition:background-color 120ms linear,color 120ms linear,border-color 120ms linear}.ds-btn:focus-visible{outline:3px solid #e30016;outline-offset:2px}.ds-btn-line{background:transparent;color:#1b1918}.ds-btn-line:hover{background:#1b1918;color:#fff}"
+    },
+    {
+      "name": "White Button",
+      "kind": "button",
+      "refersTo": "button-white",
+      "description": "Action set inside a red field; fills ink on hover.",
+      "html": "<div class=\"ds-red\"><a href=\"#\" class=\"ds-btn ds-btn-white\">Ask about this machine <svg viewBox=\"0 0 20 20\" width=\"20\" height=\"20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"square\" aria-hidden=\"true\"><path d=\"M3 10h13M11 4.5 16.5 10 11 15.5\"/></svg></a></div>",
+      "css": ":host{--color-red:#e30016;--color-ink:#1b1918;--color-paper:#fff;--color-stone:#d9d6d0;--color-mid:#5f5a55;--gutter:clamp(16px,2.2vw,32px);--font:'Archivo Variable',ui-sans-serif,system-ui,sans-serif}.ds-btn{display:inline-flex;align-items:center;justify-content:space-between;gap:1.25em;min-height:52px;padding:14px 20px;border:2px solid #1b1918;border-radius:0;font-family:'Archivo Variable',ui-sans-serif,system-ui,sans-serif;font-weight:700;line-height:1.2;text-decoration:none;transition:background-color 120ms linear,color 120ms linear,border-color 120ms linear}.ds-btn:focus-visible{outline:3px solid #e30016;outline-offset:2px}.ds-red{background:#e30016;padding:32px}.ds-btn-white{background:#fff;border-color:#fff;color:#1b1918}.ds-btn-white:hover{background:#1b1918;border-color:#1b1918;color:#fff}.ds-red .ds-btn:focus-visible{outline-color:#fff}"
+    },
+    {
+      "name": "Intake Cells",
+      "kind": "custom",
+      "refersTo": "intake-cell",
+      "description": "The primary action pair: ink cell for sending a drawing, white cell for calling production; both turn red on hover.",
+      "html": "<div class=\"ds-intake\"><a href=\"#\" class=\"ds-cell ds-cell-ink\"><span class=\"ds-lbl\">Send a drawing</span><span class=\"ds-val\">vyroba@example.sk</span><svg viewBox=\"0 0 20 20\" width=\"20\" height=\"20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"square\" aria-hidden=\"true\"><path d=\"M3 10h13M11 4.5 16.5 10 11 15.5\"/></svg></a><a href=\"#\" class=\"ds-cell\"><span class=\"ds-lbl\">Call production</span><span class=\"ds-val\">+421 900 000 000</span><svg viewBox=\"0 0 20 20\" width=\"20\" height=\"20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"square\" aria-hidden=\"true\"><path d=\"M3 10h13M11 4.5 16.5 10 11 15.5\"/></svg></a></div>",
+      "css": ":host{--color-red:#e30016;--color-ink:#1b1918;--color-paper:#fff;--color-stone:#d9d6d0;--color-mid:#5f5a55;--gutter:clamp(16px,2.2vw,32px);--font:'Archivo Variable',ui-sans-serif,system-ui,sans-serif}.ds-intake{display:grid;grid-template-columns:1fr 1fr;font-family:'Archivo Variable',ui-sans-serif,system-ui,sans-serif}.ds-cell{display:grid;grid-template-columns:1fr auto;gap:6px 16px;align-items:end;min-height:112px;padding:20px 24px;border-top:2px solid #1b1918;color:#1b1918;text-decoration:none;transition:background-color 120ms linear,color 120ms linear}.ds-cell+.ds-cell{border-left:1px solid #1b1918}.ds-cell svg{grid-column:2;grid-row:1/3;align-self:center;width:24px;height:24px}.ds-lbl{font-size:.75rem;font-weight:650;letter-spacing:.08em;text-transform:uppercase;color:#e30016}.ds-val{font-size:1.375rem;font-weight:750;letter-spacing:-.01em;font-variant-numeric:tabular-nums;white-space:nowrap}.ds-cell-ink{background:#1b1918;color:#fff}.ds-cell-ink .ds-lbl{color:#fff}.ds-cell:hover{background:#e30016;color:#fff}.ds-cell:hover .ds-lbl{color:#fff}.ds-cell:focus-visible{outline:3px solid #e30016;outline-offset:2px}"
+    },
+    {
+      "name": "Sheet Rule",
+      "kind": "custom",
+      "refersTo": "sheet-rule",
+      "description": "Head of every sheet: 2px ink rule, twelve hanging column ticks, folio on the rule at the right.",
+      "html": "<div class=\"ds-sheet\"><div class=\"ds-ticks\"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><span class=\"ds-folio\">Sheet 02</span></div>",
+      "css": ":host{--color-red:#e30016;--color-ink:#1b1918;--color-paper:#fff;--color-stone:#d9d6d0;--color-mid:#5f5a55;--gutter:clamp(16px,2.2vw,32px);--font:'Archivo Variable',ui-sans-serif,system-ui,sans-serif}.ds-sheet{position:relative;border-top:2px solid #1b1918;color:#1b1918;font-family:'Archivo Variable',ui-sans-serif,system-ui,sans-serif;padding-bottom:40px}.ds-ticks{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;height:10px}.ds-ticks span{border-left:1px solid currentColor}.ds-ticks span:last-child{border-right:1px solid currentColor}.ds-folio{position:absolute;top:12px;right:0;font-size:.75rem;font-weight:650;letter-spacing:.08em;text-transform:uppercase;font-variant-numeric:tabular-nums}"
+    },
+    {
+      "name": "Navigation",
+      "kind": "nav",
+      "refersTo": "nav-phone",
+      "description": "Sticky white bar on a 2px rule; red-numbered items, 4px red bar on hover/current, full-height red phone block.",
+      "html": "<header class=\"ds-nav\"><ul><li><a href=\"#\" aria-current=\"page\"><span>01</span>Home</a></li><li><a href=\"#\"><span>02</span>Machines</a></li><li><a href=\"#\"><span>03</span>About</a></li><li><a href=\"#\"><span>04</span>Contact</a></li></ul><a href=\"#\" class=\"ds-phone\">+421 900 000 000</a></header>",
+      "css": ":host{--color-red:#e30016;--color-ink:#1b1918;--color-paper:#fff;--color-stone:#d9d6d0;--color-mid:#5f5a55;--gutter:clamp(16px,2.2vw,32px);--font:'Archivo Variable',ui-sans-serif,system-ui,sans-serif}.ds-nav{display:flex;align-items:center;justify-content:space-between;min-height:76px;background:#fff;border-bottom:2px solid #1b1918;font-family:'Archivo Variable',ui-sans-serif,system-ui,sans-serif}.ds-nav ul{display:flex;gap:36px;list-style:none;margin:0;padding:0 0 0 24px}.ds-nav li a{position:relative;display:block;padding:26px 0 24px;font-weight:650;color:#1b1918;text-decoration:none}.ds-nav li a span{display:inline-block;min-width:2.25em;font-size:.8125rem;font-weight:700;color:#e30016;font-variant-numeric:tabular-nums}.ds-nav li a::after{content:'';position:absolute;left:0;right:0;bottom:-2px;height:4px;background:#e30016;transform:scaleX(0);transform-origin:left;transition:transform 160ms ease-out}.ds-nav li a:hover::after,.ds-nav li a[aria-current=page]::after{transform:scaleX(1)}.ds-phone{display:inline-grid;place-items:center;align-self:stretch;padding:0 24px;background:#e30016;color:#fff;font-weight:750;font-size:1.0625rem;font-variant-numeric:tabular-nums;text-decoration:none}.ds-phone:hover{background:#1b1918}.ds-nav a:focus-visible{outline:3px solid #e30016;outline-offset:2px}"
+    },
+    {
+      "name": "Segmented Filter",
+      "kind": "chip",
+      "refersTo": "segment-active",
+      "description": "Hairline-bordered segments for the machine filter and language picker; current fills ink, hover fills stone.",
+      "html": "<div class=\"ds-seg\"><button aria-pressed=\"true\">All <span>12</span></button><button aria-pressed=\"false\">CNC <span>8</span></button><button aria-pressed=\"false\">Conventional <span>3</span></button><button aria-pressed=\"false\">Cutting <span>1</span></button></div>",
+      "css": ":host{--color-red:#e30016;--color-ink:#1b1918;--color-paper:#fff;--color-stone:#d9d6d0;--color-mid:#5f5a55;--gutter:clamp(16px,2.2vw,32px);--font:'Archivo Variable',ui-sans-serif,system-ui,sans-serif}.ds-seg{display:inline-flex;border:1px solid #1b1918;font-family:'Archivo Variable',ui-sans-serif,system-ui,sans-serif}.ds-seg button{display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 18px;border:0;border-radius:0;background:#fff;color:#1b1918;font:inherit;font-weight:700;cursor:pointer}.ds-seg button+button{border-left:1px solid #1b1918}.ds-seg span{font-weight:500;color:#5f5a55;font-variant-numeric:tabular-nums}.ds-seg button:hover{background:#d9d6d0}.ds-seg button[aria-pressed=true]{background:#1b1918;color:#fff}.ds-seg button[aria-pressed=true] span{color:#fff}.ds-seg button:focus-visible{outline:3px solid #e30016;outline-offset:2px}"
+    },
+    {
+      "name": "Register",
+      "kind": "custom",
+      "refersTo": "register",
+      "description": "Key-value facts list under a 2px rule with hairline rows; used for facts, spec sheets and certificates.",
+      "html": "<dl class=\"ds-reg\"><div><dt>Machining since</dt><dd>1990</dd></div><div><dt>Production hall</dt><dd>600 m²</dd></div><div><dt>Machines</dt><dd>12</dd></div></dl>",
+      "css": ":host{--color-red:#e30016;--color-ink:#1b1918;--color-paper:#fff;--color-stone:#d9d6d0;--color-mid:#5f5a55;--gutter:clamp(16px,2.2vw,32px);--font:'Archivo Variable',ui-sans-serif,system-ui,sans-serif}.ds-reg{margin:0;border-top:2px solid #1b1918;font-family:'Archivo Variable',ui-sans-serif,system-ui,sans-serif;color:#1b1918}.ds-reg div{display:grid;grid-template-columns:2fr 3fr;gap:24px;padding:11px 0;border-bottom:1px solid #1b1918}.ds-reg dt{color:#5f5a55}.ds-reg dd{margin:0;font-weight:700;font-variant-numeric:tabular-nums}"
+    },
+    {
+      "name": "Operations Procession",
+      "kind": "custom",
+      "refersTo": "procession",
+      "description": "Numbered operations 010-040 on a 2px rule; a 6px red track runs across in four steps once on view.",
+      "html": "<ol class=\"ds-ops\"><li><b>010</b><h4>RFQ review</h4></li><li><b>020</b><h4>Production plan</h4></li><li><b>030</b><h4>Machining</h4></li><li><b>040</b><h4>Inspection and dispatch</h4></li></ol>",
+      "css": ":host{--color-red:#e30016;--color-ink:#1b1918;--color-paper:#fff;--color-stone:#d9d6d0;--color-mid:#5f5a55;--gutter:clamp(16px,2.2vw,32px);--font:'Archivo Variable',ui-sans-serif,system-ui,sans-serif}.ds-ops{position:relative;display:grid;grid-template-columns:repeat(4,1fr);list-style:none;margin:0;padding:0;border-top:2px solid #1b1918;font-family:'Archivo Variable',ui-sans-serif,system-ui,sans-serif}.ds-ops::before{content:'';position:absolute;left:0;top:-2px;height:6px;width:100%;background:#e30016;transform-origin:left;animation:ds-run 1600ms steps(4,jump-start) both}.ds-ops li{padding:22px 16px 26px}.ds-ops li+li{border-left:1px solid #1b1918}.ds-ops b{display:block;font-size:.875rem;font-weight:700;color:#e30016;font-variant-numeric:tabular-nums}.ds-ops h4{margin:10px 0 0;font-size:1.375rem;font-weight:750;font-stretch:112%;letter-spacing:-.015em;line-height:1.1;color:#1b1918}@keyframes ds-run{from{transform:scaleX(0)}to{transform:scaleX(1)}}@media (prefers-reduced-motion:reduce){.ds-ops::before{animation:none}}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Identity Manual",
+    "overview": "**Creative North Star: \"The Identity Manual\"**\n\nThe site is the firm's own 1970s-style corporate identity manual: every section is a numbered sheet that opens on a heavy ink rule, with the twelve columns of the page grid drawn as ticks hanging from that rule. White stock, ink type, and the logo red at full strength owning whole fields. Order is the message: an orderly page reads as an orderly shop.\n\nDensity is that of a reference document, not a brochure. Facts are set in registers (label left, value right, hairline under each row), machines are an index of numbered rows, the process is a sequence of numbered operations. Photography is shown in natural colour and numbered like manual plates. There are no cards, no shadows, no blur, no rounded corners; structure comes only from grid modules and rules. The previous cream, glow-and-frosted-glass system was discarded entirely and nothing from it carries over.",
+    "keyCharacteristics": [
+      "One logo red at full strength, owning whole fields (hero, people band, request band) and marking action; never tinted, never a gradient.",
+      "Sheets open on a 2px ink rule with the visible 12-column tick line and a folio (\"List 02\" / \"Sheet 02\") on the rule at the right.",
+      "One family, Archivo Variable, with the wide cut for display and tabular figures for every number.",
+      "Registers, indexes and numbered operations instead of cards.",
+      "Natural-colour photography captioned \"FOTO 01\" / \"PHOTO 01\".",
+      "One load motion (the tick-line wipe across the red field) and one scroll procession (the stepped red track over the operations)."
+    ],
+    "rules": [
+      {
+        "name": "The Full-Strength Rule",
+        "body": "Red appears at 100% or not at all. No tints, no opacity, no gradients, no red-on-red tones. A red area is a whole field or a whole action, never a wash.",
+        "section": "colors"
+      },
+      {
+        "name": "The Red Means Owned-Or-Action Rule",
+        "body": "Red either owns an entire region of the grid or marks something the buyer can act on, plus the numbering that orders the manual. It is never decoration on an otherwise neutral block.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Family Rule",
+        "body": "Archivo only. Hierarchy is made with width and weight, never with a second face.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tabular Figures Rule",
+        "body": "Every number is set with tabular figures so registers, indexes and phone numbers align like a printed table.",
+        "section": "typography"
+      },
+      {
+        "name": "The Visible Grid Rule",
+        "body": "The twelve columns are drawn, not implied. New sheets open with the tick-line rule, and content snaps to the columns those ticks mark.",
+        "section": "layout"
+      },
+      {
+        "name": "The Folio-On-The-Rule Rule",
+        "body": "Sheet numbers sit on the rule at the right edge, small and tabular. Nothing small and uppercase is stacked above a heading.",
+        "section": "layout"
+      },
+      {
+        "name": "The Rules-Not-Boxes Rule",
+        "body": "Separate with a rule or a field, never with a shadow, a card or a floating panel.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** let logo red own an entire grid region or mark an action, at full strength only.",
+      "**Do** open every sheet with the 2px ink rule, the twelve-tick line and a folio on the rule at the right.",
+      "**Do** build content as registers, indexes and numbered sequences separated by 2px rules and 1px hairlines.",
+      "**Do** set every number in tabular figures and number things the way a manual does (01, 010, FOTO 01).",
+      "**Do** show photography in natural colour and caption it with its plate number.",
+      "**Do** keep motion to the tick-line wipe on load, the stepped procession track, the spec-sheet deploy and short linear state changes; under reduced motion all of it stops (the hero video stays on its poster frame and the track shows complete)."
+    ],
+    "donts": [
+      "**Don't** tint, fade or gradient the red, or use a second accent color.",
+      "**Don't** use shadows, blur, glass, rounded corners or cards.",
+      "**Don't** set a small uppercase label above a heading; folios belong on the rule, and labels key registers or name sub-lists.",
+      "**Don't** introduce a second typeface or a system display face; width and weight of Archivo carry the hierarchy.",
+      "**Don't** use unnumbered images, or filter, tint or duotone photographs.",
+      "**Don't** add icon glyphs beyond the drawn 2px arrow and phone stroke."
+    ]
+  }
+}

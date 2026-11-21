@@ -1,0 +1,148 @@
+---
+import { getLocale } from 'astro-i18n-aut'
+import { company, telHref, mailHref } from '../data/company'
+import SheetRule from './ui/sheetRule.astro'
+
+const locale = getLocale(Astro.url) === 'en' ? 'en' : 'sk'
+const { folio } = Astro.props as { folio?: number }
+
+const copy = {
+  en: {
+    title: 'Talk to the people who make your parts.',
+    body: 'Send a drawing with material and quantity, or call us directly. You speak with production or with the owners, never a call centre.',
+    subject: 'Quote request',
+    hours: 'Office hours',
+  },
+  sk: {
+    title: 'Hovorte priamo s ľuďmi, ktorí vaše diely vyrobia.',
+    body: 'Pošlite výkres s materiálom a počtom kusov alebo nám rovno zavolajte. Hovoríte s výrobou alebo s majiteľmi, nie s call centrom.',
+    subject: 'Dopyt',
+    hours: 'Pracovná doba',
+  },
+}
+
+const t = copy[locale]
+const people = [company.production, company.owner]
+---
+
+<section class="people" aria-labelledby="contact-people-title">
+  <SheetRule folio={folio} tone="white" />
+  <div class="frame grid-12 gap-y-10">
+    <div class="col-span-12 lg:col-span-6">
+      <h2 id="contact-people-title" class="display people-title">{t.title}</h2>
+      <p class="lead mt-6">{t.body}</p>
+      <p class="mt-6">
+        {t.hours}: <strong class="whitespace-nowrap">{company.hours[locale]}</strong>
+      </p>
+    </div>
+
+    <ul class="col-span-12 lg:col-span-6 lg:col-start-7 people-list">
+      {
+        people.map((p) => (
+          <li class="person">
+            <p class="person-name">{p.name}</p>
+            <p class="person-role">{p.role[locale]}</p>
+            <a href={telHref(p.phone)} class="person-phone num">
+              {p.phone}
+            </a>
+            <a href={mailHref(p.email, t.subject)} class="person-mail">
+              {p.email}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .people {
+    background: var(--color-red);
+    color: #fff;
+    padding-bottom: clamp(48px, 7vw, 104px);
+  }
+
+  .people > :global(.sheet-rule) {
+    margin-bottom: clamp(36px, 6vw, 88px);
+  }
+
+  .people-title {
+    font-size: var(--text-statement);
+    text-wrap: balance;
+  }
+
+  .people-list {
+    display: grid;
+    gap: 0;
+    border-top: 2px solid #fff;
+  }
+
+  .person {
+    display: grid;
+    padding: 24px 0 28px;
+    border-bottom: 1px solid #fff;
+  }
+
+  .person:last-child {
+    border-bottom: 0;
+  }
+
+  .person-name {
+    font-size: var(--text-title);
+    font-weight: 750;
+    font-stretch: 112%;
+  }
+
+  .person-role {
+    margin-top: 2px;
+    font-size: var(--text-body);
+  }
+
+  .person-phone {
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    margin-top: 8px;
+    font-size: var(--text-figure);
+    white-space: nowrap;
+    font-weight: 800;
+    font-stretch: 118%;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: #fff;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.18em;
+    text-decoration-color: #fff;
+  }
+
+  .person-phone:hover {
+    text-decoration-thickness: 4px;
+  }
+
+  .person-mail {
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: var(--text-body);
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .person-mail:hover {
+    text-decoration: underline;
+  }
+
+  .people :global(:focus-visible) {
+    outline-color: #fff;
+  }
+
+  @media (min-width: 640px) and (max-width: 1023px) {
+    .people-list {
+      grid-template-columns: 1fr 1fr;
+      column-gap: var(--gutter);
+    }
+  }
+</style>

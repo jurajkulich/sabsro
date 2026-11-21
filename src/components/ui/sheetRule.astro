@@ -1,0 +1,51 @@
+---
+// The manual's sheet head: 12 column ticks hanging from the sheet's top rule,
+// with the folio ("List 02") set on the rule at the right, never above a heading.
+import { getLocale } from 'astro-i18n-aut'
+
+const { folio, tone = 'ink' } = Astro.props as { folio?: string | number; tone?: 'ink' | 'white' }
+const locale = getLocale(Astro.url) === 'en' ? 'en' : 'sk'
+const word = locale === 'sk' ? 'List' : 'Sheet'
+const label = folio === undefined ? null : typeof folio === 'number' ? `${word} ${String(folio).padStart(2, '0')}` : folio
+---
+
+<div class:list={['sheet-rule frame', tone === 'white' && 'is-white']} aria-hidden="true">
+  <div class="ticks grid-12">
+    {Array.from({ length: 12 }, () => <span></span>)}
+  </div>
+  {label && <span class="folio num">{label}</span>}
+</div>
+
+<style>
+  .sheet-rule {
+    position: relative;
+    color: var(--color-ink);
+  }
+
+  .is-white {
+    color: #fff;
+  }
+
+  .ticks {
+    height: 10px;
+  }
+
+  .ticks span {
+    border-left: 1px solid currentColor;
+  }
+
+  .ticks span:last-child {
+    border-right: 1px solid currentColor;
+    margin-right: 0;
+  }
+
+  .folio {
+    position: absolute;
+    top: 12px;
+    right: var(--gutter);
+    font-size: var(--text-label);
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+</style>

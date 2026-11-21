@@ -1,110 +1,193 @@
 ---
 import { Image } from 'astro:assets'
-import car2 from 'assets/carousel/carousel_2.jpg'
+import plates from 'assets/carousel/carousel_3.jpg'
+import ContactPeople from './contactPeople.astro'
+import Certifications from './certifications.astro'
+import Arrow from './ui/arrow.astro'
+import SheetRule from './ui/sheetRule.astro'
+import { plateLabel } from '../data/machines'
+import { company, localizedPath } from '../data/company'
 
-const { about, locale } = Astro.props
+const { about, locale: rawLocale } = Astro.props
+const locale = rawLocale === 'en' ? 'en' : 'sk'
 
-const stats =
-  locale === 'sk'
-    ? [
-        { value: '20+', label: 'členov tímu' },
-        { value: '1200 m2', label: 'výroba + sklady' },
-        { value: '1990', label: 'začiatok histórie' },
-      ]
-    : [
-        { value: '20+', label: 'team members' },
-        { value: '1200 m2', label: 'production + storage' },
-        { value: '1990', label: 'history starts' },
-      ]
-
-const labels =
-  locale === 'sk'
-    ? { p1: 'História', p2: 'Kapacity', p3: 'Služby' }
-    : { p1: 'History', p2: 'Capacity', p3: 'Services' }
+// Figures come from the About copy below (PRODUCT.md › Positioning). Keep them in step with the hero.
+const copy = {
+  sk: {
+    lead: 'Rodinná strojárska firma, približne 20 ľudí. CNC a klasické obrábanie kovov a plastov, prototypy a menšie série.',
+    registerTitle: 'Firma v číslach',
+    register: [
+      ['Obchodné meno', company.legalName],
+      ['História od roku', '1990'],
+      ['Založená', '2012 ako Švehla s.r.o.'],
+      ['Ľudia', 'približne 20'],
+      ['Výrobná hala', '600 m²'],
+      ['Sklad materiálu a reziareň', '600 m²'],
+      ['IČO', company.ids.ico],
+      ['DIČ', company.ids.dic],
+    ],
+    storyTitle: 'O firme',
+    rows: { p1: 'História', p2: 'Ľudia a priestory', p3: 'Čo robíme' },
+    caption: 'Séria vŕtaných dosiek z našej výroby.',
+    machines: 'Pozrieť strojový park',
+  },
+  en: {
+    lead: 'A family engineering company of about 20 people. CNC and conventional machining of metals and plastics, prototypes and small series.',
+    registerTitle: 'The company in figures',
+    register: [
+      ['Registered name', company.legalName],
+      ['History since', '1990'],
+      ['Founded', '2012 as Švehla s.r.o.'],
+      ['People', 'about 20'],
+      ['Production hall', '600 m²'],
+      ['Stock and cutting room', '600 m²'],
+      ['Company ID (IČO)', company.ids.ico],
+      ['VAT ID (DIČ)', company.ids.dic],
+    ],
+    storyTitle: 'About the company',
+    rows: { p1: 'History', p2: 'People and premises', p3: 'What we do' },
+    caption: 'A batch of drilled plates from our shop.',
+    machines: 'See the machine park',
+  },
+}
+const t = copy[locale]
+const rows = [
+  { title: t.rows.p1, body: about.data.subtitle1 },
+  { title: t.rows.p2, body: about.data.subtitle2 },
+  { title: t.rows.p3, body: about.data.subtitle3 },
+]
 ---
 
-<section class="pt-10 pb-16">
-  <div class="mx-auto max-w-screen-xl px-5">
-    <div class="grid items-start gap-8 lg:grid-cols-[1.05fr_0.95fr]">
-      <div class="space-y-6">
-        <h1 class="text-4xl font-display font-semibold tracking-tight text-slate-900 lg:text-6xl">
-          {about.data.title}
-        </h1>
-        <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
-          {
-            stats.map((item) => (
-              <div class="rounded-xl border border-slate-200/70 bg-white/70 px-4 py-3">
-                <p class="text-2xl font-display font-semibold text-slate-900">{item.value}</p>
-                <p class="text-xs uppercase tracking-[0.12em] text-slate-600">{item.label}</p>
-              </div>
-            ))
-          }
-        </div>
-      </div>
-      <div class="about-media">
-        <Image src={car2} alt={about.data.title} width={900} height={580} fit="cover" />
-      </div>
+<section class="sheet-first">
+  <SheetRule folio={1} />
+  <div class="frame grid-12 gap-y-12">
+    <div class="col-span-12 lg:col-span-7">
+      <h1 class="display page-title">{about.data.title}</h1>
+      <p class="lead mt-6 lg:mt-8">{t.lead}</p>
     </div>
 
-    <div class="mt-10 grid grid-cols-1 gap-4 lg:grid-cols-3">
-      <article class="about-card">
-        <p class="about-label">{labels.p1}</p>
-        <p>{about.data.subtitle1}</p>
-      </article>
-      <article class="about-card">
-        <p class="about-label">{labels.p2}</p>
-        <p>{about.data.subtitle2}</p>
-      </article>
-      <article class="about-card">
-        <p class="about-label">{labels.p3}</p>
-        <p>{about.data.subtitle3}</p>
-      </article>
+    <div class="col-span-12 lg:col-span-5 lg:col-start-8">
+      <h2 class="label">{t.registerTitle}</h2>
+      <dl class="register">
+        {
+          t.register.map(([k, v]) => (
+            <div>
+              <dt>{k}</dt>
+              <dd class="num">{v}</dd>
+            </div>
+          ))
+        }
+      </dl>
     </div>
   </div>
 </section>
 
+<section class="sheet" aria-labelledby="story-title">
+  <SheetRule folio={2} />
+  <div class="frame grid-12 gap-y-12">
+    <div class="col-span-12 lg:col-span-7">
+      <h2 id="story-title" class="sr-only">{t.storyTitle}</h2>
+      <dl class="story">
+        {
+          rows.map((row) => (
+            <div>
+              <dt>{row.title}</dt>
+              <dd>{row.body}</dd>
+            </div>
+          ))
+        }
+      </dl>
+      <a href={localizedPath(locale, 'machines')} class="btn btn-line mt-8">
+        {t.machines}
+        <Arrow />
+      </a>
+    </div>
+
+    <figure class="col-span-12 m-0 sm:col-span-8 lg:col-span-4 lg:col-start-9 about-figure">
+      <Image src={plates} alt={t.caption} width={900} height={1125} fit="cover" class="plate about-photo" />
+      <figcaption class="mt-3 text-small text-mid"><span class="num font-semibold text-ink">{plateLabel(locale, 1)}</span> · {t.caption}</figcaption>
+    </figure>
+  </div>
+</section>
+
+<Certifications folio={3} />
+<ContactPeople folio={4} />
+
 <style>
-  .about-media {
-    overflow: hidden;
-    border-radius: 22px;
-    border: 1px solid rgba(148, 163, 184, 0.28);
-    box-shadow: 0 30px 60px -45px rgba(15, 23, 42, 0.55);
-    transform: rotate(0.45deg);
-    transition: transform 280ms ease;
+  .page-title {
+    font-size: var(--text-page-title);
   }
 
-  .about-media:hover {
-    transform: rotate(0deg) scale(1.01);
-  }
-
-  .about-media img {
+  .about-photo {
+    display: block;
     width: 100%;
-    height: 100%;
-    min-height: 280px;
+    aspect-ratio: 4 / 5;
     object-fit: cover;
   }
 
-  .about-card {
-    border-radius: 16px;
-    border: 1px solid rgba(148, 163, 184, 0.34);
-    background: rgba(255, 255, 255, 0.82);
-    padding: 18px;
-    color: #475569;
-    box-shadow: 0 18px 34px -35px rgba(15, 23, 42, 0.45);
-    transition: transform 220ms ease, box-shadow 220ms ease;
+  @media (min-width: 1024px) {
+    .about-figure {
+      position: sticky;
+      top: 24px;
+      align-self: start;
+    }
   }
 
-  .about-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 24px 38px -34px rgba(15, 23, 42, 0.58);
+  .register {
+    margin-top: 10px;
+    border-top: var(--rule);
   }
 
-  .about-label {
-    margin-bottom: 8px;
-    font-size: 0.68rem;
-    text-transform: uppercase;
-    letter-spacing: 0.16em;
+  .register > div {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--gutter);
+    padding: 12px 0;
+    border-bottom: var(--soft);
+  }
+
+  .register > div:last-child {
+    border-bottom: 0;
+  }
+
+  .register dt {
+    color: var(--color-mid);
+  }
+
+  .register dd {
+    margin: 0;
     font-weight: 700;
-    color: #334155;
   }
+
+  /* The sheet rule above already opens this list; a second heavy rule would double it. */
+  .story > div {
+    display: grid;
+    gap: 8px;
+    padding: 22px 0;
+    border-bottom: var(--soft);
+  }
+
+  .story > div:first-child {
+    padding-top: 0;
+  }
+
+  .story > div:last-child {
+    border-bottom: 0;
+  }
+
+  .story dt {
+    font-size: var(--text-title);
+    font-weight: 750;
+    font-stretch: 112%;
+    letter-spacing: -0.01em;
+  }
+
+  .story dd {
+    margin: 0;
+    max-width: 65ch;
+    font-size: var(--text-lead);
+    line-height: 1.6;
+  }
+
+  /* Title over body: in seven columns a side-by-side split would squeeze the copy. */
 </style>

@@ -1,36 +1,72 @@
 ---
-import { languages } from '../i18n/ui'
 import { getLocale } from 'astro-i18n-aut'
-import '/node_modules/flag-icons/css/flag-icons.min.css'
 
 const basePath = import.meta.env.BASE_URL.replace(/\/$/, '')
 const defaultLocale = 'sk'
-const locale = getLocale(Astro.url)
+const locale = getLocale(Astro.url) === 'en' ? 'en' : 'sk'
 const routePath = Astro.url.pathname.startsWith(basePath)
   ? Astro.url.pathname.slice(basePath.length) || '/'
   : Astro.url.pathname
-const cleanRoutePath = routePath
-  .replace(/\/index\.html$/, '/')
-  .replace(/\.html$/, '')
-  .replace(/\/+$/, '') || '/'
+const cleanRoutePath =
+  routePath
+    .replace(/\/index\.html$/, '/')
+    .replace(/\.html$/, '')
+    .replace(/\/+$/, '') || '/'
 const normalizedRoutePath = cleanRoutePath.replace(/^\/(en|sk)(?=\/|$)/, '') || '/'
+const suffix = normalizedRoutePath === '/' ? '' : normalizedRoutePath
 const localizedPath = (lang: string) =>
-  lang === defaultLocale
-    ? `${basePath}${normalizedRoutePath === '/' ? '' : normalizedRoutePath}`
-    : `${basePath}/${lang}${normalizedRoutePath === '/' ? '' : normalizedRoutePath}`
-// todo astro preferences disable devToolbar
+  lang === defaultLocale ? `${basePath}${suffix}` || '/' : `${basePath}/${lang}${suffix}`
 
-const otherLocale = locale === 'en' ? 'sk' : 'en'
-const localeFlags = {
-  en: 'us',
-  sk: 'sk',
-}
+const langs = [
+  { code: 'sk', label: 'SK', name: 'Slovensky' },
+  { code: 'en', label: 'EN', name: 'English' },
+]
+const { class: className } = Astro.props
 ---
 
-<span class={`fi fi-${localeFlags[otherLocale]}`}></span>
-<a href={localizedPath(otherLocale)}>
-  {languages[otherLocale]}
-  <!--<span class={`fi fi-${localeFlags[locale]}`}></span>-->
-</a>
+<nav class:list={['lang-switch', className]} aria-label={locale === 'sk' ? 'Jazyk' : 'Language'}>
+  {
+    langs.map((l) =>
+      l.code === locale ? (
+        <span class="is-current" aria-current="true" title={l.name}>
+          {l.label}
+        </span>
+      ) : (
+        <a href={localizedPath(l.code)} hreflang={l.code} lang={l.code} title={l.name}>
+          {l.label}
+        </a>
+      ),
+    )
+  }
+</nav>
 
-<!--astro preferences disable devToolbar-->
+<style>
+  .lang-switch {
+    display: inline-flex;
+    border: var(--hair);
+    font-size: var(--text-small);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+
+  .lang-switch > * {
+    display: inline-grid;
+    place-items: center;
+    min-width: 44px;
+    height: 44px;
+    padding: 0 8px;
+  }
+
+  .is-current {
+    background: var(--color-ink);
+    color: #fff;
+  }
+
+  .lang-switch a {
+    color: var(--color-ink);
+  }
+
+  .lang-switch a:hover {
+    background: var(--color-stone);
+  }
+</style>

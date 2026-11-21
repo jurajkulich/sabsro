@@ -1,8 +1,10 @@
 ---
+import '../styles/global.css'
 import { SEO } from 'astro-seo'
 import Footer from '@components/footer.astro'
 import Navbar from '@components/navbar/navbar.astro'
 import { getLocale } from 'astro-i18n-aut'
+import { company } from '../data/company'
 
 export interface Props {
   title?: string
@@ -17,6 +19,7 @@ const locale = getLocale(Astro.url)
 const siteName = 'Švehla a Blaško'
 const siteURL = Astro.site ?? new URL(Astro.url.origin)
 const ogLocale = locale === 'sk' ? 'sk_SK' : 'en_US'
+const ogImageAlt = locale === 'sk' ? `${siteName}, strojárska dielňa` : `${siteName} machining workshop`
 const localeAlternate = locale === 'sk' ? ['en_US'] : ['sk_SK']
 const basePath = import.meta.env.BASE_URL.replace(/\/$/, '')
 const defaultLocale = 'sk'
@@ -48,8 +51,8 @@ const withBasePath = (path: string) => {
 
 const defaultDescription =
   locale === 'en'
-    ? 'Family-run CNC milling and turning in Slovakia. Prototype and small-batch machining with reliable tolerances, clear communication, and on-time delivery.'
-    : 'Rodinná firma pre CNC frézovanie a sústruženie na Slovensku. Prototypy a menšie série so spoľahlivými toleranciami, priamou komunikáciou a dodaním načas.'
+    ? 'Family-run CNC milling and turning in Slovakia. Prototypes and small series, short lead times and an inspection report with every batch.'
+    : 'Rodinná firma pre CNC frézovanie a sústruženie na Slovensku. Prototypy a menšie série, krátke dodacie termíny a protokol z kontroly ku každej sérii.'
 
 const {
   title = '',
@@ -70,9 +73,19 @@ const makeTitle = title
 const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
-  name: 'Švehla a Blaško s. r. o.',
+  name: company.legalName,
   url: new URL(basePath || '/', siteURL).toString(),
   logo: new URL(withBasePath('/favicon.svg'), siteURL).toString(),
+  email: company.email,
+  telephone: company.production.phone,
+  vatID: company.ids.dic,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: company.address.street,
+    postalCode: '915 01',
+    addressLocality: 'Nové Mesto nad Váhom',
+    addressCountry: 'SK',
+  },
 }
 const structuredData = [
   organizationSchema,
@@ -82,24 +95,12 @@ const structuredData = [
 
 <!doctype html>
 <html lang={locale}>
-  <!--x-data="{darkMode: localStorage.getItem('darkMode')}"-->
-  <!--x-init="$watch('darkMode', val => localStorage.setItem('darkMode', val))"-->
-  <!--x-bind:data-theme='darkMode'>-->
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href={withBasePath('/favicon.svg')} />
     <link rel="alternate icon" type="image/x-icon" href={withBasePath('/favicon.ico')} />
     <meta name="generator" content={Astro.generator} />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <!--todo href -->
-
-    <!-- <link rel="preload" as="image" href={src} alt="Hero" /> -->
     <SEO
       title={makeTitle}
       description={description}
@@ -120,7 +121,7 @@ const structuredData = [
           siteName,
         },
         image: {
-          alt: `${siteName} machining workshop`,
+          alt: ogImageAlt,
           width: 1200,
           height: 630,
         },
@@ -130,7 +131,7 @@ const structuredData = [
         title: makeTitle,
         description,
         image: resolvedImageWithDomain,
-        imageAlt: `${siteName} machining workshop`,
+        imageAlt: ogImageAlt,
       }}
     />
     <link
@@ -140,32 +141,26 @@ const structuredData = [
     />
     <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
   </head>
-  <body class="font-sans text-slate-900 bg-[#f7f4ef] antialiased">
-    <div
-      class="min-h-screen bg-[radial-gradient(1200px_600px_at_10%_-10%,rgba(186,140,90,0.2),transparent),radial-gradient(900px_420px_at_90%_10%,rgba(38,82,104,0.15),transparent),radial-gradient(1000px_520px_at_50%_120%,rgba(184,116,58,0.1),transparent)]">
-      <div class="pointer-events-none fixed inset-0 -z-10 opacity-70">
-        <div class="absolute -left-28 top-20 h-72 w-72 rounded-full bg-[#c58f5b]/20 blur-3xl"></div>
-        <div class="absolute -right-24 top-36 h-72 w-72 rounded-full bg-[#295d70]/16 blur-3xl"></div>
-        <div class="absolute left-1/2 top-[68%] h-80 w-80 -translate-x-1/2 rounded-full bg-[#b8743a]/10 blur-3xl"></div>
-      </div>
-      <Navbar />
-      <main class="relative">
-        <slot />
-      </main>
-      <Footer />
-    </div>
-  </body><script is:inline>
-    // if (localStorage.getItem('darkMode') === 'dark') {
-    //   document.querySelector('html').dataset.theme = 'dark'
-    // }
-    // if (localStorage.getItem('darkMode') === 'light') {
-    //   document.querySelector('html').dataset.theme = 'light'
-    // }
-    // if (!localStorage.getItem('darkMode')) {
-    //   let theme = window.matchMedia('(prefers-color-scheme: dark)')
-    //     ? 'dark'
-    //     : 'light'
-    //   localStorage.setItem('darkMode', theme)
-    // }
-  </script>
+  <body class="bg-white font-sans text-ink">
+    <a href="#main" class="skip-link">{locale === 'en' ? 'Skip to content' : 'Preskočiť na obsah'}</a>
+    <Navbar />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+  </body><style is:global>
+  .skip-link {
+    position: absolute;
+    left: 16px;
+    top: -60px;
+    z-index: 100;
+    background: var(--color-ink);
+    color: #fff;
+    padding: 12px 16px;
+    font-weight: 700;
+  }
+  .skip-link:focus {
+    top: 16px;
+  }
+</style>
 </html>

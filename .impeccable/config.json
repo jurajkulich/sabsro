@@ -1,0 +1,62 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "design-system-font",
+        "value": "helvetica neue",
+        "files": [
+          ".impeccable/mocks/decision/assigned.html"
+        ],
+        "createdAt": "2026-11-16T20:30:41.555Z",
+        "reason": "decision-round sketches for a replacement world; old DESIGN.md type system does not apply"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "helvetica neue",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-11-16T20:30:41.587Z",
+        "reason": "decision-round sketches for a replacement world; old DESIGN.md type system does not apply"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "helvetica neue",
+        "files": [
+          ".impeccable/mocks/decision/challenger-crouwel.html"
+        ],
+        "createdAt": "2026-11-16T20:30:41.616Z",
+        "reason": "decision-round sketches for a replacement world; old DESIGN.md type system does not apply"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "helvetica neue",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-11-16T20:30:41.644Z",
+        "reason": "decision-round sketches for a replacement world; old DESIGN.md type system does not apply"
+      },
+      {
+        "rule": "wide-tracking",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/assigned.html"
+        ],
+        "createdAt": "2026-11-16T20:41:07.043Z",
+        "reason": "decision-round sketch, not shipped; site files are reviewed separately"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/assigned.html"
+        ],
+        "createdAt": "2026-11-16T20:41:07.072Z",
+        "reason": "decision-round sketch, not shipped; site files are reviewed separately"
+      }
+    ]
+  }
+}

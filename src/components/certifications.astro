@@ -1,170 +1,155 @@
 ---
 import { getLocale } from 'astro-i18n-aut'
+import Arrow from './ui/arrow.astro'
+import SheetRule from './ui/sheetRule.astro'
+import { company, mailHref } from '../data/company'
 
-const locale = getLocale(Astro.url)
+const locale = getLocale(Astro.url) === 'en' ? 'en' : 'sk'
+const { folio } = Astro.props as { folio?: number }
+
+// Certificate details (number, issuing body, valid-until) are rendered only
+// once they are filled in here. Never put placeholder values in these fields.
+type Cert = {
+  standard: string
+  scope: { sk: string; en: string }
+  certId?: string
+  issuer?: string
+  validTo?: string
+}
+
+const certs: Cert[] = [
+  {
+    standard: 'ISO 9001:2015',
+    scope: { sk: 'Systém manažérstva kvality', en: 'Quality management' },
+  },
+  {
+    standard: 'ISO 14001:2015',
+    scope: { sk: 'Environmentálne manažérstvo', en: 'Environmental management' },
+  },
+  {
+    standard: 'ISO 45001:2018',
+    scope: {
+      sk: 'Bezpečnosť a ochrana zdravia pri práci',
+      en: 'Occupational health and safety',
+    },
+  },
+]
 
 const copy = {
   en: {
-    title: 'Standards and Certifications',
-    subtitle:
-      'Add your exact certificate numbers and issuing bodies below. This block is production-ready with placeholders.',
-    cta: 'Request certificate copy',
-    certs: [
-      {
-        name: 'ISO 9001:2015',
-        issuer: 'Certification Body (placeholder)',
-        certId: 'CERT-0000-0000',
-        validTo: 'Valid through: 2027-12-31',
-      },
-      {
-        name: 'ISO 14001:2015',
-        issuer: 'Certification Body (placeholder)',
-        certId: 'CERT-0000-0001',
-        validTo: 'Valid through: 2027-12-31',
-      },
-      {
-        name: 'ISO 45001:2018',
-        issuer: 'Certification Body (placeholder)',
-        certId: 'CERT-0000-0002',
-        validTo: 'Valid through: 2027-12-31',
-      },
-    ],
+    title: 'Certified management systems.',
+    body: 'Our production runs under three certified ISO management systems. Certificate copies are available on request.',
+    cta: 'Request certificate copies',
+    subject: 'Request: ISO certificate copies',
+    labels: { id: 'Certificate no.', issuer: 'Issued by', valid: 'Valid until' },
   },
   sk: {
-    title: 'Normy a certifikácie',
-    subtitle:
-      'Nižšie doplňte presné čísla certifikátov a certifikačný orgán. Sekcia je pripravená na produkciu.',
-    cta: 'Vyžiadať kópiu certifikátu',
-    certs: [
-      {
-        name: 'ISO 9001:2015',
-        issuer: 'Certifikačný orgán (placeholder)',
-        certId: 'CERT-0000-0000',
-        validTo: 'Platnosť do: 31.12.2027',
-      },
-      {
-        name: 'ISO 14001:2015',
-        issuer: 'Certifikačný orgán (placeholder)',
-        certId: 'CERT-0000-0001',
-        validTo: 'Platnosť do: 31.12.2027',
-      },
-      {
-        name: 'ISO 45001:2018',
-        issuer: 'Certifikačný orgán (placeholder)',
-        certId: 'CERT-0000-0002',
-        validTo: 'Platnosť do: 31.12.2027',
-      },
-    ],
+    title: 'Certifikované systémy riadenia.',
+    body: 'Výroba beží podľa troch certifikovaných systémov ISO. Kópie certifikátov zašleme na požiadanie.',
+    cta: 'Vyžiadať kópie certifikátov',
+    subject: 'Žiadosť: kópie certifikátov ISO',
+    labels: { id: 'Číslo certifikátu', issuer: 'Vydal', valid: 'Platnosť do' },
   },
 }
 
-const t = copy[locale] || copy.en
+const t = copy[locale]
 ---
 
-<section class="pb-14">
-  <div class="mx-auto max-w-screen-xl px-5">
-    <div class="cert-shell">
-      <div class="cert-head">
-        <h2 class="text-3xl font-display font-semibold tracking-tight text-slate-900 lg:text-5xl">
-          {t.title}
-        </h2>
-        <p class="max-w-3xl text-lg text-slate-600">{t.subtitle}</p>
-      </div>
-
-      <div class="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
-        {
-          t.certs.map((cert, idx) => (
-            <article class={`cert-card cert-card-${idx + 1}`}>
-              <div class="cert-top">
-                <span class="cert-badge">Verified</span>
-                <span class="cert-dot"></span>
-              </div>
-              <h3 class="mt-3 text-xl font-display font-semibold text-slate-900">
-                {cert.name}
-              </h3>
-              <p class="mt-2 text-sm text-slate-600">{cert.issuer}</p>
-              <dl class="mt-4 grid gap-2 text-xs uppercase tracking-[0.12em] text-slate-500">
-                <div class="flex items-center justify-between gap-4">
-                  <dt>ID</dt>
-                  <dd class="font-semibold text-slate-700">{cert.certId}</dd>
-                </div>
-                <div class="flex items-center justify-between gap-4">
-                  <dt>Status</dt>
-                  <dd class="font-semibold text-emerald-700">Active</dd>
-                </div>
-              </dl>
-              <p class="mt-4 text-sm text-slate-600">{cert.validTo}</p>
-              <a
-                href={`/${locale}/contact`}
-                class="mt-4 inline-flex rounded-md border border-slate-300 px-3 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-slate-700 transition hover:border-slate-900 hover:text-slate-900">
-                {t.cta}
-              </a>
-            </article>
-          ))
-        }
-      </div>
+<section class="sheet" aria-labelledby="certs-title">
+  <SheetRule folio={folio} />
+  <div class="frame grid-12 gap-y-10">
+    <div class="col-span-12 lg:col-span-5">
+      <h2 id="certs-title" class="headline">{t.title}</h2>
+      <p class="lead mt-6">{t.body}</p>
+      <a href={mailHref(company.email, t.subject)} class="btn btn-line mt-8">
+        {t.cta}
+        <Arrow />
+      </a>
     </div>
+
+    <ul class="certs col-span-12 lg:col-span-7">
+      {
+        certs.map((cert) => (
+          <li class="cert">
+            <p class="cert-std num">{cert.standard}</p>
+            <p class="cert-scope">{cert.scope[locale]}</p>
+            {(cert.certId || cert.issuer || cert.validTo) && (
+              <dl class="cert-meta">
+                {cert.certId && (
+                  <div>
+                    <dt class="label">{t.labels.id}</dt>
+                    <dd class="num">{cert.certId}</dd>
+                  </div>
+                )}
+                {cert.issuer && (
+                  <div>
+                    <dt class="label">{t.labels.issuer}</dt>
+                    <dd>{cert.issuer}</dd>
+                  </div>
+                )}
+                {cert.validTo && (
+                  <div>
+                    <dt class="label">{t.labels.valid}</dt>
+                    <dd class="num">{cert.validTo}</dd>
+                  </div>
+                )}
+              </dl>
+            )}
+          </li>
+        ))
+      }
+    </ul>
   </div>
 </section>
 
 <style>
-  .cert-shell {
-    border-radius: 22px;
-    border: 1px solid rgba(148, 163, 184, 0.28);
-    padding: 28px;
-    background:
-      linear-gradient(140deg, rgba(255, 255, 255, 0.82), rgba(245, 250, 255, 0.78)),
-      radial-gradient(440px 180px at 90% 10%, rgba(41, 93, 112, 0.09), transparent);
-    box-shadow: 0 22px 46px -42px rgba(15, 23, 42, 0.55);
+  .certs {
+    border-top: var(--rule);
   }
 
-  .cert-head {
+  .cert {
     display: grid;
-    gap: 10px;
+    gap: 4px;
+    padding: 22px 0;
+    border-bottom: var(--soft);
   }
 
-  .cert-card {
-    border-radius: 14px;
-    border: 1px solid rgba(148, 163, 184, 0.34);
-    background: rgba(255, 255, 255, 0.86);
-    padding: 16px;
-    transition: transform 240ms ease, box-shadow 240ms ease;
+  .cert:last-child {
+    border-bottom: 0;
   }
 
-  .cert-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 22px 40px -34px rgba(15, 23, 42, 0.55);
+  .cert-std {
+    font-size: var(--text-figure);
+    font-weight: 800;
+    font-stretch: 118%;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
   }
 
-  .cert-top {
+  .cert-scope {
+    color: var(--color-mid);
+  }
+
+  .cert-meta {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 6px 32px;
+    margin-top: 8px;
   }
 
-  .cert-badge {
-    border-radius: 999px;
-    border: 1px solid rgba(148, 163, 184, 0.4);
-    padding: 4px 9px;
-    font-size: 0.62rem;
-    font-weight: 700;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: #475569;
+  .cert-meta dd {
+    margin: 2px 0 0;
   }
 
-  .cert-dot {
-    width: 9px;
-    height: 9px;
-    border-radius: 999px;
-    background: #10b981;
-    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.14);
-  }
+  @media (min-width: 768px) {
+    .cert {
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+      column-gap: var(--gutter);
+      align-items: baseline;
+    }
 
-  @media (max-width: 640px) {
-    .cert-shell {
-      padding: 20px;
-      border-radius: 16px;
+    .cert-meta {
+      grid-column: 2;
     }
   }
 </style>

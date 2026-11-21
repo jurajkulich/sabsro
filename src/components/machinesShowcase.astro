@@ -1,167 +1,360 @@
 ---
 import { Image } from 'astro:assets'
+import Arrow from './ui/arrow.astro'
+import Intake from './ui/intake.astro'
+import MachineSpec from './ui/machineSpec.astro'
+import SheetRule from './ui/sheetRule.astro'
+import { machineFacts, machineOrder, groupLabels, slugOf, typeOnly } from '../data/machines'
 
-const { machs, machines, locale } = Astro.props
+const { machs, machines, locale: rawLocale } = Astro.props
+const locale = rawLocale === 'en' ? 'en' : 'sk'
 
-const labels =
-  locale === 'sk'
-    ? { all: 'Všetko', cnc: 'CNC', manual: 'Klasické', saw: 'Rezanie' }
-    : { all: 'All', cnc: 'CNC', manual: 'Conventional', saw: 'Cutting' }
-
-const categorize = (name, title) => {
-  const source = `${name} ${title}`.toLowerCase()
-  if (source.includes('band saw') || source.includes('saw') || source.includes('píly') || source.includes('rez')) return 'saw'
-  if (source.includes('cnc')) return 'cnc'
-  if (source.includes('classic') || source.includes('universal') || source.includes('klas')) return 'manual'
-  return 'manual'
+const copy = {
+  sk: {
+    all: 'Všetky',
+    filterLabel: 'Filtrovať stroje',
+    indexTitle: 'Zoznam strojov',
+    cols: { no: 'Č.', machine: 'Stroj', type: 'Typ', maker: 'Výrobca' },
+    fallbackTitle: 'Strojové vybavenie',
+    ctaTitle: 'Neviete, na ktorom stroji sa váš diel vyrobí?',
+    ctaBody: 'Pošlite výkres. Ing. Juraj Nemček z výroby posúdi, kam diel patrí, a ozve sa s postupom.',
+  },
+  en: {
+    all: 'All',
+    filterLabel: 'Filter machines',
+    indexTitle: 'Machine index',
+    cols: { no: 'No.', machine: 'Machine', type: 'Type', maker: 'Maker' },
+    fallbackTitle: 'Machine equipment',
+    ctaTitle: 'Not sure which machine your part needs?',
+    ctaBody: 'Send the drawing. Ing. Juraj Nemček in production will check where it fits and come back with a process.',
+  },
 }
+const t = copy[locale]
+const groups = groupLabels[locale]
 
-const mapped = machines.map((item) => {
-  const category = categorize(item.data.name, item.data.title)
-  return { item, category }
-})
+const mapped = machines
+  .map((item) => {
+    const slug = slugOf(item.id)
+    const facts = machineFacts[slug] ?? { group: 'manual' as const }
+    return { item, slug, facts, n: machineOrder.indexOf(slug) + 1 || 99 }
+  })
+  .sort((a, b) => a.n - b.n)
 
-const counts = {
-  all: mapped.length,
-  cnc: mapped.filter((x) => x.category === 'cnc').length,
-  manual: mapped.filter((x) => x.category === 'manual').length,
-  saw: mapped.filter((x) => x.category === 'saw').length,
-}
+const filterKeys = ['all', 'cnc', 'manual', 'saw'] as const
+const counts = Object.fromEntries(
+  filterKeys.map((k) => [k, k === 'all' ? mapped.length : mapped.filter((x) => x.facts.group === k).length]),
+)
+const filterLabel = (k: (typeof filterKeys)[number]) => (k === 'all' ? t.all : groups[k])
+const pad = (n: number) => String(n).padStart(2, '0')
+// The page title states the park's size, so it follows the content: "{count} machines in our hall."
+const pageTitle = machs.data.title.replace('{count}', String(mapped.length))
 ---
 
-<section class="pt-10 pb-16">
-  <div class="mx-auto max-w-screen-xl px-5">
-    <div class="max-w-3xl">
-      <h1 class="text-4xl font-display font-semibold tracking-tight text-slate-900 lg:text-6xl">
-        {machs.data.title}
-      </h1>
-      <p class="mt-4 text-lg text-slate-600">{machs.data.description}</p>
-    </div>
+<section class="sheet-first">
+  <SheetRule folio={1} />
+  <div class="frame grid-12 gap-y-6">
+    <h1 class="display page-title col-span-12 lg:col-span-7">{pageTitle}</h1>
+    <p class="lead col-span-12 max-w-2xl lg:col-span-5 lg:self-end">{machs.data.description}</p>
+  </div>
+</section>
 
-    <div class="mt-8 flex flex-wrap gap-2" id="machineFilters">
+<section class="sheet" aria-labelledby="index-title">
+  <SheetRule folio={2} />
+  <div class="frame">
+    <h2 id="index-title" class="sr-only">{t.indexTitle}</h2>
+    <!-- Filters only work with the script, so they stay hidden until it runs. -->
+    <div class="filters" role="group" aria-label={t.filterLabel} hidden>
       {
-        [
-          ['all', labels.all],
-          ['cnc', labels.cnc],
-          ['manual', labels.manual],
-          ['saw', labels.saw],
-        ].map(([key, label], idx) => (
-          <button
-            type="button"
-            data-filter={key}
-            class:list={['machine-filter', idx === 0 && 'is-active']}>
-            {label} ({counts[key]})
-          </button>
-        ))
+        filterKeys
+          .filter((key) => counts[key] > 0)
+          .map((key, idx) => (
+            <button type="button" data-filter={key} aria-pressed={idx === 0 ? 'true' : 'false'}>
+              {filterLabel(key)} <span class="num">{counts[key]}</span>
+            </button>
+          ))
       }
     </div>
 
-    <div class="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
-      {
-        mapped.map(({ item, category }, idx) => (
-          <article
-            data-category={category}
-            class="machine-card"
-            style={`animation-delay:${idx * 40}ms`}>
-            <div class="machine-image">
-              <Image
-                src={item.data.avatar.src}
-                alt={item.data.avatar.alt}
-                fit="contain"
-                loading="lazy"
-                width={560}
-                height={340}
-              />
-            </div>
-            <div class="p-5">
-              <h2 class="text-lg font-semibold text-slate-900">{item.data.name}</h2>
-              <p class="mt-2 text-sm text-slate-600">
-                {item.data.title || (locale === 'sk' ? 'Strojové vybavenie' : 'Machine equipment')}
-              </p>
-              <p class="mt-3 text-[11px] uppercase tracking-[0.16em] text-slate-500">
-                {labels[category]}
-              </p>
-            </div>
-          </article>
-        ))
-      }
+    <div class="idx-head" aria-hidden="true">
+      <span></span><span>{t.cols.no}</span><span>{t.cols.machine}</span><span>{t.cols.type}</span><span>{t.cols.maker}</span><span></span>
     </div>
+    <ul class="index">
+      {
+        mapped.map(({ item, slug, facts, n }) => {
+          const type = typeOnly(item.data.title) || t.fallbackTitle
+          return (
+            <li id={slug} data-category={facts.group}>
+              <details name="machine">
+                <summary class="idx-row">
+                  <span class="idx-thumb">
+                    <Image src={item.data.avatar.src} alt="" width={160} height={120} fit="contain" loading="lazy" class="plate" />
+                  </span>
+                  <span class="idx-no num">{pad(n)}</span>
+                  <span class="idx-name">{item.data.name}</span>
+                  <span class="idx-type">{type}</span>
+                  <span class="idx-maker">{facts.maker ?? '—'}</span>
+                  <Arrow class="idx-arrow" dir="down" />
+                </summary>
+                <MachineSpec item={item} slug={slug} n={n} locale={locale} />
+              </details>
+            </li>
+          )
+        })
+      }
+    </ul>
+  </div>
+</section>
+
+<section class="ask" aria-labelledby="ask-title">
+  <SheetRule folio={3} tone="white" />
+  <div class="frame grid-12 gap-y-8">
+    <div class="col-span-12 lg:col-span-6">
+      <h2 id="ask-title" class="display ask-title">{t.ctaTitle}</h2>
+      <p class="lead mt-6">{t.ctaBody}</p>
+    </div>
+    <Intake tone="red" note="brief" class="col-span-12 lg:col-span-5 lg:col-start-8 lg:self-end" />
   </div>
 </section>
 
 <script>
-  const buttons = Array.from(document.querySelectorAll('.machine-filter'))
-  const cards = Array.from(document.querySelectorAll('.machine-card'))
-  const apply = (filter) => {
-    buttons.forEach((btn) => btn.classList.toggle('is-active', btn.dataset.filter === filter))
-    cards.forEach((card) => {
-      const visible = filter === 'all' || card.dataset.category === filter
-      card.classList.toggle('is-hidden', !visible)
+  const filters = document.querySelector<HTMLElement>('.filters')
+  const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('.filters button'))
+  const rows = Array.from(document.querySelectorAll<HTMLElement>('.index > li'))
+  const apply = (filter: string) => {
+    buttons.forEach((btn) => btn.setAttribute('aria-pressed', String(btn.dataset.filter === filter)))
+    rows.forEach((row) => {
+      row.hidden = filter !== 'all' && row.dataset.category !== filter
     })
   }
-  buttons.forEach((btn) => btn.addEventListener('click', () => apply(btn.dataset.filter)))
+  if (filters) filters.hidden = false
+  buttons.forEach((btn) => btn.addEventListener('click', () => apply(btn.dataset.filter ?? 'all')))
+
+  // Deep link: /machines#mcv1016 opens that machine's spec sheet. If the active filter hides
+  // the row, fall back to "all" first so the opened sheet is never inside a hidden row.
+  const openFromHash = () => {
+    const id = decodeURIComponent(location.hash.slice(1))
+    const row = id ? document.getElementById(id) : null
+    const details = row?.querySelector('details')
+    if (!row || !details) return
+    if (row.hidden) apply('all')
+    details.open = true
+    row.scrollIntoView({ block: 'start' })
+  }
+  openFromHash()
+  window.addEventListener('hashchange', openFromHash)
+
+  // Keep the address in step with the open sheet, so it can be copied and shared.
+  rows.forEach((row) => {
+    row.querySelector('details')?.addEventListener('toggle', (event) => {
+      const details = event.currentTarget as HTMLDetailsElement
+      if (details.open) history.replaceState(null, '', `#${row.id}`)
+      else if (location.hash === `#${row.id}`) history.replaceState(null, '', location.pathname + location.search)
+    })
+  })
 </script>
 
 <style>
-  .machine-filter {
-    border-radius: 999px;
-    border: 1px solid rgba(148, 163, 184, 0.4);
-    background: rgba(255, 255, 255, 0.74);
-    padding: 10px 14px;
-    font-size: 0.72rem;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-    font-weight: 700;
-    color: #334155;
-    transition: all 180ms ease;
+  .page-title {
+    font-size: var(--text-page-title);
   }
 
-  .machine-filter.is-active,
-  .machine-filter:hover {
-    border-color: #0f172a;
-    background: #0f172a;
+  .filters {
+    display: inline-flex;
+    flex-wrap: wrap;
+    border: var(--hair);
+  }
+
+  .filters[hidden] {
+    display: none;
+  }
+
+  .filters button {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    padding: 0 18px;
+    font-weight: 700;
+    color: var(--color-ink);
+    background: #fff;
+  }
+
+  .filters button + button {
+    border-left: var(--hair);
+  }
+
+  .filters button .num {
+    font-weight: 500;
+    color: var(--color-mid);
+  }
+
+  .filters button:hover {
+    background: var(--color-stone);
+  }
+
+  .filters button[aria-pressed='true'] {
+    background: var(--color-ink);
     color: #fff;
   }
 
-  .machine-card {
-    border-radius: 16px;
-    border: 1px solid rgba(148, 163, 184, 0.33);
-    background: rgba(255, 255, 255, 0.84);
-    box-shadow: 0 24px 44px -40px rgba(15, 23, 42, 0.56);
-    overflow: hidden;
-    opacity: 0;
-    transform: translateY(10px);
-    animation: machineIn 460ms ease forwards;
-    transition: transform 220ms ease, box-shadow 220ms ease, opacity 180ms ease;
+  .filters button[aria-pressed='true'] .num {
+    color: #fff;
   }
 
-  .machine-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 30px 48px -40px rgba(15, 23, 42, 0.66);
+  .idx-head,
+  .idx-row {
+    display: grid;
+    grid-template-columns: 72px 2rem minmax(0, 1fr) 20px;
+    column-gap: var(--gutter);
+    align-items: center;
   }
 
-  .machine-card.is-hidden {
+  .idx-head {
     display: none;
-    opacity: 0;
-    pointer-events: none;
+    margin-top: 28px;
+    padding-bottom: 10px;
+    font-size: var(--text-label);
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-mid);
   }
 
-  .machine-image {
-    background: linear-gradient(180deg, rgba(248, 250, 252, 0.9), rgba(241, 245, 249, 0.8));
-    border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+  .index {
+    margin-top: 24px;
+    border-top: var(--rule);
   }
 
-  .machine-image img {
-    width: 100%;
-    height: 210px;
+  .index > li {
+    border-bottom: var(--soft);
+    scroll-margin-top: 96px;
+  }
+
+  .index > li:last-child {
+    border-bottom: 0;
+  }
+
+  .idx-row {
+    list-style: none;
+    cursor: pointer;
+    padding: 10px 0;
+  }
+
+  .idx-row::-webkit-details-marker {
+    display: none;
+  }
+
+  .idx-row:hover .idx-name,
+  details[open] .idx-name {
+    color: var(--color-red);
+  }
+
+  .idx-thumb {
+    grid-row: 1 / 3;
+    height: 54px;
+    display: grid;
+    place-items: center;
+  }
+
+  .idx-thumb :global(img) {
+    height: 54px;
+    width: 72px;
     object-fit: contain;
-    padding: 14px;
+    mix-blend-mode: multiply;
   }
 
-  @keyframes machineIn {
-    to {
-      opacity: 1;
-      transform: translateY(0);
+  .idx-no {
+    grid-row: 1 / 3;
+    font-weight: 700;
+  }
+
+  .idx-name {
+    font-size: var(--text-title);
+    font-weight: 750;
+    font-stretch: 112%;
+    letter-spacing: -0.01em;
+  }
+
+  .idx-type {
+    grid-column: 3;
+    font-size: var(--text-small);
+    color: var(--color-mid);
+  }
+
+  .idx-maker {
+    display: none;
+  }
+
+  .idx-row :global(.idx-arrow) {
+    grid-column: 4;
+    grid-row: 1 / 3;
+    transition:
+      transform 160ms ease-out,
+      rotate 200ms ease-out;
+  }
+
+  details:not([open]) > .idx-row:hover :global(.idx-arrow) {
+    transform: translateY(3px);
+  }
+
+  details[open] .idx-row :global(.idx-arrow) {
+    rotate: -90deg !important;
+  }
+
+  .ask {
+    margin-top: clamp(16px, 3vw, 40px);
+    background: var(--color-red);
+    color: #fff;
+    padding-bottom: clamp(48px, 7vw, 104px);
+  }
+
+  .ask > :global(.sheet-rule) {
+    margin-bottom: clamp(36px, 6vw, 88px);
+  }
+
+  .ask-title {
+    font-size: var(--text-statement);
+    text-wrap: balance;
+  }
+
+  .ask :global(:focus-visible) {
+    outline-color: #fff;
+  }
+
+  @media (min-width: 900px) {
+    .idx-head {
+      display: grid;
     }
+
+    /* The column head is only shown here, so only here does the list tuck under it. */
+    .idx-head + .index {
+      margin-top: 0;
+    }
+
+    .idx-head,
+    .idx-row {
+      grid-template-columns: 72px 2.5rem minmax(0, 3fr) minmax(0, 4fr) minmax(0, 1.4fr) 20px;
+    }
+
+    .idx-thumb,
+    .idx-no,
+    .idx-row :global(.idx-arrow) {
+      grid-row: auto;
+    }
+
+    .idx-type {
+      grid-column: auto;
+    }
+
+    .idx-maker {
+      display: block;
+      font-size: var(--text-small);
+      font-weight: 600;
+    }
+
+    .idx-row :global(.idx-arrow) {
+      grid-column: 6;
+    }
+
   }
 </style>
