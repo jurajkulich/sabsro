@@ -16,6 +16,12 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Domain switch without a code change: set repository variables SITE_URL=https://svehlaablasko.sk
+    # and BASE_PATH=/ at the moment the custom domain goes live in Settings → Pages.
+    # Unset, the build targets the GitHub Pages staging URL (jurajkulich.github.io/sabsro).
+    env:
+      SITE_URL: ${{ vars.SITE_URL }}
+      BASE_PATH: ${{ vars.BASE_PATH }}
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v7

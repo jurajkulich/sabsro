@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://jurajkulich.github.io/sabsro/sitemap-index.xml

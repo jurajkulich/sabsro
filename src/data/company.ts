@@ -56,7 +56,9 @@ const basePath = import.meta.env.BASE_URL.replace(/\/$/, '')
 /** Locale-aware internal link that respects the deploy base path. */
 export const localizedPath = (locale: string, slug = '') => {
   const s = slug ? `/${slug.replace(/^\/+|\/+$/g, '')}` : ''
-  return locale === 'sk' ? `${basePath}${s}` || '/' : `${basePath}/${locale}${s}`
+  // The default-locale home keeps its trailing slash: a base-path root without it 301s on GitHub Pages.
+  if (locale === 'sk') return s ? `${basePath}${s}` : `${basePath}/`
+  return `${basePath}/${locale}${s}`
 }
 
 export const assetPath = (path: string) => `${basePath}/${path.replace(/^\/+/, '')}`

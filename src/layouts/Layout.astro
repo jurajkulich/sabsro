@@ -31,9 +31,10 @@ const cleanRoutePath = routePath
   .replace(/\.html$/, '')
   .replace(/\/+$/, '') || '/'
 const normalizedRoutePath = cleanRoutePath.replace(/^\/(en|sk)(?=\/|$)/, '') || '/'
+// The default-locale home keeps its trailing slash: a base-path root without it 301s on GitHub Pages.
 const localizedPath = (lang: string) =>
   lang === defaultLocale
-    ? `${basePath}${normalizedRoutePath === '/' ? '' : normalizedRoutePath}`
+    ? `${basePath}${normalizedRoutePath === '/' ? '/' : normalizedRoutePath}`
     : `${basePath}/${lang}${normalizedRoutePath === '/' ? '' : normalizedRoutePath}`
 const canonicalURL = new URL(localizedPath(locale), siteURL).toString()
 const languageAlternates = ['sk', 'en'].map((lang) => ({
@@ -70,15 +71,27 @@ const makeTitle = title
     ? `${siteName} - Metalworking`
     : `${siteName} - Kovoobrábanie`
 
+const homeURL = new URL(`${basePath}/`, siteURL).toString()
+const services =
+  locale === 'en'
+    ? ['CNC milling', 'CNC turning', 'Drilling and tapping', 'Conventional milling', 'Band-saw cutting', 'Welding']
+    : ['CNC frézovanie', 'CNC sústruženie', 'Vŕtanie a rezanie závitov', 'Konvenčné frézovanie', 'Delenie materiálu na pásových pílach', 'Zváranie']
+
+// Confirmed facts only (PRODUCT.md › Operating Context, Capabilities). No ratings, geo or languages until supplied.
 const organizationSchema = {
   '@context': 'https://schema.org',
-  '@type': 'Organization',
+  '@type': 'LocalBusiness',
+  '@id': `${homeURL}#organization`,
   name: company.legalName,
-  url: new URL(basePath || '/', siteURL).toString(),
+  alternateName: siteName,
+  url: homeURL,
   logo: new URL(withBasePath('/favicon.svg'), siteURL).toString(),
+  image: resolvedImageWithDomain,
+  description: defaultDescription,
   email: company.email,
   telephone: company.production.phone,
   vatID: company.ids.dic,
+  identifier: { '@type': 'PropertyValue', propertyID: 'IČO', value: company.ids.ico },
   address: {
     '@type': 'PostalAddress',
     streetAddress: company.address.street,
@@ -86,9 +99,46 @@ const organizationSchema = {
     addressLocality: 'Nové Mesto nad Váhom',
     addressCountry: 'SK',
   },
+  hasMap: company.mapsLink,
+  openingHoursSpecification: {
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+    opens: '07:00',
+    closes: '15:30',
+  },
+  contactPoint: [
+    {
+      '@type': 'ContactPoint',
+      contactType: locale === 'en' ? 'production and quotes' : 'výroba a cenové ponuky',
+      name: company.production.name,
+      email: company.production.email,
+      telephone: company.production.phone,
+    },
+    {
+      '@type': 'ContactPoint',
+      contactType: locale === 'en' ? 'business' : 'obchod',
+      name: company.owner.name,
+      email: company.owner.email,
+      telephone: company.owner.phone,
+    },
+  ],
+  makesOffer: services.map((name) => ({
+    '@type': 'Offer',
+    itemOffered: { '@type': 'Service', name },
+  })),
+}
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': `${homeURL}#website`,
+  name: siteName,
+  url: homeURL,
+  inLanguage: ['sk', 'en'],
+  publisher: { '@id': `${homeURL}#organization` },
 }
 const structuredData = [
   organizationSchema,
+  websiteSchema,
   ...(Array.isArray(schema) ? schema : schema ? [schema] : []),
 ]
 ---
@@ -104,9 +154,9 @@ const structuredData = [
     <SEO
       title={makeTitle}
       description={description}
-      canonical={canonicalURL}
+      canonical={noindex ? null : canonicalURL}
       noindex={noindex}
-      languageAlternates={languageAlternates}
+      languageAlternates={noindex ? undefined : languageAlternates}
       openGraph={{
         basic: {
           title: makeTitle,
@@ -134,11 +184,13 @@ const structuredData = [
         imageAlt: ogImageAlt,
       }}
     />
-    <link
-      rel="alternate"
-      hreflang="x-default"
-      href={new URL(localizedPath(defaultLocale), siteURL).toString()}
-    />
+    {!noindex && (
+      <link
+        rel="alternate"
+        hreflang="x-default"
+        href={new URL(localizedPath(defaultLocale), siteURL).toString()}
+      />
+    )}
     <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
   </head>
   <body class="bg-white font-sans text-ink">

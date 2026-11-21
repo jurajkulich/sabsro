@@ -1,0 +1,24 @@
+# Old domain → new domain, permanent (301), page to page.
+# Replaces the WordPress .htaccess in the web root of svehlasro.sk once the new site is live.
+# Inventory taken 2026-11-21 from https://svehlasro.sk/page-sitemap.xml (SK only, no EN pages existed).
+# Only web traffic is redirected; leave the svehlasro.sk MX records (mailin1/mailin2) untouched.
+
+RewriteEngine On
+
+# www and http variants collapse in the same hop.
+RewriteCond %{HTTP_HOST} ^(www\.)?svehlasro\.sk$ [NC]
+RewriteRule ^sk/stroje/?$   https://svehlaablasko.sk/machines [R=301,L,NC]
+
+RewriteCond %{HTTP_HOST} ^(www\.)?svehlasro\.sk$ [NC]
+RewriteRule ^sk/kontakty/?$ https://svehlaablasko.sk/contact [R=301,L,NC]
+
+# Services have no page of their own on the new site; they are sheet 01 of the home page.
+RewriteCond %{HTTP_HOST} ^(www\.)?svehlasro\.sk$ [NC]
+RewriteRule ^sk/sluzby/?$   https://svehlaablasko.sk/ [R=301,L,NC]
+
+RewriteCond %{HTTP_HOST} ^(www\.)?svehlasro\.sk$ [NC]
+RewriteRule ^sk/?$          https://svehlaablasko.sk/ [R=301,L,NC]
+
+# Everything else (home, feeds, wp-content images, old paths) lands on the new home.
+RewriteCond %{HTTP_HOST} ^(www\.)?svehlasro\.sk$ [NC]
+RewriteRule ^ https://svehlaablasko.sk/ [R=301,L]
