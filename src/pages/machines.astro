@@ -11,7 +11,7 @@ export function getStaticPaths() {
 export const prerender = true
 
 const locale = getLocale(Astro.url)
-const machines = await getCollection('team', ({ id }) => id.startsWith(locale))
+const machines = await getCollection('team', ({ id, data }) => id.startsWith(`${locale}/`) && !data.draft)
 const machs = await getEntry('machines', locale + '/machines')
 ---
 

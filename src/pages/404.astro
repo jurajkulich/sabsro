@@ -1,29 +1,96 @@
 ---
 import Layout from '@layouts/Layout.astro'
-import Container from '@components/container.astro'
 import { getLocale } from 'astro-i18n-aut'
+import Arrow from '@components/ui/arrow.astro'
+import { company, telHref, localizedPath } from '../data/company'
 
 export function getStaticPaths() {
   return [{ params: { lang: 'en' } }, { params: { lang: 'sk' } }]
 }
-const locale = getLocale(Astro.url)
-const notFoundDescription =
-  locale === 'en'
-    ? 'The requested page could not be found.'
-    : 'Požadovanú stránku sa nepodarilo nájsť.'
-const notFoundBody =
-  locale === 'en' ? 'The page you are looking for does not exist.' : 'Stránka, ktorú hľadáte, neexistuje.'
+const locale = getLocale(Astro.url) === 'en' ? 'en' : 'sk'
+
+const t = {
+  sk: {
+    title: 'Stránka sa nenašla',
+    description: 'Požadovanú stránku sa nepodarilo nájsť.',
+    heading: 'Táto stránka neexistuje.',
+    body: 'Odkaz je pravdepodobne starý alebo preklepnutý. Skúste jednu z týchto stránok, alebo nám rovno zavolajte.',
+    links: [
+      { label: 'Domov', slug: '' },
+      { label: 'Stroje', slug: 'machines' },
+      { label: 'O nás', slug: 'about' },
+      { label: 'Kontakt', slug: 'contact' },
+    ],
+    call: 'Zavolať do výroby',
+  },
+  en: {
+    title: 'Page not found',
+    description: 'The requested page could not be found.',
+    heading: 'This page does not exist.',
+    body: 'The link is probably old or mistyped. Try one of these pages, or call us directly.',
+    links: [
+      { label: 'Home', slug: '' },
+      { label: 'Machines', slug: 'machines' },
+      { label: 'About', slug: 'about' },
+      { label: 'Contact', slug: 'contact' },
+    ],
+    call: 'Call production',
+  },
+}[locale]
 
 export const prerender = true
 ---
 
-<Layout title="404 Not Found" description={notFoundDescription} noindex={true}>
-  <Container>
-    <div class="min-h-[calc(100vh-16rem)] flex items-center justify-center">
-      <div class="mt-16 text-center">
-        <h1 class="text-4xl lg:text-5xl font-bold lg:tracking-tight">404</h1>
-        <p class="text-lg mt-4 text-slate-600">{notFoundBody}</p>
+<Layout title={t.title} description={t.description} noindex={true}>
+  <section class="py-[clamp(48px,8vw,120px)]">
+    <div class="frame grid-12 gap-y-10">
+      <div class="col-span-12 lg:col-span-7">
+        <p class="display code num" aria-hidden="true">404</p>
+        <h1 class="headline mt-6">{t.heading}</h1>
+        <p class="lead mt-4">{t.body}</p>
+        <a href={telHref(company.production.phone)} class="btn btn-ink mt-8 num">
+          {t.call}: {company.production.phone}
+          <Arrow />
+        </a>
       </div>
+      <ul class="links col-span-12 lg:col-span-5 lg:self-end">
+        {
+          t.links.map((link) => (
+            <li>
+              <a href={localizedPath(locale, link.slug)}>
+                {link.label}
+                <Arrow />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
     </div>
-  </Container>
+  </section>
 </Layout>
+
+<style>
+  .code {
+    font-size: var(--text-error-code);
+  }
+
+  .links {
+    border-top: var(--rule);
+  }
+
+  .links a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 0;
+    border-bottom: var(--soft);
+    font-size: var(--text-title);
+    font-weight: 750;
+    font-stretch: 112%;
+    color: var(--color-ink);
+  }
+
+  .links a:hover {
+    color: var(--color-red);
+  }
+</style>

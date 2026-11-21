@@ -1,5 +1,5 @@
 ---
 layouttitle: "Stroje"
-title: "Stroje"
-description: "Vitajte v našej sekcii s najmodernejšími strojmi, kde sa precíznosť a inovácia spájajú, aby priviedli vaše projekty k životu. V našej spoločnosti sme hrdí na to, že ponúkame komplexnú škálu služieb, z ktorých každá je poháňaná špičkovou flotilou špecializovaných strojov."
+title: "{count} strojov v našej hale."
+description: "Celý strojový park v našej prevádzke v Novom Meste nad Váhom: vertikálne obrábacie centrá Doosan a Kovosvit MAS, CNC frézka Intos, CNC a konvenčné sústruhy Trens, obrážačka Eastar a pásová píla Bianco."
 ---

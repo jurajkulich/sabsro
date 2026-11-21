@@ -1,158 +1,256 @@
 ---
-const { contact, locale } = Astro.props
+import Arrow from './ui/arrow.astro'
+import Intake from './ui/intake.astro'
+import SheetRule from './ui/sheetRule.astro'
+import { company, telHref, mailHref } from '../data/company'
 
-const copy =
-  locale === 'sk'
-    ? {
-        subtitle: 'Napíšte nám projekt, materiál a počet kusov. Odpovieme s návrhom postupu.',
-        officeHours: 'Pracovné dni',
-        officeHoursValue: 'Po-Pia 07:00-15:30',
-        locationTitle: 'Sídlo firmy',
-        ids: {
-          ico: 'IČO',
-          dic: 'DIČ',
-        },
-      }
-    : {
-        subtitle: 'Send your project brief, material and quantity. We will respond with a production proposal.',
-        officeHours: 'Working Days',
-        officeHoursValue: 'Mon-Fri 07:00-15:30',
-        locationTitle: 'Company location',
-        ids: {
-          ico: 'Company ID (IČO)',
-          dic: 'Tax ID (DIČ)',
-        },
-      }
+const { contact, locale: rawLocale } = Astro.props
+const locale = rawLocale === 'en' ? 'en' : 'sk'
 
-const details = {
-  email: 'info@svehlasro.sk',
-  owners: [
-    { name: 'Ing. Boris Blaško', phone: '+421 918 601 675', href: 'tel:+421918601675' },
-    { name: 'Ján Švehla', phone: '+421 907 794 370', href: 'tel:+421907794370' },
-  ],
-  production: {
-    name: 'Ing. Juraj Nemček',
-    email: 'vyroba@svehlasro.sk',
-    phone: '+421 905 691 366',
-    phoneHref: 'tel:+421905691366',
+const copy = {
+  sk: {
+    lead: 'Pošlite výkres alebo zavolajte priamo do výroby. Hovoríte s ľuďmi, ktorí diel vyrobia.',
+    peopleTitle: 'Ľudia',
+    general: 'Všeobecné',
+    hours: 'Pracovná doba',
+    address: 'Sídlo a prevádzka',
+    ids: { ico: 'IČO', dic: 'DIČ' },
+    mapTitle: 'Mapa: Švehla a Blaško s.r.o., Nové Mesto nad Váhom',
+    openMap: 'Otvoriť v Mapách Google',
   },
-  address: ['Švehla a Blaško s.r.o.', 'Kočovská 2583/22', '915 01 Nové Mesto nad Váhom'],
-  ids: {
-    ico: '47419181',
-    dic: 'SK2023864601',
+  en: {
+    lead: 'Send a drawing or call production directly. You speak with the people who make the part.',
+    peopleTitle: 'People',
+    general: 'General enquiries',
+    hours: 'Office hours',
+    address: 'Registered office and workshop',
+    ids: { ico: 'Company ID (IČO)', dic: 'VAT ID (DIČ)' },
+    mapTitle: 'Map: Švehla a Blaško s.r.o., Nové Mesto nad Váhom',
+    openMap: 'Open in Google Maps',
   },
 }
+
+const t = copy[locale]
+// One directory for every route, directly under the intake, so the people read as part of it.
+const people = [company.production, company.owner, company.director]
 ---
 
-<section class="pt-10 pb-16">
-  <div class="mx-auto max-w-screen-xl px-5">
-    <div class="max-w-3xl">
-      <h1 class="text-4xl font-display font-semibold tracking-tight text-slate-900 lg:text-6xl">
-        {contact.data.title}
-      </h1>
-      <p class="mt-4 text-lg text-slate-600">{copy.subtitle}</p>
+<section class="sheet-first">
+  <SheetRule folio={1} />
+  <div class="frame grid-12 gap-y-6">
+    <div class="col-span-12 lg:col-span-7">
+      <h1 class="display page-title">{contact.data.title}</h1>
+      <p class="lead mt-6">{t.lead}</p>
     </div>
+  </div>
 
-    <div class="mt-8 grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
-      <div class="grid gap-5 sm:grid-cols-2">
-        <article class="contact-card sm:col-span-2">
-          <p class="contact-label">{contact.data.contact}</p>
-          <a class="contact-link" href={`mailto:${details.email}`}>{details.email}</a>
-          <div class="mt-4 grid gap-3 sm:grid-cols-2">
-            {
-              details.owners.map((owner) => (
-                <div>
-                  <p class="font-semibold text-slate-800">{owner.name}</p>
-                  <a class="contact-link" href={owner.href}>{owner.phone}</a>
-                </div>
-              ))
-            }
-          </div>
-        </article>
+  <div class="frame intake-wrap">
+    <Intake allContacts={false} note="brief" />
+  </div>
 
-        <article class="contact-card">
-          <p class="contact-label">{contact.data.contactmachinery}</p>
-          <p class="font-semibold text-slate-800">{details.production.name}</p>
-          <a class="contact-link" href={`mailto:${details.production.email}`}>{details.production.email}</a>
-          <a class="contact-link" href={details.production.phoneHref}>{details.production.phone}</a>
-        </article>
-
-        <article class="contact-card">
-          <p class="contact-label">{contact.data.contactaddress}</p>
-          <p class="text-slate-700">
-            {details.address.map((line) => (
-              <>
-                {line}
-                <br />
-              </>
-            ))}
+  <div class="frame people">
+    <h2 class="label">{t.peopleTitle}</h2>
+    <ul class="ledger">
+      {
+        people.map((p) => (
+          <li class="row">
+            <div>
+              <p class="name">{p.name}</p>
+              <p class="mt-1 text-mid">{p.role[locale]}</p>
+            </div>
+            <a href={telHref(p.phone)} class="phone num">{p.phone}</a>
+            {p.email ? <a href={mailHref(p.email)} class="mail">{p.email}</a> : <span class="phone-empty" aria-hidden="true" />}
+          </li>
+        ))
+      }
+      <li class="row">
+        <div>
+          <p class="name">{t.general}</p>
+          <p class="mt-1 text-mid">
+            {t.hours}: <span class="num whitespace-nowrap">{company.hours[locale]}</span>
           </p>
-          <p class="mt-3 text-sm text-slate-600">
-            {copy.ids.ico}: {details.ids.ico}
-          </p>
-          <p class="text-sm text-slate-600">
-            {copy.ids.dic}: {details.ids.dic}
-          </p>
-        </article>
-      </div>
-
-      <div class="contact-map-wrap">
-        <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2630.8721528963933!2d17.842833576841596!3d48.74613890859892!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4714a82d6f578e57%3A0x7dd63b0688b42144!2s%C5%A0vehla%20a%20Bla%C5%A1ko%20s.%20r.%20o.!5e0!3m2!1ssk!2ssk!4v1703425557175!5m2!1ssk!2ssk"
-          title={copy.locationTitle}
-          loading="eager"
-          referrerpolicy="no-referrer-when-downgrade"
-          class="h-full min-h-[360px] w-full"></iframe>
-        <div class="contact-map-caption">
-          <p class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">{copy.officeHours}</p>
-          <p class="text-sm text-slate-700">{copy.officeHoursValue}</p>
         </div>
+        <span class="phone-empty" aria-hidden="true"></span>
+        <a href={mailHref(company.email)} class="mail">{company.email}</a>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="sheet" aria-labelledby="address-title">
+  <SheetRule folio={2} />
+  <div class="frame grid-12 gap-y-10">
+    <div class="col-span-12 lg:col-span-4">
+      <h2 id="address-title" class="label">{t.address}</h2>
+      <div class="ledger pt-5">
+        <address class="not-italic leading-relaxed">
+          <strong>{company.legalName}</strong><br />
+          {company.address.street}<br />
+          {company.address.city}<br />
+          {company.address.country[locale]}
+        </address>
+        <dl class="mt-3 text-mid num">
+          <div><dt class="inline">{t.ids.ico}:</dt> <dd class="inline">{company.ids.ico}</dd></div>
+          <div><dt class="inline">{t.ids.dic}:</dt> <dd class="inline">{company.ids.dic}</dd></div>
+        </dl>
       </div>
     </div>
+
+    <figure class="map col-span-12 m-0 lg:col-span-8 lg:col-start-5">
+      <div class="map-box">
+        <iframe
+          src={company.mapsEmbed}
+          title={t.mapTitle}
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen
+        ></iframe>
+      </div>
+      <figcaption>
+        <a href={company.mapsLink} rel="noopener" target="_blank">
+          {t.openMap}
+          <Arrow dir="up-right" />
+        </a>
+      </figcaption>
+    </figure>
   </div>
 </section>
 
 <style>
-  .contact-card {
-    border-radius: 16px;
-    border: 1px solid rgba(148, 163, 184, 0.34);
-    background: rgba(255, 255, 255, 0.84);
-    padding: 18px;
-    box-shadow: 0 18px 34px -35px rgba(15, 23, 42, 0.5);
-    transition: transform 220ms ease, box-shadow 220ms ease;
+  .page-title {
+    font-size: var(--text-page-title);
   }
 
-  .contact-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 24px 38px -34px rgba(15, 23, 42, 0.6);
+  .intake-wrap {
+    margin-top: clamp(32px, 4vw, 56px);
   }
 
-  .contact-label {
-    font-size: 0.68rem;
-    text-transform: uppercase;
-    letter-spacing: 0.16em;
-    font-weight: 700;
-    color: #334155;
-    margin-bottom: 8px;
+  /* On a white sheet the note lines up with the frame edge, like the rest of the page. */
+  .intake-wrap :global(.note) {
+    padding-inline: 0;
   }
 
-  .contact-link {
+  .people {
+    margin-top: clamp(28px, 3vw, 44px);
+  }
+
+  .ledger {
+    margin-top: 10px;
+    border-top: var(--rule);
+  }
+
+  .row {
+    display: grid;
+    gap: 10px;
+    padding: 20px 0;
+    border-bottom: var(--soft);
+  }
+
+  .row:last-child {
+    border-bottom: 0;
+  }
+
+  .name {
+    font-size: var(--text-title);
+    font-weight: 750;
+    font-stretch: 112%;
+  }
+
+  .phone,
+  .mail {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  .phone {
+    white-space: nowrap;
+    font-size: var(--text-figure);
+    font-weight: 800;
+    color: var(--color-ink);
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.2em;
+  }
+
+  .phone:hover {
+    text-decoration-color: var(--color-red);
+  }
+
+  .mail {
+    color: var(--color-ink);
+  }
+
+  .mail:hover {
+    color: var(--color-red);
+    text-decoration: underline;
+  }
+
+  .map {
+    border: var(--hair);
+  }
+
+  .map-box {
+    aspect-ratio: 4 / 3;
+    background: var(--color-stone);
+  }
+
+  .map-box iframe {
     display: block;
-    color: #1d4ed8;
-    margin-top: 4px;
+    width: 100%;
+    height: 100%;
+    border: 0;
   }
 
-  .contact-map-wrap {
-    overflow: hidden;
-    border-radius: 18px;
-    border: 1px solid rgba(148, 163, 184, 0.34);
-    background: rgba(255, 255, 255, 0.84);
-    box-shadow: 0 20px 38px -36px rgba(15, 23, 42, 0.58);
+  .map figcaption {
+    border-top: var(--hair);
   }
 
-  .contact-map-caption {
-    border-top: 1px solid rgba(148, 163, 184, 0.24);
-    padding: 12px 14px;
-    background: rgba(255, 255, 255, 0.9);
+  .map figcaption a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    font-weight: 700;
+    color: var(--color-ink);
+  }
+
+  .map figcaption a:hover {
+    background: var(--color-ink);
+    color: #fff;
+  }
+
+  .phone-empty {
+    display: none;
+  }
+
+  /* Name on the left half, phone and email on the right half, so the phones sit under the
+     intake's call cell. The extra half gutter matches that cell's hairline-plus-padding inset. */
+  @media (min-width: 768px) {
+    .row {
+      grid-template-columns: minmax(0, 6fr) minmax(0, 4fr) minmax(0, 2fr);
+      gap: var(--gutter);
+      align-items: center;
+    }
+
+    .row > :nth-child(2) {
+      padding-left: calc(var(--gutter) / 2);
+    }
+
+    .phone-empty {
+      display: block;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .map-box {
+      aspect-ratio: 16 / 9;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .map-box {
+      aspect-ratio: 21 / 9;
+    }
   }
 </style>

@@ -1,0 +1,20 @@
+---
+// Drawn arrow for links and actions; one stroke weight across the site.
+// Direction uses the `rotate` property, so components stay free to animate `transform` (e.g. a hover nudge).
+const { class: className, dir = 'right' } = Astro.props
+const rotate = { right: 0, down: 90, up: -90, 'up-right': -45 }[dir as string] ?? 0
+---
+
+<svg
+  class={className}
+  viewBox="0 0 20 20"
+  width="20"
+  height="20"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="square"
+  aria-hidden="true"
+  style={`rotate: ${rotate}deg; flex: none`}>
+  <path d="M3 10h13M11 4.5 16.5 10 11 15.5"></path>
+</svg>

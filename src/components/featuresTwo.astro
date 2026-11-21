@@ -2,158 +2,341 @@
 import { Image } from 'astro:assets'
 import { getEntry } from 'astro:content'
 import { getLocale } from 'astro-i18n-aut'
-import car0 from 'assets/carousel/carousel_0.jpg'
-import car2 from 'assets/carousel/carousel_2.jpg'
-import car4 from 'assets/carousel/carousel_4.jpg'
-import car5 from 'assets/carousel/carousel_5.jpg'
+import SheetRule from './ui/sheetRule.astro'
+import { localizedPath } from '../data/company'
+import { plateLabel, firstSlugOf } from '../data/machines'
+import shafts from 'assets/carousel/carousel_1.jpg'
+import sprockets from 'assets/carousel/carousel_2.jpg'
+import ring from 'assets/carousel/carousel_4.jpg'
+import bushings from 'assets/carousel/carousel_5.jpg'
 
-const locale = getLocale(Astro.url)
+const locale = getLocale(Astro.url) === 'en' ? 'en' : 'sk'
 const features = await getEntry('features', locale + '/features')
+if (!features) throw new Error(`Missing features content for ${locale}`)
 
 const copy = {
   en: {
-    meta:
-      'Typical deliverables: jigs, housings, brackets, shafts, and replacement components for maintenance and production lines.',
+    deliverables:
+      'Typical work: jigs, housings, brackets, shafts, and replacement components for maintenance and production lines.',
+    register: [
+      ['Materials', 'Steel, stainless steel, aluminium, copper alloys, technical plastics'],
+      ['We supply', 'Energy, food-processing machinery, automation lines, maintenance spare parts, fixtures and clamping, one-off parts'],
+    ],
+    cols: ['No.', 'Service', 'Machines'],
+    groups: { shop: 'In our hall', around: 'Finishing and delivery' },
+    machinesLabel: 'Machines',
+    partsTitle: 'Parts from our shop',
+    parts: [
+      { src: shafts, caption: 'Turned and milled shafts' },
+      { src: sprockets, caption: 'Sprockets with keyways' },
+      { src: ring, caption: 'Slotted ring' },
+      { src: bushings, caption: 'Turned bushings, small series' },
+    ],
   },
   sk: {
-    meta:
-      'Typické výstupy: prípravky, kryty, konzoly, hriadele a náhradné diely pre údržbu a výrobné linky.',
+    deliverables:
+      'Typické zákazky: prípravky, kryty, konzoly, hriadele a náhradné diely pre údržbu a výrobné linky.',
+    register: [
+      ['Materiály', 'Oceľ, nerez, hliník, zliatiny medi, technické plasty'],
+      ['Pre koho', 'Energetika, potravinárske stroje, automatizačné linky, náhradné diely pre údržbu, prípravky a upínanie, kusové diely'],
+    ],
+    cols: ['Č.', 'Služba', 'Stroje'],
+    groups: { shop: 'V našej hale', around: 'Povrchové úpravy a doprava' },
+    machinesLabel: 'Stroje',
+    partsTitle: 'Diely z našej dielne',
+    parts: [
+      { src: shafts, caption: 'Sústružené a frézované hriadele' },
+      { src: sprockets, caption: 'Reťazové kolesá s drážkou pre pero' },
+      { src: ring, caption: 'Drážkovaný prstenec' },
+      { src: bushings, caption: 'Sústružené puzdrá, malá séria' },
+    ],
   },
 }
 
-const t = copy[locale] || copy.en
+const t = copy[locale]
+const machinesPath = localizedPath(locale, 'machines')
 
-const materials = [
-  {
-    src: car0,
-    label: locale === 'sk' ? 'Oceľ' : 'Steel',
-  },
-  {
-    src: car2,
-    label: locale === 'sk' ? 'Hliník' : 'Aluminum',
-  },
-  {
-    src: car4,
-    label: locale === 'sk' ? 'Nerez' : 'Stainless',
-  },
-  {
-    src: car5,
-    label: locale === 'sk' ? 'Plasty' : 'Plastics',
-  },
-]
-
-// const features = await getCollection("features", ({ id }) => {
-//   return id.startsWith(locale);
-// });
+// One numbered register, set as two short lists: what we machine ourselves, then what happens around the part.
+const numbered = features.data.features.map((item, i) => ({ item, n: i + 1 }))
+const groups = (['shop', 'around'] as const)
+  .map((key) => ({ key, rows: numbered.filter(({ item }) => (item.group ?? 'shop') === key) }))
+  .filter((g) => g.rows.length > 0)
 ---
 
-<section class="pb-10 md:pb-16">
-  <div class="container py-10 mx-auto">
-    <div class="max-w-3xl">
-      <div>
-        <h2 class="mt-4 text-3xl font-display font-semibold tracking-tight text-slate-900 lg:text-5xl">
-          {features.data.title}
-        </h2>
-        <p class="mt-4 max-w-2xl text-lg text-slate-600">
-          {features.data.description}
-        </p>
-        <p class="mt-6 max-w-2xl text-sm font-medium uppercase tracking-[0.08em] text-slate-500">
-          {t.meta}
-        </p>
+<section class="sheet" aria-labelledby="services-title">
+  <SheetRule folio={2} />
+  <div class="frame">
+    <div class="grid-12 gap-y-6">
+      <h2 id="services-title" class="headline col-span-12 lg:col-span-6">{features.data.title}</h2>
+      <div class="col-span-12 lg:col-span-5 lg:col-start-8">
+        <p class="lead">{features.data.description}</p>
+        <p class="mt-4 text-mid">{t.deliverables}</p>
       </div>
     </div>
 
-    <div class="grid grid-cols-1 gap-5 mt-10 md:grid-cols-2 xl:grid-cols-3">
+    {
+      groups.map((group, gi) => (
+        <div class="svc-group">
+          <div class="svc-head">
+            <h3 class="label svc-group-title">{t.groups[group.key]}</h3>
+            {gi === 0 && <span class="svc-col" aria-hidden="true">{t.cols[2]}</span>}
+          </div>
+          <ol class="svc" start={group.rows[0].n}>
+            {group.rows.map(({ item, n }) => (
+              <li class="svc-row">
+                <span class="svc-no num" aria-hidden="true">{String(n).padStart(2, '0')}</span>
+                <h4 class="svc-name">{item.title}</h4>
+                <p class="svc-desc">{item.description}</p>
+                {item.machines && (
+                  <p class="svc-machines num">
+                    <a href={`${machinesPath}#${firstSlugOf(item.machines) ?? ''}`} class="link">
+                      <span class="svc-machines-label">{t.machinesLabel} </span>
+                      <span class="svc-machines-no">{item.machines}</span>
+                    </a>
+                  </p>
+                )}
+              </li>
+            ))}
+          </ol>
+        </div>
+      ))
+    }
+
+    <dl class="reg">
       {
-        features.data.features.map((item, idx) => (
-          <div
-            class={`service-card service-card-${idx + 1} service-reveal group rounded-[1.1rem] border border-slate-200/70 bg-white/75 p-6 shadow-[0_18px_35px_-36px_rgba(20,30,40,0.55)] transition hover:-translate-y-1 hover:border-slate-300`}
-            style={`--card-rotate:${idx % 2 === 0 ? '-0.35deg' : '0.35deg'};`}>
-            <div class="flex items-center justify-between">
-              <h2 class="text-lg font-semibold text-slate-900">
-                {item.title}
-              </h2>
-              <span class="h-9 w-9 rounded-full border border-slate-200/80 bg-white/90 text-center text-xs font-semibold uppercase leading-9 tracking-[0.16em] text-slate-500">
-                CNC
-              </span>
-            </div>
-            <p class="mt-3 text-sm leading-relaxed text-slate-600">
-              {item.description || 'Custom setups available on request.'}
-            </p>
+        t.register.map(([k, v]) => (
+          <div>
+            <dt class="label">{k}</dt>
+            <dd>{v}</dd>
           </div>
         ))
       }
-    </div>
+    </dl>
 
-    <div class="mt-10">
-      <div class="flex gap-4 overflow-x-auto pb-2">
-        {
-          materials.map((item) => (
-            <div class="min-w-[170px] overflow-hidden rounded-lg border border-slate-200/70 bg-white/75">
+    <h3 class="label parts-title">{t.partsTitle}</h3>
+    <ul class="parts">
+      {
+        t.parts.map((part, i) => (
+          <li>
+            <figure class="m-0">
               <Image
-                src={item.src}
-                alt={item.label}
+                src={part.src}
+                alt={part.caption}
+                width={640}
+                height={480}
                 fit="cover"
-                width={320}
-                height={200}
                 loading="lazy"
+                class="plate aspect-4/3 w-full object-cover"
               />
-              <div class="px-3 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-slate-600">
-                {item.label}
-              </div>
-            </div>
-          ))
-        }
-      </div>
-    </div>
+              <figcaption><span class="num">{plateLabel(locale, i + 2)}</span> · {part.caption}</figcaption>
+            </figure>
+          </li>
+        ))
+      }
+    </ul>
   </div>
 </section>
 
-<script>
-  const cards = document.querySelectorAll('.service-reveal')
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('service-visible')
-          observer.unobserve(entry.target)
-        }
-      })
-    },
-    { threshold: 0.2 }
-  )
-  cards.forEach((card) => observer.observe(card))
-</script>
-
 <style>
-  .service-card {
-    opacity: 0;
-    transform: translateY(10px) scale(0.985) rotate(var(--card-rotate, 0deg));
-    transition: transform 360ms ease, opacity 360ms ease;
+  .text-mid {
+    max-width: 36rem;
+    line-height: 1.5;
+    color: var(--color-mid);
   }
 
-  .service-card.service-visible {
-    opacity: 1;
-    transform: translateY(0) scale(1) rotate(var(--card-rotate, 0deg));
+  /* Services: a numbered register in two short lists. Number, name, what it is, which machines do it. */
+  .svc-group {
+    margin-top: clamp(32px, 4vw, 56px);
   }
 
-  .service-card-2,
-  .service-card-5,
-  .service-card-8 {
-    animation-delay: 0.07s;
+  .svc-group + .svc-group {
+    margin-top: clamp(24px, 3vw, 40px);
   }
 
-  .service-card-3,
-  .service-card-6,
-  .service-card-9 {
-    animation-delay: 0.14s;
+  .svc-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--gutter);
+    padding-bottom: 10px;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .service-card {
-      opacity: 1;
-      transform: none !important;
-      transition: none;
+  .svc-col {
+    display: none;
+    font-size: var(--text-label);
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-mid);
+  }
+
+  .svc {
+    border-top: var(--rule);
+  }
+
+  .svc-row {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr) auto;
+    column-gap: var(--gutter);
+    align-items: baseline;
+    padding: 14px 0 16px;
+    border-bottom: var(--soft);
+  }
+
+  /* The list ends in space; the next 2px rule closes it, so no hairline doubles it. */
+  .svc-row:last-child {
+    border-bottom: 0;
+  }
+
+  .svc-no {
+    font-weight: 700;
+  }
+
+  .svc-name {
+    font-size: var(--text-title);
+    font-weight: 750;
+    font-stretch: 112%;
+    letter-spacing: -0.015em;
+    line-height: 1.1;
+  }
+
+  .svc-desc {
+    grid-column: 2 / 4;
+    margin-top: 4px;
+    max-width: 62ch;
+    color: var(--color-mid);
+    line-height: 1.5;
+  }
+
+  /* Narrow screens have no column head, so the link carries its own label under the description. */
+  .svc-machines {
+    grid-column: 2 / 4;
+    margin-top: 6px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .svc-machines-no {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-decoration-color: inherit;
+  }
+
+  .svc-machines a:hover .svc-machines-no {
+    text-decoration-color: var(--color-red);
+  }
+
+  /* inline-block keeps the link's underline on the numbers only. */
+  .svc-machines-label {
+    display: inline-block;
+    font-size: var(--text-label);
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-right: 6px;
+  }
+
+  /* The machine numbers are a link: give the thumb a full-height target. */
+  .svc-machines a {
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    min-width: 44px;
+    min-height: 44px;
+    margin-block: -8px;
+  }
+
+  /* Materials and industries: one register, two rows. */
+  .reg {
+    margin-top: clamp(28px, 3vw, 40px);
+    border-top: var(--rule);
+  }
+
+  .reg > div {
+    display: grid;
+    gap: 4px;
+    padding: 12px 0;
+    border-bottom: var(--soft);
+  }
+
+  .reg > div:last-child {
+    border-bottom: 0;
+  }
+
+  .reg dt {
+    color: var(--color-mid);
+  }
+
+  .reg dd {
+    margin: 0;
+    font-weight: 600;
+  }
+
+  .parts-title {
+    margin-top: clamp(40px, 5vw, 64px);
+  }
+
+  .parts {
+    margin-top: 12px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--gutter);
+    border-top: var(--rule);
+    padding-top: var(--gutter);
+  }
+
+  .parts figcaption {
+    margin-top: 8px;
+    font-size: var(--text-small);
+    color: var(--color-mid);
+  }
+
+  @media (min-width: 900px) {
+    .svc-col {
+      display: block;
+      /* Sits over the Machines column of the rows below. */
+      width: calc((100% - 2.5rem - 3 * var(--gutter)) * 1.2 / 9.2);
+    }
+
+    .svc-row {
+      grid-template-columns: 2.5rem minmax(0, 3fr) minmax(0, 5fr) minmax(0, 1.2fr);
+    }
+
+    .svc-desc {
+      grid-column: 3;
+      margin-top: 0;
+    }
+
+    .svc-machines {
+      grid-column: 4;
+      grid-row: auto;
+      margin-top: 0;
+    }
+
+    .svc-machines a {
+      margin-block: -12px;
+    }
+
+    /* The column head names the column from here on; the label stays for screen readers. */
+    .svc-machines-label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    .reg > div {
+      /* Key column ends where the service name column ends, so values align with the descriptions. */
+      grid-template-columns: calc(2.5rem + var(--gutter) + (100% - 2.5rem - 3 * var(--gutter)) * 3 / 9.2) 1fr;
+      column-gap: var(--gutter);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .parts {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
     }
   }
 </style>

@@ -1,0 +1,204 @@
+---
+// The spec sheet a machine index row deploys into: plate on the left, register on the right.
+// Used by the home index and by /machines, so both open the same sheet in place.
+// The register never repeats the row: it carries the maker (the row hides it on narrow screens),
+// the maker's country and only the figures `machineFacts[slug].specs` states. A machine with no
+// stated figures says the parameters are on request instead of padding the register.
+import { Image } from 'astro:assets'
+import Arrow from './arrow.astro'
+import { company, mailHref } from '../../data/company'
+import { machineFacts, plateLabel, specLabels, specOrder, typeOnly } from '../../data/machines'
+
+interface Props {
+  item: { data: { name: string; title: string; avatar: { src: ImageMetadata; alt: string } } }
+  slug: string
+  n: number
+  locale: 'sk' | 'en'
+}
+
+const { item, slug, n, locale } = Astro.props
+const facts = machineFacts[slug] ?? { group: 'manual' as const }
+
+const t = {
+  sk: {
+    maker: 'Výrobca',
+    country: 'Krajina výrobcu',
+    plateNote: 'obrázok výrobcu',
+    onRequest: 'Parametre stroja na požiadanie',
+    onRequestNote: 'Pojazdy, upínanie a riadiaci systém vám povie Ing. Juraj Nemček z výroby.',
+    more: 'Ďalšie parametre na požiadanie.',
+    ask: 'Opýtať sa na tento stroj',
+    askSubject: (name: string) => `Dopyt – ${name}`,
+  },
+  en: {
+    maker: 'Maker',
+    country: 'Maker’s country',
+    plateNote: 'manufacturer image',
+    onRequest: 'Machine parameters on request',
+    onRequestNote: 'Ing. Juraj Nemček in production can give you travels, work-holding and control.',
+    more: 'Further parameters on request.',
+    ask: 'Ask about this machine',
+    askSubject: (name: string) => `Enquiry – ${name}`,
+  },
+}[locale]
+
+const specs = specOrder
+  .filter((key) => facts.specs?.[key])
+  .map((key) => ({ label: specLabels[key][locale], value: facts.specs![key]! }))
+const type = typeOnly(item.data.title)
+---
+
+<div class="spec">
+  <figure class="spec-plate m-0">
+    <Image
+      src={item.data.avatar.src}
+      alt={`${item.data.name}${type && type !== item.data.name ? `, ${type}` : ''} (${t.plateNote})`}
+      width={800}
+      height={400}
+      fit="contain"
+      loading="lazy"
+      class="plate"
+    />
+    <figcaption><span class="num">{plateLabel(locale, n)}</span> · {item.data.name} · {t.plateNote}</figcaption>
+  </figure>
+  <div class="spec-body">
+    <dl class="spec-rows">
+      {
+        facts.maker && (
+          <div class="spec-maker">
+            <dt>{t.maker}</dt>
+            <dd>{facts.maker}</dd>
+          </div>
+        )
+      }
+      {
+        facts.country && (
+          <div>
+            <dt>{t.country}</dt>
+            <dd>{facts.country[locale]}</dd>
+          </div>
+        )
+      }
+      {
+        specs.map((spec) => (
+          <div>
+            <dt>{spec.label}</dt>
+            <dd class="num">{spec.value}</dd>
+          </div>
+        ))
+      }
+    </dl>
+    {
+      specs.length === 0 ? (
+        <div class="spec-request">
+          <p class="spec-request-title">{t.onRequest}</p>
+          <p class="spec-request-note">{t.onRequestNote}</p>
+        </div>
+      ) : (
+        <p class="spec-more">{t.more}</p>
+      )
+    }
+    <a href={mailHref(company.production.email, t.askSubject(item.data.name))} class="btn btn-ink mt-6">
+      {t.ask}
+      <Arrow />
+    </a>
+  </div>
+</div>
+
+<style>
+  .spec {
+    display: grid;
+    gap: var(--gutter);
+    padding: 8px 0 32px;
+    animation: deploy 320ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .spec-plate {
+    border-top: var(--rule);
+  }
+
+  .spec-plate :global(img) {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: contain;
+    padding: 4% 8%;
+    mix-blend-mode: multiply;
+  }
+
+  .spec-plate figcaption {
+    padding: 8px 0;
+    border-top: var(--hair);
+    font-size: var(--text-small);
+    font-weight: 600;
+  }
+
+  .spec-body {
+    border-top: var(--rule);
+  }
+
+  .spec-rows > div {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    gap: var(--gutter);
+    padding: 11px 0;
+    border-bottom: var(--soft);
+  }
+
+  .spec-rows dt {
+    color: var(--color-mid);
+  }
+
+  .spec-rows dd {
+    margin: 0;
+    font-weight: 700;
+  }
+
+  .spec-request {
+    padding: 14px 0 16px;
+  }
+
+  .spec-request-title {
+    font-weight: 700;
+  }
+
+  .spec-request-note,
+  .spec-more {
+    margin-top: 4px;
+    font-size: var(--text-small);
+    line-height: 1.45;
+    color: var(--color-mid);
+  }
+
+  .spec-more {
+    margin-top: 10px;
+  }
+
+  @keyframes deploy {
+    from {
+      clip-path: inset(0 0 100% 0);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .spec {
+      animation: none;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .spec {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      align-items: start;
+      margin-left: calc(72px + 2.5rem + 2 * var(--gutter));
+    }
+
+    /* The row already shows the maker in its own column from here on. */
+    .spec-maker {
+      display: none !important;
+    }
+  }
+</style>

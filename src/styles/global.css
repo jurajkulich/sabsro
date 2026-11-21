@@ -1,0 +1,227 @@
+@import '@fontsource-variable/archivo/wdth.css';
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+
+/*
+  Švehla a Blaško — identity manual.
+  One family (Archivo, wide cut for display), white stock, ink, and the logo red
+  at full strength owning whole fields. Structure is grid modules and rules only:
+  no shadows, no blur, no radii.
+*/
+@theme {
+  --font-sans: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Archivo Variable', ui-sans-serif, system-ui, sans-serif;
+
+  --color-red: #e30016;
+  --color-ink: #1b1918;
+  --color-paper: #ffffff;
+  --color-stone: #d9d6d0;
+  --color-mid: #5f5a55;
+
+  /* The type ramp (DESIGN.md › Typography). Use these, never a literal size. */
+  --text-label: 0.75rem;
+  --text-small: 0.875rem;
+  --text-body: 1rem;
+  --text-lead: 1.125rem;
+  --text-title: clamp(1.25rem, 1rem + 0.8vw, 1.625rem);
+  --text-figure: clamp(1.5rem, 1.1rem + 1.3vw, 2.25rem);
+  --text-headline: clamp(2rem, 1.3rem + 2vw, 3rem);
+  --text-statement: clamp(2.25rem, 1.2rem + 3vw, 4rem);
+  --text-display: clamp(2.75rem, 0.8rem + 5.2vw, 5.5rem);
+  --text-page-title: clamp(2.25rem, 1.5rem + 2.8vw, 4.25rem);
+  --text-error-code: clamp(5rem, 3rem + 10vw, 12rem);
+}
+
+:root {
+  --gutter: clamp(16px, 2.2vw, 32px);
+  --rule: 2px solid var(--color-ink);
+  --hair: 1px solid var(--color-ink);
+  --soft: 1px solid var(--color-stone);
+}
+
+html {
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  background: var(--color-paper);
+  font-kerning: normal;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-red);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-red);
+  outline-offset: 2px;
+}
+
+a {
+  text-underline-offset: 0.22em;
+}
+
+@layer components {
+  /* Page frame: 12 columns, the manual's grid. */
+  .frame {
+    width: 100%;
+    max-width: 1440px;
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  .grid-12 {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--gutter);
+  }
+
+  /* Display voice: the wide cut. */
+  .display {
+    font-family: var(--font-display);
+    font-stretch: 125%;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 0.95;
+  }
+
+  .headline {
+    font-family: var(--font-display);
+    font-stretch: 118%;
+    font-weight: 750;
+    letter-spacing: -0.025em;
+    line-height: 1.02;
+    font-size: var(--text-headline);
+    text-wrap: balance;
+  }
+
+  /* The first paragraph of a sheet. */
+  .lead {
+    max-width: 36rem;
+    font-size: var(--text-lead);
+    line-height: 1.5;
+  }
+
+  .label {
+    font-size: var(--text-label);
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .num {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Section: opens on a heavy rule, like a new manual sheet. */
+  .sheet {
+    border-top: var(--rule);
+    padding-bottom: clamp(40px, 6vw, 88px);
+  }
+
+  /* Ticks hang from the rule; the sheet's content starts below them. */
+  .sheet > .sheet-rule,
+  .sheet-first > .sheet-rule {
+    margin-bottom: clamp(30px, 5vw, 78px);
+  }
+
+  /* Sheet 01 of a sub-page hangs its ticks from the header's own rule. */
+  .sheet-first {
+    padding-bottom: clamp(40px, 6vw, 88px);
+  }
+
+  /* Actions: square, solid, ink or red. */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25em;
+    min-height: 52px;
+    padding: 14px 20px;
+    border: 2px solid var(--color-ink);
+    font-weight: 700;
+    line-height: 1.2;
+    text-decoration: none;
+    transition:
+      background-color 120ms linear,
+      color 120ms linear,
+      border-color 120ms linear;
+  }
+
+  .btn-ink {
+    background: var(--color-ink);
+    color: #fff;
+  }
+
+  .btn-ink:hover {
+    background: var(--color-red);
+    border-color: var(--color-red);
+  }
+
+  .btn-line {
+    background: transparent;
+    color: var(--color-ink);
+  }
+
+  .btn-line:hover {
+    background: var(--color-ink);
+    color: #fff;
+  }
+
+  .btn-white {
+    background: #fff;
+    border-color: #fff;
+    color: var(--color-ink);
+  }
+
+  .btn-white:hover {
+    background: var(--color-ink);
+    border-color: var(--color-ink);
+    color: #fff;
+  }
+
+  .link {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-decoration-color: currentColor;
+  }
+
+  .link:hover {
+    text-decoration-color: var(--color-red);
+  }
+
+  /* Photography runs in natural colour, numbered like manual plates. */
+}
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-stone, currentcolor);
+  }
+
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
+
+  /* No single word left alone on a last line. */
+  p,
+  li,
+  dd,
+  figcaption {
+    text-wrap: pretty;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

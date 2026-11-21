@@ -1,5 +1,5 @@
 import { defineConfig } from "astro/config";
-import tailwind from "@astrojs/tailwind";
+import tailwindcss from "@tailwindcss/vite";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import { i18n, filterSitemapByDefaultLocale } from "astro-i18n-aut/integration";
@@ -32,7 +32,6 @@ export default defineConfig({
   },
 
   integrations: [
-    tailwind(),
     mdx(),
 
     i18n({
@@ -51,4 +50,11 @@ export default defineConfig({
   ],
 
   output: "static",
+
+  // Astro 7 defaults to "jsx" whitespace handling; keep the previous output.
+  compressHTML: true,
+
+  vite: {
+    plugins: [tailwindcss()],
+  },
 });

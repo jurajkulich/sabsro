@@ -1,37 +1,112 @@
 ---
-import LanguagePicker from './languagePicker.astro'
 import { getLocale } from 'astro-i18n-aut'
+import logo from '../assets/logo.svg'
+import { company, telHref, mailHref, localizedPath } from '../data/company'
 
-const locale = getLocale(Astro.url)
-const tagline =
+const locale = getLocale(Astro.url) === 'en' ? 'en' : 'sk'
+const t =
   locale === 'sk'
-    ? 'Presné frézovanie a obrábanie od roku 1990.'
-    : 'Precision milling and machining since 1990.'
+    ? {
+        tagline: 'Obrábame od roku 1990.',
+        address: 'Adresa',
+        contact: 'Kontakt',
+        company: 'Firma',
+        pages: 'Stránky',
+        ico: 'IČO',
+        dic: 'DIČ',
+        links: [
+          ['Domov', ''],
+          ['Stroje', 'machines'],
+          ['O nás', 'about'],
+          ['Kontakt', 'contact'],
+        ],
+      }
+    : {
+        tagline: 'Machining since 1990.',
+        address: 'Address',
+        contact: 'Contact',
+        company: 'Company',
+        pages: 'Pages',
+        ico: 'Company ID (IČO)',
+        dic: 'VAT ID (DIČ)',
+        links: [
+          ['Home', ''],
+          ['Machines', 'machines'],
+          ['About', 'about'],
+          ['Contact', 'contact'],
+        ],
+      }
 ---
 
-<footer class="py-10">
-  <div class="mx-auto max-w-screen-xl px-5">
-    <div class="flex flex-col items-center justify-between gap-4 border-t border-slate-200/70 pt-6 md:flex-row">
-      <p class="text-sm text-slate-500">
-        {tagline}
-      </p>
-      <div class="text-sm text-slate-500">
-        <LanguagePicker />
-      </div>
+<footer class="site-footer">
+  <div class="frame grid-12 gap-y-10">
+    <div class="col-span-12 md:col-span-6 lg:col-span-3">
+      <img src={logo.src} alt="Švehla a Blaško s.r.o." width="86" height="64" class="w-[86px]" />
+      <p class="mt-4 font-semibold">{company.legalName}</p>
+      <p class="mt-1 text-mid">{t.tagline}</p>
+    </div>
+    <div class="col-span-6 md:col-span-3 lg:col-span-2 lg:col-start-5">
+      <p class="label">{t.pages}</p>
+      <ul class="foot-list">
+        {t.links.map(([label, slug]) => <li><a href={localizedPath(locale, slug)}>{label}</a></li>)}
+      </ul>
+    </div>
+    <div class="col-span-6 md:col-span-3 lg:col-span-2">
+      <p class="label">{t.address}</p>
+      <address class="foot-list not-italic">
+        {company.address.street}<br />
+        {company.address.city}<br />
+        {company.address.country[locale]}
+      </address>
+    </div>
+    <div class="col-span-6 md:col-span-6 lg:col-span-2">
+      <p class="label">{t.contact}</p>
+      <ul class="foot-list">
+        <li><a class="num" href={telHref(company.production.phone)}>{company.production.phone}</a></li>
+        <li><a href={mailHref(company.email)}>{company.email}</a></li>
+        <li>{company.hours[locale]}</li>
+      </ul>
+    </div>
+    <div class="col-span-6 md:col-span-6 lg:col-span-2">
+      <p class="label">{t.company}</p>
+      <dl class="foot-list num">
+        <div><dt class="inline">{t.ico}:</dt> <dd class="inline">{company.ids.ico}</dd></div>
+        <div><dt class="inline">{t.dic}:</dt> <dd class="inline">{company.ids.dic}</dd></div>
+      </dl>
     </div>
   </div>
-  <!--
-    Can we ask you a favor 🙏
-    Please keep this backlink on your website if possible.
-    or Purchase a commercial license from https://web3templates.com
-  -->
-  <!--<p class="text-center text-xs text-slate-500 mt-1">-->
-  <!--  Made by <a-->
-  <!--    href="https://web3templates.com"-->
-  <!--    target="_blank"-->
-  <!--    rel="noopener"-->
-  <!--    class="hover:underline">-->
-  <!--    Web3Templates-->
-  <!--  </a>-->
-  <!--</p>-->
 </footer>
+
+<style>
+  .site-footer {
+    border-top: var(--rule);
+    padding-block: clamp(40px, 5vw, 64px);
+    font-size: var(--text-small);
+  }
+
+  .foot-list {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: var(--soft);
+    line-height: 1.7;
+  }
+
+  .foot-list a {
+    color: var(--color-ink);
+  }
+
+  /* Touch: every footer link gets a full-height target. */
+  @media (pointer: coarse) {
+    .foot-list a {
+      display: inline-flex;
+      align-items: center;
+      min-width: 44px;
+      min-height: 44px;
+    }
+  }
+
+  .foot-list a:hover {
+    color: var(--color-red);
+    text-decoration: underline;
+  }
+</style>

@@ -1,5 +1,5 @@
 ---
 layouttitle: "Machines"
-title: "Machines"
-description: "Welcome to our state-of-the-art machinery section, where precision and innovation come together to bring your projects to life. At our company, we take great pride in offering a comprehensive range of services, each powered by a cutting-edge fleet of specialized machines."
+title: "{count} machines in our hall."
+description: "The whole machine park at our workshop in Nové Mesto nad Váhom: vertical machining centres from Doosan and Kovosvit MAS, an Intos CNC mill, CNC and conventional lathes from Trens, an Eastar slotter and a Bianco band saw."
 ---
