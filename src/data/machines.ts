@@ -160,9 +160,6 @@ export const groupLabels = {
 
 export const slugOf = (id: string) => id.split('/').pop() ?? id
 
-export const plateLabel = (locale: 'sk' | 'en', n: number) =>
-  `${locale === 'sk' ? 'FOTO' : 'PHOTO'} ${String(n).padStart(2, '0')}`
-
 /** The maker has its own column and row, so the type drops the "from the manufacturer …" tail. */
 export const typeOnly = (title: string) =>
   title

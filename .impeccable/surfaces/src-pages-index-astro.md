@@ -13,7 +13,7 @@ Mode: Persuade. Audience: B2B engineers and procurement (SK, DE, AT, CZ) judging
 
 THESIS: The site is Švehla a Blaško's own 1970s-style corporate identity manual: numbered sheets on one visible 12-column grid, one logo red. It refuses the category default of a dark machine-photo hero, stats bar and service cards, and the incumbent cream SaaS glow.
 
-OWN-WORLD: White offset stock, ink #1b1918, logo red #e30016 at full strength owning whole fields (never tints, never gradients), warm grey #d9d6d0 for secondary rules. One grotesk family with a wide display cut, tabular figures. Rules and grid modules only: no cards, shadows, blur, radii. Photos in natural colour (B/W dropped at the client's request 2026-11-21), cropped to grid modules, numbered "FOTO 01". Sections are numbered sheets (01, 02 …).
+OWN-WORLD: White offset stock, ink #1b1918, logo red #e30016 at full strength owning whole fields (never tints, never gradients), warm grey #d9d6d0 for secondary rules. One grotesk family with a wide display cut, tabular figures. Rules and grid modules only: no cards, shadows, blur, radii. Photos in natural colour (B/W dropped at the client's request 2026-11-21), cropped to grid modules, captioned plainly (no "FOTO 01" plate numbers). Sections are numbered sheets (01, 02 …).
 
 STORY: The buyer sees a real, orderly firm, understands what it machines and on which named machines, trusts the IDs, people and ISO, and sends a drawing or calls.
 

@@ -1,0 +1,488 @@
+---
+// The hero plate: a section drawing of a G83 peck-drilling cycle, drawn white on ink like a
+// manual's technical plate. A spindle steps along four Ø8.5 holes while the control readout
+// above it counts the axes; when the row is finished a fresh part wipes in and the program
+// runs again. The server renders a still frame (second peck of hole 2) from the same timeline
+// the script animates, so nothing jumps when the script takes over.
+import { getLocale } from 'astro-i18n-aut'
+import {
+  CONE,
+  DRILL_R,
+  HOLES_X,
+  PART,
+  POSTER_TIME,
+  SPEED,
+  holeArea,
+  holePath,
+  pad,
+  stateAt,
+  toX,
+  toY,
+} from '../data/drillCycle'
+
+interface Props {
+  class?: string
+}
+
+const { class: className } = Astro.props
+const locale = getLocale(Astro.url) === 'en' ? 'en' : 'sk'
+
+const copy = {
+  en: {
+    caption: 'G83 cycle: peck drilling, four holes Ø8.5.',
+    label: 'Animated drawing: a CNC spindle peck-drills four holes into a workpiece clamped in a vise.',
+    callout: '4× Ø8.5',
+    play: 'Play animation',
+    pause: 'Pause animation',
+  },
+  sk: {
+    caption: 'Cyklus G83: vŕtanie s odvodom triesky, štyri otvory Ø8,5.',
+    label: 'Animovaný výkres: vreteno CNC stroja vŕta štyri otvory do obrobku upnutého vo zveráku.',
+    callout: '4× Ø8,5',
+    play: 'Spustiť animáciu',
+    pause: 'Zastaviť animáciu',
+  },
+}
+const t = copy[locale]
+
+const s0 = stateAt(POSTER_TIME)
+const P = PART
+
+// Machine table: top edge with three T-slots, running past both sides of the plate.
+const slot = (x: number) => `H${x - 9}V${342}H${x - 20}V${352}H${x + 20}V${342}H${x + 9}V330`
+const tableTop = `M-2000 330${[140, 320, 500].map(slot).join('')}H2640`
+
+// Flutes: a run of helix edges, one pitch longer than the body so the run can scroll a whole pitch.
+const PITCH = 26
+const FLUTE_TOP = -150
+const flutes = Array.from({ length: Math.ceil((-FLUTE_TOP + 2 * PITCH) / PITCH) + 1 }, (_, k) => {
+  const y = PITCH * 2 - k * PITCH
+  return [
+    `M${-DRILL_R} ${y}Q0 ${y - 9} ${DRILL_R} ${y - 16}`,
+    `M${-DRILL_R} ${y - 10}Q0 ${y - 19} ${DRILL_R} ${y - 26}`,
+  ]
+}).flat()
+const body = `M0 0L${-DRILL_R} ${-CONE}V-150H${DRILL_R}V${-CONE}Z`
+const CHIPS = 18
+---
+
+<figure class:list={["plate", className]} data-drill-plate>
+  <div class="plate-media">
+    <div class="readout" aria-hidden="true">
+      <dl class="axes">
+        <div><dt>X</dt><dd data-out="x">{pad(s0.x, 2, 3)}</dd></div>
+        <div><dt>Z</dt><dd data-out="z">{pad(s0.z, 2, 3)}</dd></div>
+        <div><dt>S</dt><dd data-out="s">{s0.spindle ? SPEED : 0}</dd></div>
+        <div><dt>F</dt><dd data-out="f">{s0.feed}</dd></div>
+      </dl>
+      <p class="block" data-out="block">{s0.block}</p>
+    </div>
+
+    <svg class="drawing" viewBox="48 0 564 370" preserveAspectRatio="xMidYMax meet" role="img" aria-label={t.label}>
+      <defs>
+        <pattern id="dp-hatch" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+          <path d="M0 -1V10" stroke="currentColor" stroke-width="1"></path>
+        </pattern>
+        <pattern id="dp-hatch-jaw" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)">
+          <path d="M0 -1V7" stroke="currentColor" stroke-width="1"></path>
+        </pattern>
+        <mask id="dp-cut" maskUnits="userSpaceOnUse" x="-100" y="-100" width="840" height="560">
+          <rect x="-100" y="-100" width="840" height="560" fill="#fff"></rect>
+          {HOLES_X.map((_, i) => <path data-area={i} d={holeArea(i, s0.depths[i])} fill="#000" />)}
+        </mask>
+        <clipPath id="dp-wipe">
+          <rect data-out="wipe" x={P.x - 4} y={P.y - 8} width={s0.swap * (P.w + 8)} height={P.h + 12}></rect>
+        </clipPath>
+        <clipPath id="dp-flute-clip">
+          <rect x={-DRILL_R} y={FLUTE_TOP + 30} width={DRILL_R * 2} height={-FLUTE_TOP - 30 - CONE}></rect>
+        </clipPath>
+        <g id="dp-part">
+          <rect x={P.x} y={P.y} width={P.w} height={P.h} fill="var(--color-ink)"></rect>
+          <rect x={P.x} y={P.y} width={P.w} height={P.h} fill="url(#dp-hatch)"></rect>
+          <rect class="edge" x={P.x} y={P.y} width={P.w} height={P.h} fill="none"></rect>
+        </g>
+      </defs>
+
+      <!-- Machine table and vise -->
+      <path class="edge" d={tableTop} fill="none"></path>
+      <rect class="edge" x="60" y="300" width="520" height="30" fill="var(--color-ink)"></rect>
+      <path class="thin" d="M84 315H556" fill="none"></path>
+      {
+        [84, 520].map((x) => (
+          <g>
+            <rect x={x} y="236" width="36" height="64" fill="url(#dp-hatch-jaw)" />
+            <rect class="edge" x={x} y="236" width="36" height="64" fill="none" />
+          </g>
+        ))
+      }
+
+      <!-- Workpiece in section: drilled holes are cut out of the hatch and the face line. -->
+      <g mask="url(#dp-cut)"><use href="#dp-part"></use></g>
+      {HOLES_X.map((_, i) => <path class="edge" data-hole={i} d={holePath(i, s0.depths[i])} fill="none" />)}
+      <g clip-path="url(#dp-wipe)"><use href="#dp-part"></use></g>
+
+      <!-- Drawing annotation: hole centre lines and numbers, the work zero, the callout. -->
+      <g class="anno">
+        {
+          HOLES_X.map((x, i) => (
+            <g>
+              <path class="thin center" d={`M${toX(x)} 188V312`} />
+              <text x={toX(x)} y="180" text-anchor="middle">{i + 1}</text>
+            </g>
+          ))
+        }
+        <g transform={`translate(${P.x} ${P.y})`}>
+          <circle class="thin" r="7" fill="var(--color-ink)"></circle>
+          <path d="M0 0V-7A7 7 0 0 1 7 0ZM0 0V7A7 7 0 0 1 -7 0Z" fill="currentColor"></path>
+        </g>
+        <path class="thin" d={`M600 196H${toX(HOLES_X[3]) + 40}L${toX(HOLES_X[3]) + DRILL_R + 2} ${P.y - 1}`} fill="none"></path>
+        <text x="600" y="192" text-anchor="end">{t.callout}</text>
+      </g>
+
+      <!-- Spindle, collet and drill; translated so the drill point sits on the programmed position. -->
+      <g data-out="tool" transform={`translate(${toX(s0.x)} ${toY(s0.z)})`}>
+        <rect class="edge" x="-74" y="-2000" width="148" height={2000 - 252} fill="var(--color-ink)"></rect>
+        <path class="thin" d="M-74 -264H74" fill="none"></path>
+        <rect class="edge" x="-46" y="-253" width="92" height="75" fill="var(--color-ink)"></rect>
+        <path class="thin" d="M-46 -196H46M-46 -202H46" fill="none"></path>
+        <path class="edge" d="M-26 -150L-32 -178H32L26 -150Z" fill="var(--color-ink)"></path>
+        <path class="thin" d="M-12 -152V-176M12 -152V-176" fill="none"></path>
+        <path class="edge" d={body} fill="var(--color-ink)"></path>
+        <g clip-path="url(#dp-flute-clip)">
+          <path class="thin" data-out="flutes" d={flutes.join('')} fill="none"></path>
+        </g>
+        <path class="thin" d={`M${-DRILL_R} ${-CONE}H${DRILL_R}M${-DRILL_R} -120H${DRILL_R}`} fill="none"></path>
+        <path class="thin center" d="M0 12V-240" fill="none"></path>
+      </g>
+
+      <g data-out="chips">
+        {Array.from({ length: CHIPS }, () => <path class="chip" d="M-5 1C-5 -4 3 -5 4 -1S1 4 -1 2S0 -2 1 -1" fill="none" opacity="0" />)}
+      </g>
+    </svg>
+  </div>
+  <figcaption>
+    <span>{t.caption}</span>
+    <button type="button" class="plate-toggle" aria-label={t.play} data-play={t.play} data-pause={t.pause}>
+      <svg viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true">
+        <path class="i-play" d="M6 4.5v11l9-5.5z"></path>
+        <path class="i-pause" d="M7 4.5v11M13 4.5v11"></path>
+      </svg>
+    </button>
+  </figcaption>
+</figure>
+
+<script>
+  import { PART, POSTER_TIME, SPEED, DRILL_R, HOLES_X, holeArea, holePath, pad, stateAt, toX, toY } from '../data/drillCycle'
+
+  const root = document.querySelector<HTMLElement>('[data-drill-plate]')
+
+  if (root) {
+    const $ = <T extends Element>(sel: string) => root.querySelector<T>(sel)!
+    const toggle = $<HTMLButtonElement>('.plate-toggle')
+    const tool = $<SVGGElement>('[data-out="tool"]')
+    const flutes = $<SVGPathElement>('[data-out="flutes"]')
+    const wipe = $<SVGRectElement>('[data-out="wipe"]')
+    const chipEls = [...root.querySelectorAll<SVGPathElement>('.chip')]
+    const holes = HOLES_X.map((_, i) => ({
+      edge: $<SVGPathElement>(`[data-hole="${i}"]`),
+      area: $<SVGPathElement>(`[data-area="${i}"]`),
+      depth: -1,
+    }))
+    const out = Object.fromEntries(
+      ['x', 'z', 's', 'f', 'block'].map((k) => [k, { el: $<HTMLElement>(`[data-out="${k}"]`), text: '' }]),
+    )
+
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)')
+    let userChoice: 'play' | 'pause' | null = null
+    let onScreen = true
+    let time = POSTER_TIME
+    let last = 0
+    let raf = 0
+    let phase = 0
+    let spawnClock = 0
+
+    type Chip = { el: SVGPathElement; x: number; y: number; vx: number; vy: number; r: number; vr: number; age: number; life: number }
+    const chips: Chip[] = []
+    const free = [...chipEls]
+
+    const write = (key: string, text: string) => {
+      const o = out[key]
+      if (o.text !== text) o.el.textContent = o.text = text
+    }
+
+    const spawn = (cx: number) => {
+      const el = free.pop()
+      if (!el) return
+      const side = Math.random() < 0.5 ? -1 : 1
+      chips.push({
+        el,
+        x: cx + side * (DRILL_R + 2),
+        y: PART.y - 2,
+        vx: side * (50 + Math.random() * 90),
+        vy: -(90 + Math.random() * 110),
+        r: Math.random() * 360,
+        vr: side * (400 + Math.random() * 500),
+        age: 0,
+        life: 0.45 + Math.random() * 0.25,
+      })
+    }
+
+    const draw = (dt: number) => {
+      const s = stateAt(time)
+      tool.setAttribute('transform', `translate(${toX(s.x)} ${toY(s.z)})`)
+
+      holes.forEach((h, i) => {
+        const d = s.depths[i]
+        if (d === h.depth) return
+        h.depth = d
+        h.edge.setAttribute('d', holePath(i, d))
+        h.area.setAttribute('d', holeArea(i, d))
+      })
+      wipe.setAttribute('width', String(s.swap * (PART.w + 8)))
+
+      write('x', pad(s.x, 2, 3))
+      write('z', pad(s.z, 2, 3))
+      write('s', String(s.spindle ? SPEED : 0))
+      write('f', String(s.feed))
+      write('block', s.block)
+
+      // The flutes climb while the spindle turns, the way a twist drill reads from the side.
+      if (s.spindle) phase = (phase + dt * 64) % 26
+      flutes.setAttribute('transform', `translate(0 ${-phase})`)
+
+      if (s.cutting) {
+        spawnClock += dt
+        while (spawnClock > 0.06) {
+          spawnClock -= 0.06
+          spawn(toX(s.x))
+        }
+      }
+      for (let i = chips.length - 1; i >= 0; i--) {
+        const c = chips[i]
+        c.age += dt
+        if (c.age >= c.life) {
+          c.el.setAttribute('opacity', '0')
+          free.push(c.el)
+          chips.splice(i, 1)
+          continue
+        }
+        c.vy += 700 * dt
+        c.x += c.vx * dt
+        c.y += c.vy * dt
+        c.r += c.vr * dt
+        c.el.setAttribute('transform', `translate(${c.x.toFixed(1)} ${c.y.toFixed(1)}) rotate(${c.r.toFixed(0)})`)
+        c.el.setAttribute('opacity', c.age > c.life - 0.12 ? '0.5' : '1')
+      }
+    }
+
+    const frame = (now: number) => {
+      const dt = last ? Math.min(0.05, (now - last) / 1000) : 0
+      last = now
+      time += dt
+      draw(dt)
+      raf = requestAnimationFrame(frame)
+    }
+
+    const wanted = () => (userChoice ? userChoice === 'play' : !reduce.matches)
+
+    const sync = () => {
+      const run = wanted() && onScreen && !document.hidden
+      if (run && !raf) {
+        last = 0
+        raf = requestAnimationFrame(frame)
+      } else if (!run && raf) {
+        cancelAnimationFrame(raf)
+        raf = 0
+      }
+      const playing = wanted()
+      toggle.classList.toggle('is-playing', playing)
+      toggle.setAttribute('aria-label', (playing ? toggle.dataset.pause : toggle.dataset.play) ?? '')
+    }
+
+    toggle.addEventListener('click', () => {
+      userChoice = wanted() ? 'pause' : 'play'
+      sync()
+    })
+    reduce.addEventListener('change', sync)
+    document.addEventListener('visibilitychange', sync)
+    new IntersectionObserver(([entry]) => {
+      onScreen = entry.isIntersecting
+      sync()
+    }).observe(root)
+    sync()
+  }
+</script>
+
+<style>
+  .plate {
+    container: plate / inline-size;
+    position: relative;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    margin: 0;
+    background: var(--color-ink);
+    color: #fff;
+  }
+
+  /* The box is sized by the layout only: 16:10 by default, the hero's row height on desktop. */
+  .plate-media {
+    position: relative;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    aspect-ratio: var(--plate-ratio, 16 / 10);
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  /* Control readout: a register of the four axes, white rules on ink. The spindle rises behind it. */
+  .readout {
+    position: relative;
+    z-index: 1;
+    background: var(--color-ink);
+    padding: 0 var(--plate-pad-r, var(--gutter)) 0 var(--plate-pad-l, var(--gutter));
+    border-bottom: 1px solid #fff;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .axes {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin: 0;
+  }
+
+  .axes > div {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 10px 12px 9px;
+    border-left: 1px solid #fff;
+  }
+
+  .axes > div:first-child {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .axes dt {
+    font-size: var(--text-label);
+    font-weight: 650;
+    letter-spacing: 0.08em;
+  }
+
+  .axes dd {
+    margin: 0;
+    font-size: var(--text-body);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .block {
+    margin: 0;
+    padding: 8px 0 9px;
+    border-top: 1px solid #fff;
+    font-size: var(--text-small);
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .drawing {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    padding: 0 calc(var(--gutter) / 2);
+  }
+
+  .drawing text {
+    fill: currentColor;
+    font-size: 14px;
+    font-weight: 650;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .edge,
+  .thin,
+  .chip {
+    stroke: currentColor;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .edge {
+    stroke-width: 2;
+  }
+
+  .thin {
+    stroke-width: 1;
+  }
+
+  .chip {
+    stroke-width: 1.5;
+    stroke-linecap: round;
+  }
+
+  .center {
+    stroke-dasharray: 14 3 2 3;
+  }
+
+  .plate figcaption {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 0 0 0 var(--plate-pad-l, var(--gutter));
+    background: var(--color-ink);
+    color: #fff;
+    font-size: var(--text-small);
+    font-weight: 600;
+  }
+
+  .plate-toggle {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    color: #fff;
+    background: var(--color-ink);
+    border: 0;
+    border-left: 1px solid #fff;
+    transition: background-color 120ms linear;
+  }
+
+  .plate-toggle:hover {
+    background: var(--color-red);
+  }
+
+  .plate-toggle:focus-visible {
+    outline-color: #fff;
+    outline-offset: -4px;
+  }
+
+  .plate-toggle .i-pause,
+  .plate-toggle.is-playing .i-play {
+    display: none;
+  }
+
+  .plate-toggle.is-playing .i-pause {
+    display: inline;
+  }
+
+  /* Narrow plates keep the axes and the drawing; the NC block and the annotation would be too small to read. */
+  @container plate (max-width: 479px) {
+    .block,
+    .anno {
+      display: none;
+    }
+
+    .axes > div {
+      padding-inline: 8px;
+    }
+
+    .axes dd {
+      font-size: var(--text-small);
+    }
+  }
+</style>

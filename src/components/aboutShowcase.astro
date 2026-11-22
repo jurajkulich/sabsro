@@ -4,7 +4,6 @@ import plates from 'assets/carousel/carousel_3.jpg'
 import ContactPeople from './contactPeople.astro'
 import Arrow from './ui/arrow.astro'
 import SheetRule from './ui/sheetRule.astro'
-import { plateLabel } from '../data/machines'
 import { company, localizedPath } from '../data/company'
 
 const { about, locale: rawLocale } = Astro.props
@@ -103,8 +102,8 @@ const rows = [
     </div>
 
     <figure class="col-span-12 m-0 sm:col-span-8 lg:col-span-4 lg:col-start-9 about-figure">
-      <Image src={plates} alt={t.caption} width={900} height={1125} fit="cover" class="plate about-photo" />
-      <figcaption class="mt-3 text-small text-mid"><span class="num font-semibold text-ink">{plateLabel(locale, 1)}</span> · {t.caption}</figcaption>
+      <Image src={plates} alt={t.caption} width={900} height={1125} fit="cover" loading="eager" class="plate about-photo" />
+      <figcaption class="mt-3 text-small text-mid">{t.caption}</figcaption>
     </figure>
   </div>
 </section>

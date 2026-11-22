@@ -4,7 +4,7 @@ import { getEntry } from 'astro:content'
 import { getLocale } from 'astro-i18n-aut'
 import SheetRule from './ui/sheetRule.astro'
 import { localizedPath } from '../data/company'
-import { plateLabel, firstSlugOf } from '../data/machines'
+import { firstSlugOf } from '../data/machines'
 import shafts from 'assets/carousel/carousel_1.jpg'
 import sprockets from 'assets/carousel/carousel_2.jpg'
 import ring from 'assets/carousel/carousel_4.jpg'
@@ -161,7 +161,6 @@ const groups = (['shop', 'around'] as const)
               class="plate aspect-4/3 w-full object-cover"
             />
             <figcaption>
-              <span class="num">{plateLabel(locale, i + 2)}</span> ·{' '}
               {part.caption}
             </figcaption>
           </figure>

@@ -1,14 +1,10 @@
 ---
-import { getImage } from 'astro:assets'
 import { getLocale } from 'astro-i18n-aut'
-import posterSrc from 'assets/hero-poster.jpg'
 import Intake from './ui/intake.astro'
-import { assetPath } from '../data/company'
-import { parkSize, plateLabel } from '../data/machines'
+import DrillPlate from './drillPlate.astro'
+import { parkSize } from '../data/machines'
 
 const locale = getLocale(Astro.url) === 'en' ? 'en' : 'sk'
-// The source footage is 960 px wide; the poster is served at its native size, never upscaled.
-const poster = await getImage({ src: posterSrc, width: 960, format: 'webp', quality: 82 })
 
 const copy = {
   en: {
@@ -21,9 +17,6 @@ const copy = {
       ['Production hall', '600 m²'],
       ['Machines', String(parkSize.total)],
     ],
-    videoNote: 'Footage from our workshop.',
-    play: 'Play footage',
-    pause: 'Pause footage',
   },
   sk: {
     head: ['List 01 · CNC obrábanie', 'Nové Mesto nad Váhom · od 1990'],
@@ -35,9 +28,6 @@ const copy = {
       ['Výrobná hala', '600 m²'],
       ['Stroje', String(parkSize.total)],
     ],
-    videoNote: 'Zábery z našej dielne.',
-    play: 'Prehrať video',
-    pause: 'Zastaviť video',
   },
 }
 
@@ -78,73 +68,9 @@ const t = copy[locale]
       </dl>
     </div>
 
-    <figure class="hero-photo">
-      <div class="hero-media">
-        <video
-          muted
-          loop
-          playsinline
-          preload="none"
-          poster={poster.src}
-          aria-label={t.videoNote}
-          class="hero-video plate">
-          <source src={assetPath('hero.mp4')} type="video/mp4" />
-        </video>
-      </div>
-      <figcaption>
-        <span><span class="num">{plateLabel(locale, 1)}</span> · {t.videoNote}</span>
-        <button
-          type="button"
-          class="video-toggle"
-          aria-label={t.play}
-          data-play={t.play}
-          data-pause={t.pause}>
-          <svg viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true">
-            <path class="i-play" d="M6 4.5v11l9-5.5z"></path>
-            <path class="i-pause" d="M7 4.5v11M13 4.5v11"></path>
-          </svg>
-        </button>
-      </figcaption>
-    </figure>
+    <DrillPlate class="hero-photo" />
   </section>
 </div>
-
-<script>
-  // Footage autoplays only on wide screens, with motion welcome and no data saver.
-  // Everyone else keeps the poster plate and can start it with the control.
-  const video = document.querySelector<HTMLVideoElement>('.hero-video')
-  const toggle = document.querySelector<HTMLButtonElement>('.video-toggle')
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)')
-  const wide = window.matchMedia('(min-width: 1024px)')
-  const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData
-  let userChoice: 'play' | 'pause' | null = null
-
-  const render = () => {
-    if (!video || !toggle) return
-    const playing = !video.paused
-    toggle.classList.toggle('is-playing', playing)
-    toggle.setAttribute('aria-label', (playing ? toggle.dataset.pause : toggle.dataset.play) ?? '')
-  }
-
-  const sync = () => {
-    if (!video) return
-    const auto = !reduce.matches && wide.matches && !saveData
-    const want = userChoice ? userChoice === 'play' : auto
-    if (want && video.paused) video.play().catch(() => {})
-    else if (!want && !video.paused) video.pause()
-  }
-
-  video?.addEventListener('play', render)
-  video?.addEventListener('pause', render)
-  toggle?.addEventListener('click', () => {
-    userChoice = video?.paused ? 'play' : 'pause'
-    sync()
-  })
-  reduce.addEventListener('change', sync)
-  wide.addEventListener('change', sync)
-  sync()
-  render()
-</script>
 
 <style>
   .hero-wrap {
@@ -252,71 +178,6 @@ const t = copy[locale]
     font-weight: 750;
   }
 
-  /* Plate: footage over an ink caption bar carrying the plate number and the play/pause control. */
-  .hero-photo {
-    position: relative;
-    margin: 0;
-    background: var(--color-ink);
-  }
-
-  /* The box is sized by the layout only; the video (poster or playing) never sizes the hero. */
-  .hero-media {
-    position: relative;
-    aspect-ratio: 16 / 10;
-    overflow: hidden;
-  }
-
-  .hero-video {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .hero-photo figcaption {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 0 0 0 var(--gutter);
-    background: var(--color-ink);
-    color: #fff;
-    font-size: var(--text-small);
-    font-weight: 600;
-  }
-
-  .video-toggle {
-    flex: none;
-    display: grid;
-    place-items: center;
-    width: 44px;
-    height: 44px;
-    color: #fff;
-    background: var(--color-ink);
-    border: 0;
-    border-left: 1px solid #fff;
-    transition: background-color 120ms linear;
-  }
-
-  .video-toggle:hover {
-    background: var(--color-red);
-  }
-
-  .video-toggle:focus-visible {
-    outline-color: #fff;
-    outline-offset: -4px;
-  }
-
-  .video-toggle .i-pause,
-  .video-toggle.is-playing .i-play {
-    display: none;
-  }
-
-  .video-toggle.is-playing .i-pause {
-    display: inline;
-  }
-
   @media (prefers-reduced-motion: reduce) {
     .hero-ticks {
       animation: none;
@@ -390,16 +251,12 @@ const t = copy[locale]
       padding: clamp(24px, 2.4vw, 32px) calc(var(--gutter) / 2) clamp(28px, 3vw, 40px) var(--edge);
     }
 
-    .hero-photo {
+    .hero :global(.hero-photo) {
       grid-column: 2;
       grid-row: 1;
-      display: grid;
-      grid-template-rows: 1fr auto;
-    }
-
-    .hero-media {
-      aspect-ratio: auto;
-      min-height: 0;
+      --plate-ratio: auto;
+      --plate-pad-l: calc(var(--gutter) / 2);
+      --plate-pad-r: var(--edge);
     }
 
     .hero :global(.hero-intake) {
@@ -407,10 +264,6 @@ const t = copy[locale]
       grid-row: 2;
       --intake-pad-l: calc(var(--gutter) / 2);
       --intake-pad-r: var(--edge);
-    }
-
-    .hero-photo figcaption {
-      padding-left: calc(var(--gutter) / 2);
     }
   }
 </style>

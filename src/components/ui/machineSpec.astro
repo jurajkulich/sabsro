@@ -7,16 +7,15 @@
 import { Image } from 'astro:assets'
 import Arrow from './arrow.astro'
 import { company, mailHref } from '../../data/company'
-import { machineFacts, plateLabel, specLabels, specOrder, typeOnly } from '../../data/machines'
+import { machineFacts, specLabels, specOrder, typeOnly } from '../../data/machines'
 
 interface Props {
   item: { data: { name: string; title: string; avatar: { src: ImageMetadata; alt: string } } }
   slug: string
-  n: number
   locale: 'sk' | 'en'
 }
 
-const { item, slug, n, locale } = Astro.props
+const { item, slug, locale } = Astro.props
 const facts = machineFacts[slug] ?? { group: 'manual' as const }
 
 const t = {
@@ -59,7 +58,7 @@ const type = typeOnly(item.data.title)
       loading="lazy"
       class="plate"
     />
-    <figcaption><span class="num">{plateLabel(locale, n)}</span> · {item.data.name} · {t.plateNote}</figcaption>
+    <figcaption>{item.data.name} · {t.plateNote}</figcaption>
   </figure>
   <div class="spec-body">
     <dl class="spec-rows">

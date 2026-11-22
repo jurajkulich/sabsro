@@ -41,6 +41,7 @@ const isCurrent = (path: string) => (path.replace(/\/+$/, '') || '/') === curren
                 <a href={item.path} aria-current={isCurrent(item.path) ? 'page' : undefined}>
                   <span class="nav-no num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
                   {item.title}
+                  <span class="nav-bar" aria-hidden="true"></span>
                 </a>
               </li>
             ))
@@ -81,10 +82,24 @@ const isCurrent = (path: string) => (path.replace(/\/+$/, '') || '/') === curren
     }
   })
   desktop.addEventListener('change', () => setOpen(false))
+
+  // A page change hands the red bar to the next sheet: drop any hover bar first so only one bar travels.
+  // An open mobile menu stays put and turns with the old sheet, so nothing reflows before the wipe.
+  const header = document.querySelector<HTMLElement>('.site-header')
+  window.addEventListener('pageswap', () => {
+    document.documentElement.classList.add('is-swapping')
+    if (btn?.getAttribute('aria-expanded') === 'true' && header) header.style.viewTransitionName = 'none'
+  })
+  window.addEventListener('pageshow', (e) => {
+    document.documentElement.classList.remove('is-swapping')
+    if (header) header.style.viewTransitionName = ''
+    if (e.persisted) setOpen(false)
+  })
 </script>
 
 <style>
   .site-header {
+    view-transition-name: site-header;
     position: sticky;
     top: 0;
     z-index: 50;
@@ -224,8 +239,7 @@ const isCurrent = (path: string) => (path.replace(/\/+$/, '') || '/') === curren
       border-bottom: 0;
     }
 
-    .menu a::after {
-      content: '';
+    .nav-bar {
       position: absolute;
       left: 0;
       right: 0;
@@ -237,9 +251,19 @@ const isCurrent = (path: string) => (path.replace(/\/+$/, '') || '/') === curren
       transition: transform 160ms ease-out;
     }
 
-    .menu a:hover::after,
-    .menu a[aria-current='page']::after {
+    .menu a:hover .nav-bar,
+    .menu a[aria-current='page'] .nav-bar {
       transform: scaleX(1);
+    }
+
+    /* The current bar is one object across pages: the view transition carries it to the next item. */
+    .menu a[aria-current='page'] .nav-bar {
+      view-transition-name: nav-current;
+    }
+
+    :global(.is-swapping) .menu a:not([aria-current='page']) .nav-bar {
+      transform: scaleX(0);
+      transition: none;
     }
 
     .menu a[aria-current='page'] {

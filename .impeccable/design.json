@@ -156,8 +156,13 @@
         "purpose": "Desktop nav hover/current red bar; index arrow nudge 4px."
       },
       {
+        "name": "page-turn",
+        "value": "cross-document view transition: new root clip-path inset(0 100% 0 0) to inset(0) 440ms cubic-bezier(0.45, 0, 0.15, 1) over a static old root; nav-current bar group 380ms same curve; site-header held",
+        "purpose": "Between pages the header holds, the red current bar travels to the new nav item and the next sheet wipes in from the left."
+      },
+      {
         "name": "reduced-motion",
-        "value": "all animation and transition durations 0.01ms; tick wipe off; procession never armed (track shows complete); hero video paused on poster",
+        "value": "all animation and transition durations 0.01ms; tick wipe off; procession never armed (track shows complete); hero video paused on poster; no page view transition (instant swap)",
         "purpose": "prefers-reduced-motion: reduce."
       }
     ],
@@ -167,7 +172,7 @@
     },
     "photography": {
       "treatment": "natural colour, no filter",
-      "caption": "FOTO NN / PHOTO NN in tabular figures, then a dot and the caption",
+      "caption": "Plain caption only; no FOTO NN / PHOTO NN plate numbers (read as placeholders)",
       "cutouts": "machine cutouts multiplied onto paper (mix-blend-mode multiply)"
     },
     "breakpoints": [
@@ -280,8 +285,8 @@
       "Sheets open on a 2px ink rule with the visible 12-column tick line and a folio (\"List 02\" / \"Sheet 02\") on the rule at the right.",
       "One family, Archivo Variable, with the wide cut for display and tabular figures for every number.",
       "Registers, indexes and numbered operations instead of cards.",
-      "Natural-colour photography captioned \"FOTO 01\" / \"PHOTO 01\".",
-      "One load motion (the tick-line wipe across the red field) and one scroll procession (the stepped red track over the operations)."
+      "Natural-colour photography with plain captions (no plate numbers).",
+      "One load motion (the tick-line wipe across the red field), one scroll procession (the stepped red track over the operations) and one page turn (header holds, red current bar travels, next sheet wipes in from the left)."
     ],
     "rules": [
       {
@@ -324,9 +329,9 @@
       "**Do** let logo red own an entire grid region or mark an action, at full strength only.",
       "**Do** open every sheet with the 2px ink rule, the twelve-tick line and a folio on the rule at the right.",
       "**Do** build content as registers, indexes and numbered sequences separated by 2px rules and 1px hairlines.",
-      "**Do** set every number in tabular figures and number things the way a manual does (01, 010, FOTO 01).",
+      "**Do** set every number in tabular figures and number things the way a manual does (01, 010).",
       "**Do** show photography in natural colour and caption it with its plate number.",
-      "**Do** keep motion to the tick-line wipe on load, the stepped procession track, the spec-sheet deploy and short linear state changes; under reduced motion all of it stops (the hero video stays on its poster frame and the track shows complete)."
+      "**Do** keep motion to the tick-line wipe on load, the stepped procession track, the spec-sheet deploy, the page turn between pages and short linear state changes; under reduced motion all of it stops (the hero video stays on its poster frame, the track shows complete and pages swap instantly)."
     ],
     "donts": [
       "**Don't** tint, fade or gradient the red, or use a second accent color.",

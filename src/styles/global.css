@@ -217,6 +217,50 @@ a {
   }
 }
 
+/* Turning the sheet: between pages the header holds still, the red nav bar travels to the new item
+   and the next sheet wipes in from the left edge of the grid. Off under reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+
+  ::view-transition-group(root) {
+    animation: none;
+  }
+
+  ::view-transition-old(root) {
+    animation: none;
+  }
+
+  ::view-transition-new(root) {
+    animation: sheet-in 440ms cubic-bezier(0.45, 0, 0.15, 1) both;
+  }
+
+  ::view-transition-group(nav-current) {
+    animation-duration: 380ms;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  ::view-transition-old(site-header),
+  ::view-transition-new(site-header) {
+    animation-duration: 160ms;
+  }
+
+  /* Leaving an open mobile menu: the old header turns with its sheet, the new one is simply there. */
+  ::view-transition-new(site-header):only-child {
+    animation: none;
+  }
+}
+
+@keyframes sheet-in {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   ::before,
