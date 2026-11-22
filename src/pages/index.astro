@@ -2,7 +2,7 @@
 import Hero from '@components/hero.astro'
 import FeaturesTwo from '../components/featuresTwo.astro'
 import Layout from '../layouts/Layout.astro'
-import ProcessFlow from '../components/processFlow.astro'
+// import ProcessFlow from '../components/processFlow.astro'
 import ContactPeople from '../components/contactPeople.astro'
 import { getLocale } from 'astro-i18n-aut'
 
@@ -24,6 +24,7 @@ const homeDescription =
 <Layout title={homeTitle} description={homeDescription}>
   <Hero />
   <FeaturesTwo />
-  <ProcessFlow />
-  <ContactPeople folio={4} />
+  {/* Sheet 03 (process flow) hidden for now; restore and set ContactPeople back to folio 4 */}
+  {/* <ProcessFlow /> */}
+  <ContactPeople folio={3} />
 </Layout>
