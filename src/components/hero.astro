@@ -4,7 +4,7 @@ import { getLocale } from 'astro-i18n-aut'
 import posterSrc from 'assets/hero-poster.jpg'
 import Intake from './ui/intake.astro'
 import { assetPath } from '../data/company'
-import { plateLabel } from '../data/machines'
+import { parkSize, plateLabel } from '../data/machines'
 
 const locale = getLocale(Astro.url) === 'en' ? 'en' : 'sk'
 // The source footage is 960 px wide; the poster is served at its native size, never upscaled.
@@ -17,10 +17,9 @@ const copy = {
     body: 'A family machining shop in Nové Mesto nad Váhom. CNC milling and turning for prototypes and small series, steel to technical plastics.',
     facts: [
       ['Machining since', '1990'],
-      ['People', 'about 20'],
+      ['People', 'a stable 20'],
       ['Production hall', '600 m²'],
-      ['Machines', '12'],
-      ['Certified', 'ISO 9001 · 14001 · 45001'],
+      ['Machines', String(parkSize.total)],
     ],
     videoNote: 'Footage from our workshop.',
     play: 'Play footage',
@@ -32,10 +31,9 @@ const copy = {
     body: 'Rodinná strojárska dielňa v Novom Meste nad Váhom. CNC frézovanie a sústruženie pre prototypy a menšie série, od ocele po technické plasty.',
     facts: [
       ['Obrábame od roku', '1990'],
-      ['Ľudia', 'približne 20'],
+      ['Ľudia', 'stabilných 20'],
       ['Výrobná hala', '600 m²'],
-      ['Stroje', '12'],
-      ['Certifikáty', 'ISO 9001 · 14001 · 45001'],
+      ['Stroje', String(parkSize.total)],
     ],
     videoNote: 'Zábery z našej dielne.',
     play: 'Prehrať video',
@@ -359,12 +357,6 @@ const t = copy[locale]
       display: grid;
       grid-template-columns: 1fr 1fr;
       column-gap: var(--gutter);
-    }
-
-    /* The long certificate row spans both halves; its value column stays on the same line as the others. */
-    .hero-facts > div:last-child:nth-child(odd) {
-      grid-column: 1 / -1;
-      grid-template-columns: calc((100% - 3 * var(--gutter)) / 4) 1fr;
     }
   }
 

@@ -12,24 +12,19 @@ export const company = {
   },
   ids: { ico: '47419181', dic: 'SK2023864601' },
   email: 'info@svehlasro.sk',
-  hours: { sk: 'Po–Pia 07:00–15:30', en: 'Mon–Fri 07:00–15:30 CET/CEST' },
-  production: {
-    name: 'Ing. Juraj Nemček',
-    role: { sk: 'Výroba · výkresy a dopyty', en: 'Production · drawings and quotes' },
-    email: 'vyroba@svehlasro.sk',
-    phone: '+421 905 691 366',
-  },
+  hours: { sk: 'Po–Pia 07:00–14:30', en: 'Mon–Fri 07:00–14:30 CET/CEST' },
+  // Primary contact: drawings, quotes and the site's main phone line.
   owner: {
     name: 'Ing. Boris Blaško',
     role: { sk: 'Konateľ · obchod a spolupráca', en: 'Managing partner · business and contracts' },
     email: 'info@svehlasro.sk',
     phone: '+421 918 601 675',
   },
-  // Second managing director. No email of his own was given; the contact page shows phone only.
+  // Second managing director; runs production.
   director: {
     name: 'Ján Švehla',
-    role: { sk: 'Konateľ', en: 'Managing director' },
-    email: undefined as string | undefined,
+    role: { sk: 'Konateľ · výroba', en: 'Managing director · production' },
+    email: 'vyroba@svehlasro.sk',
     phone: '+421 907 794 370',
   },
   // Reassurance for the moment a buyer sends a drawing: reply time, the languages the contacts
@@ -53,11 +48,16 @@ export const mailHref = (email: string, subject?: string) =>
 
 const basePath = import.meta.env.BASE_URL.replace(/\/$/, '')
 
+/**
+ * Default-locale home. Production keeps the trailing slash (a base-path root without it 301s on
+ * GitHub Pages); the dev server enforces trailingSlash: "never" and rejects it.
+ */
+export const homePath = basePath ? (import.meta.env.DEV ? basePath : `${basePath}/`) : '/'
+
 /** Locale-aware internal link that respects the deploy base path. */
 export const localizedPath = (locale: string, slug = '') => {
   const s = slug ? `/${slug.replace(/^\/+|\/+$/g, '')}` : ''
-  // The default-locale home keeps its trailing slash: a base-path root without it 301s on GitHub Pages.
-  if (locale === 'sk') return s ? `${basePath}${s}` : `${basePath}/`
+  if (locale === 'sk') return s ? `${basePath}${s}` : homePath
   return `${basePath}/${locale}${s}`
 }
 

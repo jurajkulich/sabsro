@@ -89,7 +89,7 @@ const organizationSchema = {
   image: resolvedImageWithDomain,
   description: defaultDescription,
   email: company.email,
-  telephone: company.production.phone,
+  telephone: company.owner.phone,
   vatID: company.ids.dic,
   identifier: { '@type': 'PropertyValue', propertyID: 'IČO', value: company.ids.ico },
   address: {
@@ -109,17 +109,17 @@ const organizationSchema = {
   contactPoint: [
     {
       '@type': 'ContactPoint',
-      contactType: locale === 'en' ? 'production and quotes' : 'výroba a cenové ponuky',
-      name: company.production.name,
-      email: company.production.email,
-      telephone: company.production.phone,
-    },
-    {
-      '@type': 'ContactPoint',
-      contactType: locale === 'en' ? 'business' : 'obchod',
+      contactType: locale === 'en' ? 'quotes and business' : 'cenové ponuky a obchod',
       name: company.owner.name,
       email: company.owner.email,
       telephone: company.owner.phone,
+    },
+    {
+      '@type': 'ContactPoint',
+      contactType: locale === 'en' ? 'production' : 'výroba',
+      name: company.director.name,
+      email: company.director.email,
+      telephone: company.director.phone,
     },
   ],
   makesOffer: services.map((name) => ({

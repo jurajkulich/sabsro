@@ -17,14 +17,21 @@ if (!features) throw new Error(`Missing features content for ${locale}`)
 const copy = {
   en: {
     deliverables:
-      'Typical work: jigs, housings, brackets, shafts, and replacement components for maintenance and production lines.',
+      'Typical work: production fixtures and jigs, ground shafts, replacement parts for all kinds of uses, and slotting keyways, for example in gears.',
     register: [
-      ['Materials', 'Steel, stainless steel, aluminium, copper alloys, technical plastics'],
-      ['We supply', 'Energy, food-processing machinery, automation lines, maintenance spare parts, fixtures and clamping, one-off parts'],
+      [
+        'Materials',
+        'All grades of steel and stainless steel, aluminium and copper alloys, technical plastics',
+      ],
+      [
+        'We supply',
+        'Energy, food processing, agriculture, automation lines, spare parts, fixtures and clamping, one-off parts, machining of moulded plastic parts, robotics, healthcare and other industries',
+      ],
     ],
     cols: ['No.', 'Service', 'Machines'],
     groups: { shop: 'In our hall', around: 'Finishing and delivery' },
     machinesLabel: 'Machines',
+    newLabel: 'New',
     partsTitle: 'Parts from our shop',
     parts: [
       { src: shafts, caption: 'Turned and milled shafts' },
@@ -35,14 +42,21 @@ const copy = {
   },
   sk: {
     deliverables:
-      'Typické zákazky: prípravky, kryty, konzoly, hriadele a náhradné diely pre údržbu a výrobné linky.',
+      'Typické zákazky: rôzne prípravky do výroby, brúsené hriadele a náhradné diely pre rôzne využitie, obrážanie drážok napríklad do ozubených kolies.',
     register: [
-      ['Materiály', 'Oceľ, nerez, hliník, zliatiny medi, technické plasty'],
-      ['Pre koho', 'Energetika, potravinárske stroje, automatizačné linky, náhradné diely pre údržbu, prípravky a upínanie, kusové diely'],
+      [
+        'Materiály',
+        'Všetky triedy ocele aj nehrdzavejúcej ocele, zliatiny hliníka a medi, technické plasty',
+      ],
+      [
+        'Pre koho',
+        'Energetika, potravinárstvo, poľnohospodárstvo, automatizačné linky, náhradné diely, prípravky a upínanie, kusové diely, opracovanie lisovaných plastových dielov, robotizácia, zdravotníctvo a iné odvetvia',
+      ],
     ],
     cols: ['Č.', 'Služba', 'Stroje'],
     groups: { shop: 'V našej hale', around: 'Povrchové úpravy a doprava' },
     machinesLabel: 'Stroje',
+    newLabel: 'Novinka',
     partsTitle: 'Diely z našej dielne',
     parts: [
       { src: shafts, caption: 'Sústružené a frézované hriadele' },
@@ -56,10 +70,16 @@ const copy = {
 const t = copy[locale]
 const machinesPath = localizedPath(locale, 'machines')
 
+// Descriptions may mark a phrase with **double asterisks**; odd parts after the split render bold.
+const emphasis = (text: string) => text.split(/\*\*(.+?)\*\*/)
+
 // One numbered register, set as two short lists: what we machine ourselves, then what happens around the part.
 const numbered = features.data.features.map((item, i) => ({ item, n: i + 1 }))
 const groups = (['shop', 'around'] as const)
-  .map((key) => ({ key, rows: numbered.filter(({ item }) => (item.group ?? 'shop') === key) }))
+  .map((key) => ({
+    key,
+    rows: numbered.filter(({ item }) => (item.group ?? 'shop') === key),
+  }))
   .filter((g) => g.rows.length > 0)
 ---
 
@@ -67,72 +87,86 @@ const groups = (['shop', 'around'] as const)
   <SheetRule folio={2} />
   <div class="frame">
     <div class="grid-12 gap-y-6">
-      <h2 id="services-title" class="headline col-span-12 lg:col-span-6">{features.data.title}</h2>
+      <h2 id="services-title" class="headline col-span-12 lg:col-span-6">
+        {features.data.title}
+      </h2>
       <div class="col-span-12 lg:col-span-5 lg:col-start-8">
         <p class="lead">{features.data.description}</p>
         <p class="mt-4 text-mid">{t.deliverables}</p>
       </div>
     </div>
 
-    {
-      groups.map((group, gi) => (
-        <div class="svc-group">
-          <div class="svc-head">
-            <h3 class="label svc-group-title">{t.groups[group.key]}</h3>
-            {gi === 0 && <span class="svc-col" aria-hidden="true">{t.cols[2]}</span>}
-          </div>
-          <ol class="svc" start={group.rows[0].n}>
-            {group.rows.map(({ item, n }) => (
-              <li class="svc-row">
-                <span class="svc-no num" aria-hidden="true">{String(n).padStart(2, '0')}</span>
-                <h4 class="svc-name">{item.title}</h4>
-                <p class="svc-desc">{item.description}</p>
-                {item.machines && (
-                  <p class="svc-machines num">
-                    <a href={`${machinesPath}#${firstSlugOf(item.machines) ?? ''}`} class="link">
-                      <span class="svc-machines-label">{t.machinesLabel} </span>
-                      <span class="svc-machines-no">{item.machines}</span>
-                    </a>
-                  </p>
-                )}
-              </li>
-            ))}
-          </ol>
+    {groups.map((group, gi) => (
+      <div class="svc-group">
+        <div class="svc-head">
+          <h3 class="label svc-group-title">{t.groups[group.key]}</h3>
+          {gi === 0 && (
+            <span class="svc-col" aria-hidden="true">
+              {t.cols[2]}
+            </span>
+          )}
         </div>
-      ))
-    }
+        <ol class="svc" start={group.rows[0].n}>
+          {group.rows.map(({ item, n }) => (
+            <li class="svc-row">
+              <span class="svc-no num" aria-hidden="true">
+                {String(n).padStart(2, '0')}
+              </span>
+              <h4 class="svc-name">
+                {item.title}
+                {item.new && <span class="svc-new label">{t.newLabel}</span>}
+              </h4>
+              <p class="svc-desc">
+                {emphasis(item.description).map((part, i) =>
+                  i % 2 ? <strong>{part}</strong> : part,
+                )}
+              </p>
+              {item.machines && (
+                <p class="svc-machines num">
+                  <a
+                    href={`${machinesPath}#${firstSlugOf(item.machines) ?? ''}`}
+                    class="link">
+                    <span class="svc-machines-label">{t.machinesLabel} </span>
+                    <span class="svc-machines-no">{item.machines}</span>
+                  </a>
+                </p>
+              )}
+            </li>
+          ))}
+        </ol>
+      </div>
+    ))}
 
     <dl class="reg">
-      {
-        t.register.map(([k, v]) => (
-          <div>
-            <dt class="label">{k}</dt>
-            <dd>{v}</dd>
-          </div>
-        ))
-      }
+      {t.register.map(([k, v]) => (
+        <div>
+          <dt class="label">{k}</dt>
+          <dd>{v}</dd>
+        </div>
+      ))}
     </dl>
 
     <h3 class="label parts-title">{t.partsTitle}</h3>
     <ul class="parts">
-      {
-        t.parts.map((part, i) => (
-          <li>
-            <figure class="m-0">
-              <Image
-                src={part.src}
-                alt={part.caption}
-                width={640}
-                height={480}
-                fit="cover"
-                loading="lazy"
-                class="plate aspect-4/3 w-full object-cover"
-              />
-              <figcaption><span class="num">{plateLabel(locale, i + 2)}</span> · {part.caption}</figcaption>
-            </figure>
-          </li>
-        ))
-      }
+      {t.parts.map((part, i) => (
+        <li>
+          <figure class="m-0">
+            <Image
+              src={part.src}
+              alt={part.caption}
+              width={640}
+              height={480}
+              fit="cover"
+              loading="lazy"
+              class="plate aspect-4/3 w-full object-cover"
+            />
+            <figcaption>
+              <span class="num">{plateLabel(locale, i + 2)}</span> ·{' '}
+              {part.caption}
+            </figcaption>
+          </figure>
+        </li>
+      ))}
     </ul>
   </div>
 </section>
@@ -198,6 +232,28 @@ const groups = (['shop', 'around'] as const)
     font-stretch: 112%;
     letter-spacing: -0.015em;
     line-height: 1.1;
+  }
+
+  /* A stamp, not a badge: full-strength red field, paper type, square. It sits above the name,
+     out of flow, so the number, name and description keep sharing one baseline. */
+  .svc-row:has(.svc-new) {
+    padding-top: 40px;
+  }
+
+  .svc-name {
+    position: relative;
+  }
+
+  .svc-new {
+    position: absolute;
+    left: 0;
+    bottom: calc(100% + 6px);
+    padding: 3px 6px 2px;
+    background: var(--color-red);
+    color: var(--color-paper);
+    font-stretch: 100%;
+    line-height: 1;
+    white-space: nowrap;
   }
 
   .svc-desc {
@@ -269,7 +325,6 @@ const groups = (['shop', 'around'] as const)
 
   .reg dd {
     margin: 0;
-    font-weight: 600;
   }
 
   .parts-title {
@@ -299,7 +354,10 @@ const groups = (['shop', 'around'] as const)
     }
 
     .svc-row {
-      grid-template-columns: 2.5rem minmax(0, 3fr) minmax(0, 5fr) minmax(0, 1.2fr);
+      grid-template-columns: 2.5rem minmax(0, 3fr) minmax(0, 5fr) minmax(
+          0,
+          1.2fr
+        );
     }
 
     .svc-desc {
@@ -329,7 +387,11 @@ const groups = (['shop', 'around'] as const)
 
     .reg > div {
       /* Key column ends where the service name column ends, so values align with the descriptions. */
-      grid-template-columns: calc(2.5rem + var(--gutter) + (100% - 2.5rem - 3 * var(--gutter)) * 3 / 9.2) 1fr;
+      grid-template-columns:
+        calc(
+          2.5rem + var(--gutter) + (100% - 2.5rem - 3 * var(--gutter)) * 3 / 9.2
+        )
+        1fr;
       column-gap: var(--gutter);
     }
   }

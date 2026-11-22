@@ -3,8 +3,6 @@ import Hero from '@components/hero.astro'
 import FeaturesTwo from '../components/featuresTwo.astro'
 import Layout from '../layouts/Layout.astro'
 import ProcessFlow from '../components/processFlow.astro'
-import Certifications from '../components/certifications.astro'
-import MachinePark from '../components/machinePark.astro'
 import ContactPeople from '../components/contactPeople.astro'
 import { getLocale } from 'astro-i18n-aut'
 
@@ -26,8 +24,6 @@ const homeDescription =
 <Layout title={homeTitle} description={homeDescription}>
   <Hero />
   <FeaturesTwo />
-  <MachinePark />
-  <Certifications folio={4} />
   <ProcessFlow />
-  <ContactPeople folio={6} />
+  <ContactPeople folio={4} />
 </Layout>

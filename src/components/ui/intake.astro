@@ -1,6 +1,6 @@
 ---
 // The primary action pair, one component for every page: an ink cell (send a drawing)
-// and a white cell (call production) under a 2px rule, then a note saying what to send,
+// and a white cell (call the primary contact) under a 2px rule, then a note saying what to send,
 // who answers and what comes back. `tone="red"` is for use inside a red field.
 // `note="brief"` keeps only the what-to-send line, for places whose own copy already
 // names the person and the reply, so the page does not say it twice.
@@ -17,7 +17,7 @@ interface Props {
 
 const { tone = 'paper', allContacts = true, note = 'full', class: className } = Astro.props
 const locale = getLocale(Astro.url) === 'en' ? 'en' : 'sk'
-const contact = company.production
+const contact = company.owner
 const [mailUser, mailDomain] = contact.email.split('@')
 // Filled in by the client in company.ts; unfilled lines never render.
 const assurances = Object.values(company.assurances).filter((line): line is { sk: string; en: string } => Boolean(line))
@@ -25,10 +25,10 @@ const assurances = Object.values(company.assurances).filter((line): line is { sk
 const t = {
   en: {
     send: 'Send a drawing',
-    call: 'Call production',
+    call: 'Call us',
     subject: 'Quote request – drawing attached',
     sendWhat: 'STEP, DXF or PDF · material · quantity · deadline',
-    who: `${contact.name}, production`,
+    who: contact.name,
     reply: 'We reply with a proposed process and a lead time.',
     copyMail: 'Copy address',
     copied: 'Address copied',
@@ -37,10 +37,10 @@ const t = {
   },
   sk: {
     send: 'Poslať výkres',
-    call: 'Zavolať do výroby',
+    call: 'Zavolať',
     subject: 'Dopyt – výkres v prílohe',
     sendWhat: 'STEP, DXF alebo PDF · materiál · počet kusov · termín',
-    who: `${contact.name}, výroba`,
+    who: contact.name,
     reply: 'Odpovieme s návrhom postupu a termínom.',
     copyMail: 'Kopírovať adresu',
     copied: 'Adresa skopírovaná',

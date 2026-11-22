@@ -4,7 +4,8 @@ import Arrow from './ui/arrow.astro'
 import Intake from './ui/intake.astro'
 import MachineSpec from './ui/machineSpec.astro'
 import SheetRule from './ui/sheetRule.astro'
-import { machineFacts, machineOrder, groupLabels, slugOf, typeOnly } from '../data/machines'
+import { company } from '../data/company'
+import { machineFacts, machineOrder, groupLabels, parkSize, slugOf, typeOnly } from '../data/machines'
 
 const { machs, machines, locale: rawLocale } = Astro.props
 const locale = rawLocale === 'en' ? 'en' : 'sk'
@@ -17,7 +18,7 @@ const copy = {
     cols: { no: 'Č.', machine: 'Stroj', type: 'Typ', maker: 'Výrobca' },
     fallbackTitle: 'Strojové vybavenie',
     ctaTitle: 'Neviete, na ktorom stroji sa váš diel vyrobí?',
-    ctaBody: 'Pošlite výkres. Ing. Juraj Nemček z výroby posúdi, kam diel patrí, a ozve sa s postupom.',
+    ctaBody: `Pošlite výkres. ${company.owner.name} posúdi, kam diel patrí, a ozve sa s postupom.`,
   },
   en: {
     all: 'All',
@@ -26,7 +27,7 @@ const copy = {
     cols: { no: 'No.', machine: 'Machine', type: 'Type', maker: 'Maker' },
     fallbackTitle: 'Machine equipment',
     ctaTitle: 'Not sure which machine your part needs?',
-    ctaBody: 'Send the drawing. Ing. Juraj Nemček in production will check where it fits and come back with a process.',
+    ctaBody: `Send the drawing. ${company.owner.name} will check where it fits and come back with a process.`,
   },
 }
 const t = copy[locale]
@@ -46,8 +47,8 @@ const counts = Object.fromEntries(
 )
 const filterLabel = (k: (typeof filterKeys)[number]) => (k === 'all' ? t.all : groups[k])
 const pad = (n: number) => String(n).padStart(2, '0')
-// The page title states the park's size, so it follows the content: "{count} machines in our hall."
-const pageTitle = machs.data.title.replace('{count}', String(mapped.length))
+// The page title states the whole park's size ("{count} machines in our hall."); the index below lists a selection.
+const pageTitle = machs.data.title.replace('{count}', String(parkSize.total))
 ---
 
 <section class="sheet-first">

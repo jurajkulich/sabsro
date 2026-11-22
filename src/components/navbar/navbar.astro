@@ -50,12 +50,12 @@ const isCurrent = (path: string) => (path.replace(/\/+$/, '') || '/') === curren
 
       <div class="tools">
         <LanguagePicker />
-        <a href={telHref(company.production.phone)} class="phone num">
+        <a href={telHref(company.owner.phone)} class="phone num">
           <span class="sr-only">{titles.call}: </span>
           <svg class="lg:hidden" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true">
             <path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z"></path>
           </svg>
-          <span class="hidden lg:inline">{company.production.phone}</span>
+          <span class="hidden lg:inline">{company.owner.phone}</span>
         </a>
         <button type="button" class="menu-btn label" aria-expanded="false" aria-controls="site-menu">
           {titles.menu}

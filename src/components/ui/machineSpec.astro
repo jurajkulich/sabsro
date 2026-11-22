@@ -25,7 +25,7 @@ const t = {
     country: 'Krajina výrobcu',
     plateNote: 'obrázok výrobcu',
     onRequest: 'Parametre stroja na požiadanie',
-    onRequestNote: 'Pojazdy, upínanie a riadiaci systém vám povie Ing. Juraj Nemček z výroby.',
+    onRequestNote: `Pojazdy, upínanie a riadiaci systém vám povie ${company.owner.name}.`,
     more: 'Ďalšie parametre na požiadanie.',
     ask: 'Opýtať sa na tento stroj',
     askSubject: (name: string) => `Dopyt – ${name}`,
@@ -35,7 +35,7 @@ const t = {
     country: 'Maker’s country',
     plateNote: 'manufacturer image',
     onRequest: 'Machine parameters on request',
-    onRequestNote: 'Ing. Juraj Nemček in production can give you travels, work-holding and control.',
+    onRequestNote: `${company.owner.name} can give you travels, work-holding and control.`,
     more: 'Further parameters on request.',
     ask: 'Ask about this machine',
     askSubject: (name: string) => `Enquiry – ${name}`,
@@ -98,7 +98,7 @@ const type = typeOnly(item.data.title)
         <p class="spec-more">{t.more}</p>
       )
     }
-    <a href={mailHref(company.production.email, t.askSubject(item.data.name))} class="btn btn-ink mt-6">
+    <a href={mailHref(company.owner.email, t.askSubject(item.data.name))} class="btn btn-ink mt-6">
       {t.ask}
       <Arrow />
     </a>

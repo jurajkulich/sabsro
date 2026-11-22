@@ -9,7 +9,7 @@ const locale = rawLocale === 'en' ? 'en' : 'sk'
 
 const copy = {
   sk: {
-    lead: 'Pošlite výkres alebo zavolajte priamo do výroby. Hovoríte s ľuďmi, ktorí diel vyrobia.',
+    lead: 'Pošlite výkres alebo nám rovno zavolajte. Hovoríte s ľuďmi, ktorí diel vyrobia.',
     peopleTitle: 'Ľudia',
     general: 'Všeobecné',
     hours: 'Pracovná doba',
@@ -19,7 +19,7 @@ const copy = {
     openMap: 'Otvoriť v Mapách Google',
   },
   en: {
-    lead: 'Send a drawing or call production directly. You speak with the people who make the part.',
+    lead: 'Send a drawing or call us directly. You speak with the people who make the part.',
     peopleTitle: 'People',
     general: 'General enquiries',
     hours: 'Office hours',
@@ -32,7 +32,7 @@ const copy = {
 
 const t = copy[locale]
 // One directory for every route, directly under the intake, so the people read as part of it.
-const people = [company.production, company.owner, company.director]
+const people = [company.owner, company.director]
 ---
 
 <section class="sheet-first">

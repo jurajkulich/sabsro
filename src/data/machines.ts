@@ -12,6 +12,10 @@
 
 export type MachineGroup = 'cnc' | 'manual' | 'saw'
 
+/** Size of the whole park as the client states it (2026-11-22). The site lists only a selection,
+ *  so park-size copy uses these figures, not the number of content entries. */
+export const parkSize = { cnc: 11, conventional: 10, total: 25 } as const
+
 /** The figures an engineer checks first, in the order the spec sheet lists them. */
 export const specLabels = {
   axes: { sk: 'Počet osí', en: 'Axes' },
@@ -21,6 +25,10 @@ export const specLabels = {
   table: { sk: 'Upínacia plocha stola', en: 'Table size' },
   tableLoad: { sk: 'Nosnosť stola', en: 'Table load' },
   swing: { sk: 'Obežný priemer nad lôžkom', en: 'Swing over bed' },
+  swingTable: { sk: 'Obežný priemer nad stolom', en: 'Swing over table' },
+  centres: { sk: 'Vzdialenosť hrotov', en: 'Distance between centres' },
+  grindDiameter: { sk: 'Max. vonkajší priemer brúsenia', en: 'Max. external grinding diameter' },
+  wheel: { sk: 'Brúsny kotúč', en: 'Grinding wheel' },
   turningLength: { sk: 'Dĺžka sústruženia', en: 'Turning length' },
   barCapacity: { sk: 'Priechod tyče', en: 'Bar capacity' },
   spindleBore: { sk: 'Vŕtanie vretena', en: 'Spindle bore' },
@@ -104,6 +112,21 @@ export const machineFacts: Record<
   // No usable figures found yet: stays "on request".
   sbx500: { group: 'cnc', maker: 'Trens', country: { sk: 'Slovensko', en: 'Slovakia' } },
   eastar300: { group: 'cnc', maker: 'Eastar' },
+  gu32x150nc: {
+    group: 'cnc',
+    maker: 'Palmary',
+    country: { sk: 'Taiwan', en: 'Taiwan' },
+    // catalog: official Palmary GU32x60NC/100NC/150NC/200NC spec table (palmary.com), 150NC column.
+    // The plate image is the manufacturer's GU32x100NC photo (same series, shorter bed).
+    specs: {
+      swingTable: 'Ø320 mm',
+      centres: '1500 mm',
+      grindDiameter: 'Ø300 mm',
+      partWeight: '150 kg',
+      wheel: 'Ø405 × 50 mm, 33 m/s',
+      control: 'NC',
+    },
+  },
   sn50: {
     group: 'manual',
     maker: 'Trens',

@@ -20,12 +20,12 @@ The marketing website of **Švehla a Blaško s.r.o.**, a Slovak family-owned CNC
 
 ## Positioning
 
-A real, owner-run manufacturing company, not a broker or a faceless platform. It has a history going back to 1990 (the current company was founded in 2012 as Švehla s.r.o.), about 20 staff, a ~600 m² production hall plus ~600 m² of warehouse, sawmill and storage, and a named machine park. Buyers deal directly with the owners and the production lead. Credibility comes from concrete facts: machines, people, certifications and the premises.
+A real, owner-run manufacturing company, not a broker or a faceless platform. It has a history going back to 1990 (the current company was founded in 2012 as Švehla s.r.o.), about 20 staff, a ~600 m² production hall plus ~600 m² of warehouse, sawmill and storage, and a named machine park. Buyers deal directly with the owners and the production lead. Credibility comes from concrete facts: machines, people and the premises.
 
 ## Operating Context
 
 - Buyers arrive with a drawing or a part need and judge the shop before making contact. The machine park is a key part of that judgement.
-- Contact is person-to-person. There is an owner phone line (Ing. Boris Blaško), a production contact (Ing. Juraj Nemček, vyroba@svehlasro.sk) and a general inbox (info@svehlasro.sk). Office hours are Mon–Fri 07:00–15:30.
+- Contact is person-to-person. The primary contact is Ing. Boris Blaško (owner; his phone is the site's main line, drawings go to info@svehlasro.sk). Ján Švehla (managing director, production) is reachable at vyroba@svehlasro.sk. Office hours are Mon–Fri 07:00–15:30.
 - Company IDs (IČO 47419181, DIČ SK2023864601) and the address (Kočovská 2583/22, 915 01 Nové Mesto nad Váhom) are part of B2B due diligence.
 
 ## Capabilities and Constraints
@@ -44,7 +44,7 @@ A real, owner-run manufacturing company, not a broker or a faceless platform. It
 
 ## Evidence on Hand
 
-- **Certifications:** the user confirmed the company holds ISO 9001:2015, ISO 14001:2015 and ISO 45001:2018. Certificate numbers, issuing bodies and validity dates are **still placeholders** (`src/components/certifications.astro`) and must not be invented.
+- **Certifications:** removed from the site at the owner's request. Do not reintroduce ISO or certificate claims.
 - **Confirmed claims (user, 2026-11-16):** the team is senior-led; lead times are short; every batch ships with an inspection/QC report. These may be stated as fact in both SK and EN. Specific numbers (days, tolerances) are still unconfirmed.
 - **Unverified figures:** the hero stats "0.01 mm tolerance" and "20-day batch lead time" are **not confirmed**. Do not present them as fact or build new claims on them until the user verifies them. "Established 1990" is supported by the About copy.
 - **Real imagery:** shop photos in `src/assets/carousel/`, machine photos in `src/assets/stroje/`, and shop footage `src/assets/hero.mp4`.
@@ -52,7 +52,7 @@ A real, owner-run manufacturing company, not a broker or a faceless platform. It
 
 ## Product Principles
 
-1. **Facts over adjectives.** Name the machine, the material, the person and the certificate. Unverified claims stay out.
+1. **Facts over adjectives.** Name the machine, the material and the person. Unverified claims stay out.
 2. **A real person is one step away.** Phone numbers and named contacts are always within easy reach.
 3. **Equal in both languages.** The EN site is a first-class experience for foreign buyers, not a translation afterthought.
-4. **Speak to both the engineer and the buyer.** Engineers need technical depth (capabilities, machines) and procurement needs due-diligence signals (certifications, company IDs, history).
+4. **Speak to both the engineer and the buyer.** Engineers need technical depth (capabilities, machines) and procurement needs due-diligence signals (company IDs, history).

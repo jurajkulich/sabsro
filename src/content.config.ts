@@ -51,6 +51,8 @@ const features = defineCollection({
         machines: z.string().optional(),
         // 'shop' = machining done in our own hall; 'around' = finishing through partners and delivery.
         group: z.enum(['shop', 'around']).default('shop'),
+        // Marks a newly added service; renders a "Novinka" / "New" stamp beside the name.
+        new: z.boolean().optional(),
       }),
     ),
   }),

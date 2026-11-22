@@ -21,7 +21,7 @@ const t = {
       { label: 'O nás', slug: 'about' },
       { label: 'Kontakt', slug: 'contact' },
     ],
-    call: 'Zavolať do výroby',
+    call: 'Zavolať',
   },
   en: {
     title: 'Page not found',
@@ -34,7 +34,7 @@ const t = {
       { label: 'About', slug: 'about' },
       { label: 'Contact', slug: 'contact' },
     ],
-    call: 'Call production',
+    call: 'Call us',
   },
 }[locale]
 
@@ -48,8 +48,8 @@ export const prerender = true
         <p class="display code num" aria-hidden="true">404</p>
         <h1 class="headline mt-6">{t.heading}</h1>
         <p class="lead mt-4">{t.body}</p>
-        <a href={telHref(company.production.phone)} class="btn btn-ink mt-8 num">
-          {t.call}: {company.production.phone}
+        <a href={telHref(company.owner.phone)} class="btn btn-ink mt-8 num">
+          {t.call}: {company.owner.phone}
           <Arrow />
         </a>
       </div>

@@ -2,7 +2,6 @@
 import { Image } from 'astro:assets'
 import plates from 'assets/carousel/carousel_3.jpg'
 import ContactPeople from './contactPeople.astro'
-import Certifications from './certifications.astro'
 import Arrow from './ui/arrow.astro'
 import SheetRule from './ui/sheetRule.astro'
 import { plateLabel } from '../data/machines'
@@ -14,13 +13,13 @@ const locale = rawLocale === 'en' ? 'en' : 'sk'
 // Figures come from the About copy below (PRODUCT.md › Positioning). Keep them in step with the hero.
 const copy = {
   sk: {
-    lead: 'Rodinná strojárska firma, približne 20 ľudí. CNC a klasické obrábanie kovov a plastov, prototypy a menšie série.',
+    lead: 'Rodinná strojárska firma, stabilných 20 ľudí. CNC a klasické obrábanie kovov a plastov, prototypy a menšie série.',
     registerTitle: 'Firma v číslach',
     register: [
       ['Obchodné meno', company.legalName],
       ['História od roku', '1990'],
       ['Založená', '2012 ako Švehla s.r.o.'],
-      ['Ľudia', 'približne 20'],
+      ['Ľudia', 'stabilných 20'],
       ['Výrobná hala', '600 m²'],
       ['Sklad materiálu a reziareň', '600 m²'],
       ['IČO', company.ids.ico],
@@ -32,13 +31,13 @@ const copy = {
     machines: 'Pozrieť strojový park',
   },
   en: {
-    lead: 'A family engineering company of about 20 people. CNC and conventional machining of metals and plastics, prototypes and small series.',
+    lead: 'A family engineering company with a stable team of 20 people. CNC and conventional machining of metals and plastics, prototypes and small series.',
     registerTitle: 'The company in figures',
     register: [
       ['Registered name', company.legalName],
       ['History since', '1990'],
       ['Founded', '2012 as Švehla s.r.o.'],
-      ['People', 'about 20'],
+      ['People', 'a stable 20'],
       ['Production hall', '600 m²'],
       ['Stock and cutting room', '600 m²'],
       ['Company ID (IČO)', company.ids.ico],
@@ -110,8 +109,7 @@ const rows = [
   </div>
 </section>
 
-<Certifications folio={3} />
-<ContactPeople folio={4} />
+<ContactPeople folio={3} />
 
 <style>
   .page-title {

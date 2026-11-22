@@ -62,7 +62,7 @@ const t =
     <div class="col-span-6 md:col-span-6 lg:col-span-2">
       <p class="label">{t.contact}</p>
       <ul class="foot-list">
-        <li><a class="num" href={telHref(company.production.phone)}>{company.production.phone}</a></li>
+        <li><a class="num" href={telHref(company.owner.phone)}>{company.owner.phone}</a></li>
         <li><a href={mailHref(company.email)}>{company.email}</a></li>
         <li>{company.hours[locale]}</li>
       </ul>
