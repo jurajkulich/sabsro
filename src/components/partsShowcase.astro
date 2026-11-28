@@ -1,9 +1,7 @@
 ---
 import { Image } from 'astro:assets'
 import Arrow from './ui/arrow.astro'
-import Intake from './ui/intake.astro'
 import SheetRule from './ui/sheetRule.astro'
-import { company } from '../data/company'
 import type { Part } from '../data/parts'
 
 type Item = Part & { full: { src: string }; views: { src: string; width: number }[]; ratio: number }
@@ -22,8 +20,6 @@ const copy = {
     close: 'Zavrieť',
     prev: 'Predchádzajúca fotografia',
     next: 'Ďalšia fotografia',
-    ctaTitle: 'Váš diel tu nie je?',
-    ctaBody: `Ukážky sú len výber. Pošlite výkres a ${company.owner.name} sa ozve s postupom.`,
   },
   en: {
     title: 'Examples of our work.',
@@ -36,8 +32,6 @@ const copy = {
     close: 'Close',
     prev: 'Previous photo',
     next: 'Next photo',
-    ctaTitle: 'Your part isn’t here?',
-    ctaBody: `These are only examples. Send the drawing and ${company.owner.name} will come back with a process.`,
   },
 }
 const t = copy[locale]
@@ -116,17 +110,6 @@ const t = copy[locale]
     </div>
   </div>
 </dialog>
-
-<section class="ask" aria-labelledby="ask-title">
-  <SheetRule folio={3} tone="white" />
-  <div class="frame grid-12 gap-y-8">
-    <div class="col-span-12 lg:col-span-6">
-      <h2 id="ask-title" class="display ask-title">{t.ctaTitle}</h2>
-      <p class="lead mt-6">{t.ctaBody}</p>
-    </div>
-    <Intake tone="red" note="brief" class="col-span-12 lg:col-span-5 lg:col-start-8 lg:self-end" />
-  </div>
-</section>
 
 <script>
   const dialog = document.querySelector<HTMLDialogElement>('.viewer')
@@ -516,25 +499,6 @@ const t = copy[locale]
       padding: 4px 0 5px;
       line-height: 1.35;
     }
-  }
-
-  .ask {
-    background: var(--color-red);
-    color: #fff;
-    padding-bottom: clamp(48px, 7vw, 104px);
-  }
-
-  .ask > :global(.sheet-rule) {
-    margin-bottom: clamp(36px, 6vw, 88px);
-  }
-
-  .ask-title {
-    font-size: var(--text-statement);
-    text-wrap: balance;
-  }
-
-  .ask :global(:focus-visible) {
-    outline-color: #fff;
   }
 
   @media (min-width: 1100px) {
