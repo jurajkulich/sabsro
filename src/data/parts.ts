@@ -11,7 +11,6 @@
 import type { ImageMetadata } from 'astro'
 import flangedHubs from '../assets/carousel/prirubove-naboje-cnc-sustruzenie.jpg'
 import flangedBodies from '../assets/carousel/telesa-s-prirubou-sustruzenie-vrtanie.jpg'
-import keyedBushings from '../assets/carousel/puzdra-s-drazkou-pre-pero.jpg'
 import groundShafts from '../assets/carousel/brusene-hriadele.jpg'
 import rails from '../assets/carousel/hlinikove-listy-cnc-frezovanie.jpg'
 import oneOffs from '../assets/carousel/diely-na-zakazku-sustruzenie-frezovanie.jpg'
@@ -54,13 +53,6 @@ export const parts: Part[] = [
     name: { sk: 'Telesá s prírubou a bočnými otvormi', en: 'Flanged bodies with cross holes' },
     material: { sk: 'Nehrdzavejúca oceľ', en: 'Stainless steel' },
     process: { sk: 'CNC sústruženie, vŕtanie a rezanie závitov', en: 'CNC turning, drilling and tapping' },
-    verified: false,
-  },
-  {
-    src: keyedBushings,
-    name: { sk: 'Puzdrá s drážkou pre pero', en: 'Bushings with keyways' },
-    material: { sk: 'Oceľ', en: 'Steel' },
-    process: { sk: 'Sústruženie, obrážanie drážky', en: 'Turning, keyway slotting' },
     verified: false,
   },
   {

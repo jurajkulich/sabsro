@@ -93,7 +93,7 @@ const pageTitle = machs.data.title.replace('{count}', String(parkSize.total))
                   <span class="idx-no num">{pad(n)}</span>
                   <span class="idx-name">{item.data.name}</span>
                   <span class="idx-type">{type}</span>
-                  <span class="idx-maker">{facts.maker ?? '—'}</span>
+                  <span class="idx-maker">{facts.maker ?? ''}</span>
                   <Arrow class="idx-arrow" dir="down" />
                 </summary>
                 <MachineSpec item={item} slug={slug} locale={locale} />
