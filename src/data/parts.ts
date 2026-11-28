@@ -5,26 +5,25 @@
 // owners. They are pending the owners' check; flip `verified` to true per entry once confirmed or corrected.
 // The part names of the four older photos (12–15, formerly carousel_1/2/4/5) were client-confirmed on 2026-11-16.
 //
-// File names are descriptive on purpose: Astro keeps the base name in the built image URL, which
-// image search reads alongside the alt text and caption. The NN- prefix is the part's number on /parts
-// (its place in this array): reorder the array and rename the files with it.
+// Each photo file is named by the part's number on /parts (its place in this array, 01.jpg, 02.jpg, …):
+// reorder the array and rename the files with it.
 
 import type { ImageMetadata } from 'astro'
-import flangedHubs from '../assets/carousel/01-prirubove-naboje-cnc-sustruzenie.jpg'
-import flangedBodies from '../assets/carousel/02-telesa-s-prirubou-sustruzenie-vrtanie.jpg'
-import groundShafts from '../assets/carousel/03-brusene-hriadele.jpg'
-import rails from '../assets/carousel/04-hlinikove-listy-cnc-frezovanie.jpg'
-import oneOffs from '../assets/carousel/05-diely-na-zakazku-sustruzenie-frezovanie.jpg'
-import plastics from '../assets/carousel/06-diely-z-technickych-plastov.jpg'
-import sprockets from '../assets/carousel/07-retazove-kolesa.jpg'
-import pulleys from '../assets/carousel/08-remenice-a-ozubene-koleso.jpg'
-import pinSleeves from '../assets/carousel/09-cap-puzdra-a-podlozka-cierne.jpg'
-import collar from '../assets/carousel/10-delena-upinacia-objimka.jpg'
-import hub from '../assets/carousel/11-naboj-s-drazkou-pre-pero.jpg'
-import shaftsOld from '../assets/carousel/12-sustruzene-a-frezovane-hriadele.jpg'
-import sprocketsOld from '../assets/carousel/13-retazove-kolesa-s-drazkou-pre-pero.jpg'
-import ringOld from '../assets/carousel/14-drazkovany-prstenec-hlinik.jpg'
-import bushingsOld from '../assets/carousel/15-sustruzene-puzdra-nerez.jpg'
+import flangedHubs from '../assets/carousel/01.jpg'
+import flangedBodies from '../assets/carousel/02.jpg'
+import groundShafts from '../assets/carousel/03.jpg'
+import rails from '../assets/carousel/04.jpg'
+import oneOffs from '../assets/carousel/05.jpg'
+import plastics from '../assets/carousel/06.jpg'
+import sprockets from '../assets/carousel/07.jpg'
+import pulleys from '../assets/carousel/08.jpg'
+import pinSleeves from '../assets/carousel/09.jpg'
+import collar from '../assets/carousel/10.jpg'
+import hub from '../assets/carousel/11.jpg'
+import shaftsOld from '../assets/carousel/12.jpg'
+import sprocketsOld from '../assets/carousel/13.jpg'
+import ringOld from '../assets/carousel/14.jpg'
+import bushingsOld from '../assets/carousel/15.jpg'
 
 type Localized = { sk: string; en: string }
 
