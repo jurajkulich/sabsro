@@ -19,7 +19,10 @@ const locale = getLocale(Astro.url)
 const siteName = 'Švehla a Blaško'
 const siteURL = Astro.site ?? new URL(Astro.url.origin)
 const ogLocale = locale === 'sk' ? 'sk_SK' : 'en_US'
-const ogImageAlt = locale === 'sk' ? `${siteName}, strojárska dielňa` : `${siteName} machining workshop`
+const ogImageAlt =
+  locale === 'sk'
+    ? `${siteName}: Váš výkres. Náš diel. CNC frézovanie a sústruženie.`
+    : `${siteName}: Your drawing. Our part. CNC milling and turning.`
 const localeAlternate = locale === 'sk' ? ['en_US'] : ['sk_SK']
 const basePath = import.meta.env.BASE_URL.replace(/\/$/, '')
 const defaultLocale = 'sk'
@@ -58,7 +61,7 @@ const defaultDescription =
 const {
   title = '',
   description = defaultDescription,
-  image = '/opengraph.jpg',
+  image = locale === 'en' ? '/share-en.jpg' : '/share-sk.jpg',
   noindex = false,
   type = 'website',
   schema,
