@@ -33,6 +33,7 @@ export default defineConfig({
     "/sk/about": `${basePrefix}/about`,
     "/sk/contact": `${basePrefix}/contact`,
     "/sk/machines": `${basePrefix}/machines`,
+    "/sk/parts": `${basePrefix}/parts`,
   },
 
   trailingSlash: "never",

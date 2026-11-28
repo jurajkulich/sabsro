@@ -2,6 +2,7 @@
 import Layout from '@layouts/Layout.astro'
 import { getLocale } from 'astro-i18n-aut'
 import Arrow from '@components/ui/arrow.astro'
+import SheetRule from '@components/ui/sheetRule.astro'
 import { company, telHref, localizedPath } from '../data/company'
 
 export function getStaticPaths() {
@@ -18,6 +19,7 @@ const t = {
     links: [
       { label: 'Domov', slug: '' },
       { label: 'Stroje', slug: 'machines' },
+      { label: 'Ukážky', slug: 'parts' },
       { label: 'O nás', slug: 'about' },
       { label: 'Kontakt', slug: 'contact' },
     ],
@@ -31,6 +33,7 @@ const t = {
     links: [
       { label: 'Home', slug: '' },
       { label: 'Machines', slug: 'machines' },
+      { label: 'Our work', slug: 'parts' },
       { label: 'About', slug: 'about' },
       { label: 'Contact', slug: 'contact' },
     ],
@@ -42,7 +45,8 @@ export const prerender = true
 ---
 
 <Layout title={t.title} description={t.description} noindex={true}>
-  <section class="py-[clamp(48px,8vw,120px)]">
+  <section class="sheet-first">
+    <SheetRule />
     <div class="frame grid-12 gap-y-10">
       <div class="col-span-12 lg:col-span-7">
         <p class="display code num" aria-hidden="true">404</p>

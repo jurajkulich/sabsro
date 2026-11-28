@@ -159,10 +159,13 @@ const pageTitle = machs.data.title.replace('{count}', String(parkSize.total))
     font-size: var(--text-page-title);
   }
 
+  /* Each button draws its own right and bottom hairline, so the group stays a closed table
+     whether it sits on one row or folds into two. */
   .filters {
-    display: inline-flex;
-    flex-wrap: wrap;
-    border: var(--hair);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-top: var(--hair);
+    border-left: var(--hair);
   }
 
   .filters[hidden] {
@@ -178,10 +181,16 @@ const pageTitle = machs.data.title.replace('{count}', String(parkSize.total))
     font-weight: 700;
     color: var(--color-ink);
     background: #fff;
+    border-right: var(--hair);
+    border-bottom: var(--hair);
   }
 
-  .filters button + button {
-    border-left: var(--hair);
+  @media (min-width: 600px) {
+    .filters {
+      display: inline-grid;
+      grid-template-columns: none;
+      grid-auto-flow: column;
+    }
   }
 
   .filters button .num {
@@ -274,6 +283,8 @@ const pageTitle = machs.data.title.replace('{count}', String(parkSize.total))
     font-weight: 750;
     font-stretch: 112%;
     letter-spacing: -0.01em;
+    line-height: 1.1;
+    text-wrap: balance;
   }
 
   .idx-type {

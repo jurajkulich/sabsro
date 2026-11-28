@@ -14,7 +14,7 @@ features:
   - title: "CNC sústruženie"
     description: "CNC sústruhy Trens SBL 300, SE 520 a **SBX 500** s aktívnymi, radiálnymi a axiálnymi nástrojmi."
     machines: "05–07"
-  - title: "CNC Drážkovanie (obrážanie)"
+  - title: "CNC drážkovanie (obrážanie)"
     description: "Priebežné drážky do oceli, nereze, hliníku, zliatin medi a technických plastov. Možnosť horizontálneho obrábania pri dlhších kusoch."
     machines: "08"
   - title: "Konvenčné sústruženie"
