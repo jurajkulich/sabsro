@@ -20,7 +20,7 @@ The marketing website of **Švehla a Blaško s.r.o.**, a Slovak family-owned CNC
 
 ## Positioning
 
-A real, owner-run manufacturing company, not a broker or a faceless platform. It has a history going back to 1990 (the current company was founded in 2012 as Švehla s.r.o.), about 20 staff, a ~600 m² production hall plus ~600 m² of warehouse, sawmill and storage, and a named machine park. Buyers deal directly with the owners and the production lead. Credibility comes from concrete facts: machines, people and the premises.
+A real, owner-run manufacturing company, not a broker or a faceless platform. It has a history going back to 1990 (the current company was founded in 2012 as Švehla s.r.o.), about 20 staff, about 600 m² in total for the production hall, warehouse, cutting room and storage, and a named machine park. Buyers deal directly with the owners and the production lead. Credibility comes from concrete facts: machines, people and the premises.
 
 ## Operating Context
 
