@@ -2,7 +2,7 @@
 version: 1
 slug: "src-pages-index-astro"
 primary_target: "src/pages/index.astro"
-related_targets: ["src/pages/machines.astro","src/pages/about.astro","src/pages/contact.astro","src/pages/404.astro"]
+related_targets: ["src/pages/machines.astro","src/pages/parts.astro","src/pages/about.astro","src/pages/contact.astro","src/pages/404.astro"]
 ---
 
 # Surface brief: site (home, machines, about, contact, 404)

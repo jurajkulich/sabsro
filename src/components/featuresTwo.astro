@@ -5,10 +5,8 @@ import { getLocale } from 'astro-i18n-aut'
 import SheetRule from './ui/sheetRule.astro'
 import { localizedPath } from '../data/company'
 import { firstSlugOf } from '../data/machines'
-import shafts from 'assets/carousel/carousel_1.jpg'
-import sprockets from 'assets/carousel/carousel_2.jpg'
-import ring from 'assets/carousel/carousel_4.jpg'
-import bushings from 'assets/carousel/carousel_5.jpg'
+import Arrow from './ui/arrow.astro'
+import { parts as partsRegister } from '../data/parts'
 
 const locale = getLocale(Astro.url) === 'en' ? 'en' : 'sk'
 const features = await getEntry('features', locale + '/features')
@@ -33,12 +31,7 @@ const copy = {
     machinesLabel: 'Machines',
     newLabel: 'New',
     partsTitle: 'Parts from our shop',
-    parts: [
-      { src: shafts, caption: 'Turned and milled shafts' },
-      { src: sprockets, caption: 'Sprockets with keyways' },
-      { src: ring, caption: 'Slotted ring' },
-      { src: bushings, caption: 'Turned bushings, small series' },
-    ],
+    allParts: 'More examples',
   },
   sk: {
     deliverables:
@@ -58,17 +51,14 @@ const copy = {
     machinesLabel: 'Stroje',
     newLabel: 'Novinka',
     partsTitle: 'Diely z našej dielne',
-    parts: [
-      { src: shafts, caption: 'Sústružené a frézované hriadele' },
-      { src: sprockets, caption: 'Reťazové kolesá s drážkou pre pero' },
-      { src: ring, caption: 'Drážkovaný prstenec' },
-      { src: bushings, caption: 'Sústružené puzdrá, malá séria' },
-    ],
+    allParts: 'Ďalšie ukážky',
   },
 }
 
 const t = copy[locale]
 const machinesPath = localizedPath(locale, 'machines')
+// The home page shows the first four examples; the rest live on /parts.
+const homeParts = partsRegister.slice(0, 4).map((part) => ({ src: part.src, caption: part.name[locale] }))
 
 // Descriptions may mark a phrase with **double asterisks**; odd parts after the split render bold.
 const emphasis = (text: string) => text.split(/\*\*(.+?)\*\*/)
@@ -146,19 +136,25 @@ const groups = (['shop', 'around'] as const)
       ))}
     </dl>
 
-    <h3 class="label parts-title">{t.partsTitle}</h3>
+    <div class="parts-head">
+      <h3 class="label">{t.partsTitle}</h3>
+      <a href={localizedPath(locale, 'parts')} class="parts-all link">
+        {t.allParts}
+        <Arrow />
+      </a>
+    </div>
     <ul class="parts">
-      {t.parts.map((part, i) => (
+      {homeParts.map((part, i) => (
         <li>
           <figure class="m-0">
             <Image
               src={part.src}
               alt={part.caption}
               width={640}
-              height={480}
+              height={800}
               fit="cover"
               loading="lazy"
-              class="plate aspect-4/3 w-full object-cover"
+              class="plate aspect-4/5 w-full object-cover"
             />
             <figcaption>
               {part.caption}
@@ -326,8 +322,29 @@ const groups = (['shop', 'around'] as const)
     margin: 0;
   }
 
-  .parts-title {
+  .parts-head {
     margin-top: clamp(40px, 5vw, 64px);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--gutter);
+  }
+
+  .parts-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    font-weight: 700;
+  }
+
+  .parts-all :global(svg) {
+    align-self: center;
+    transition: transform 160ms ease-out;
+  }
+
+  .parts-all:hover :global(svg) {
+    transform: translateX(3px);
   }
 
   .parts {

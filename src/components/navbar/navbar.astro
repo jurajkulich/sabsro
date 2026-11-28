@@ -7,13 +7,14 @@ import { company, telHref, localizedPath } from '../../data/company'
 const locale = getLocale(Astro.url) === 'en' ? 'en' : 'sk'
 
 const titles = {
-  en: { home: 'Home', machines: 'Machines', about: 'About', contact: 'Contact', call: 'Call production', menu: 'Menu', nav: 'Main' },
-  sk: { home: 'Domov', machines: 'Stroje', about: 'O nás', contact: 'Kontakt', call: 'Zavolať do výroby', menu: 'Menu', nav: 'Hlavná' },
+  en: { home: 'Home', machines: 'Machines', parts: 'Our work', about: 'About', contact: 'Contact', call: 'Call production', menu: 'Menu', nav: 'Main' },
+  sk: { home: 'Domov', machines: 'Stroje', parts: 'Ukážky', about: 'O nás', contact: 'Kontakt', call: 'Zavolať do výroby', menu: 'Menu', nav: 'Hlavná' },
 }[locale]
 
 const items = [
   { title: titles.home, path: localizedPath(locale) },
   { title: titles.machines, path: localizedPath(locale, 'machines') },
+  { title: titles.parts, path: localizedPath(locale, 'parts') },
   { title: titles.about, path: localizedPath(locale, 'about') },
   { title: titles.contact, path: localizedPath(locale, 'contact') },
 ]

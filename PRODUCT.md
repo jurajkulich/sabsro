@@ -47,6 +47,7 @@ A real, owner-run manufacturing company, not a broker or a faceless platform. It
 - **Certifications:** removed from the site at the owner's request. Do not reintroduce ISO or certificate claims.
 - **Confirmed claims (user, 2026-11-16):** the team is senior-led; lead times are short; every batch ships with an inspection/QC report. These may be stated as fact in both SK and EN. Specific numbers (days, tolerances) are still unconfirmed.
 - **Unverified figures:** the hero stats "0.01 mm tolerance" and "20-day batch lead time" are **not confirmed**. Do not present them as fact or build new claims on them until the user verifies them. "Established 1990" is supported by the About copy.
+- **Examples of work (2026-11-28):** `/parts` shows example part photos (a showcase, not a catalogue) with material and process per entry. Those materials and processes were drafted from the photos and are **pending the owners' check** (`verified: false` in `src/data/parts.ts`); correct them there, do not build further claims on them until verified.
 - **Real imagery:** shop photos in `src/assets/carousel/`, machine photos in `src/assets/stroje/`, and shop footage `src/assets/hero.mp4`.
 - **Absent:** customer names, testimonials, case studies and pricing. Do not fabricate any of them.
 

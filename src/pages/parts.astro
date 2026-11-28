@@ -1,0 +1,64 @@
+---
+import Layout from '@layouts/Layout.astro'
+import { getImage } from 'astro:assets'
+import { getLocale } from 'astro-i18n-aut'
+import PartsShowcase from '@components/partsShowcase.astro'
+import { parts } from '../data/parts'
+
+export function getStaticPaths() {
+  return [{ params: { lang: 'en' } }, { params: { lang: 'sk' } }]
+}
+
+export const prerender = true
+
+const locale = getLocale(Astro.url) === 'en' ? 'en' : 'sk'
+const meta = {
+  sk: {
+    title: 'Ukážky výroby',
+    description:
+      'Príklady dielov z našej dielne v Novom Meste nad Váhom. Vyrábame podľa výkresu: CNC sústruženie, frézovanie, brúsenie a obrážanie drážok v oceli, nereze, hliníku a technických plastoch.',
+  },
+  en: {
+    title: 'Examples of our work',
+    description:
+      'Examples of parts machined in our shop in Nové Mesto nad Váhom, Slovakia. We work to your drawing: CNC turning, milling, grinding and keyway slotting in steel, stainless steel, aluminium and technical plastics.',
+  },
+}[locale]
+
+// A larger, uncropped rendering of each photo: the plate links to it, and the structured data points at it.
+// The viewer also gets smaller renderings and picks the smallest that covers its stage, so a phone never
+// pulls the 1800px file (up to 1MB) just to draw it 360 CSS pixels wide.
+const VIEWER_WIDTHS = [800, 1200]
+const items = await Promise.all(
+  parts.map(async (part) => {
+    const fullWidth = Math.min(part.src.width, 1800)
+    const full = await getImage({ src: part.src, width: fullWidth, format: 'webp' })
+    const smaller = await Promise.all(
+      VIEWER_WIDTHS.filter((w) => w < fullWidth).map((w) => getImage({ src: part.src, width: w, format: 'webp' })),
+    )
+    const views = [...smaller, full].map((img) => ({ src: img.src, width: Number(img.attributes.width) }))
+    const ratio = Number(full.attributes.width) / Number(full.attributes.height)
+    return { ...part, full, views, ratio }
+  }),
+)
+
+const siteURL = Astro.site ?? new URL(Astro.url.origin)
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: meta.title,
+  description: meta.description,
+  inLanguage: locale,
+  url: new URL(Astro.url.pathname, siteURL).toString(),
+  hasPart: items.map((item) => ({
+    '@type': 'ImageObject',
+    contentUrl: new URL(item.full.src, siteURL).toString(),
+    name: item.name[locale],
+    caption: `${item.name[locale]}. ${item.material[locale]}. ${item.process[locale]}.`,
+  })),
+}
+---
+
+<Layout title={meta.title} description={meta.description} schema={schema}>
+  <PartsShowcase locale={locale} items={items} />
+</Layout>

@@ -1,0 +1,5 @@
+
+
+
+
+Video: zmenit alebo vymazat

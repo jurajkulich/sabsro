@@ -102,7 +102,17 @@ const rows = [
     </div>
 
     <figure class="col-span-12 m-0 sm:col-span-8 lg:col-span-4 lg:col-start-9 about-figure">
-      <Image src={plates} alt={t.caption} width={900} height={1125} fit="cover" loading="eager" class="plate about-photo" />
+      <Image
+        src={plates}
+        alt={t.caption}
+        width={900}
+        height={1125}
+        fit="cover"
+        widths={[480, 720, 900]}
+        sizes="(min-width: 1440px) 460px, (min-width: 1024px) 32vw, (min-width: 640px) 64vw, 92vw"
+        loading="lazy"
+        class="plate about-photo"
+      />
       <figcaption class="mt-3 text-small text-mid">{t.caption}</figcaption>
     </figure>
   </div>
