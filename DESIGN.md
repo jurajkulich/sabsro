@@ -162,7 +162,7 @@ Don't:
 - Don't use shadows, blur, glass, rounded corners or cards.
 - Don't set a small uppercase label above a heading; folios belong on the rule, and labels key registers or name sub-lists.
 - Don't introduce a second typeface or a system display face; width and weight of Archivo carry the hierarchy.
-- Don't filter, tint, duotone or desaturate photographs, and don't add plate numbers ("FOTO 01") back to captions.
+- Don't filter, tint, duotone or desaturate photographs, and don't add "FOTO 01" plate labels back to captions; the parts register carries bare ink running numbers, set like the machine index.
 - Don't add icon glyphs beyond the drawn 2px arrow, the phone stroke and the play/pause stroke.
 Do:
 - Do let logo red own an entire grid region or mark an action, at full strength only.

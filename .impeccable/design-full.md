@@ -155,7 +155,7 @@ Density is that of a reference document, not a brochure. Facts are set in regist
 - Sheets open on a 2px ink rule with the visible 12-column tick line and a folio ("List 02" / "Sheet 02") on the rule at the right.
 - One family, Archivo Variable, with the wide cut for display and tabular figures for every number.
 - Registers, indexes and numbered operations instead of cards.
-- Natural-colour photography with plain captions (no plate numbers).
+- Natural-colour photography with plain captions (no "FOTO 01" labels; parts carry bare running numbers).
 - One load motion (the tick-line wipe across the headline field), one looping hero plate (the drilling drawing, see Plates), one scroll procession (the stepped red track over the operations; that sheet is currently hidden on the home page) and one page turn (between pages the header holds, the red current bar travels to the new nav item and the next sheet wipes in from the left).
 
 ## Colors
@@ -163,7 +163,7 @@ Density is that of a reference document, not a brochure. Facts are set in regist
 Ink on white with one red; the red is the logo's own and is used at full strength or not at all.
 
 ### Primary
-- **Logo Red** (logo-red): owns whole fields only where a page closes (the people band, the machine request band), the hero's facts module, and the mobile and desktop phone block and marks action (intake-cell hover, ink-button hover, nav current/hover underline, link hover underline, focus ring, text selection). Numbering (nav numbers, machine index numbers, service numbers, operation numbers) is set in ink, so red on a white sheet always means "you can act here". On red, all type and rules are white.
+- **Logo Red** (logo-red): owns whole fields only where a page closes (the people band, the machine request band), the hero's facts module, and the mobile and desktop phone block and marks action (intake-cell hover, ink-button hover, nav current/hover underline, link hover underline, focus ring, text selection). Numbering (nav numbers, machine index numbers, parts register numbers, service numbers, operation numbers) is set in ink, so red on a white sheet always means "you can act here". On red, all type and rules are white.
 
 ### Neutral
 - **Ink** (ink): all text, the 2px sheet rules and 1px hairlines, the primary ink action cell and ink button, active segment in filters and language picker, the photo caption bar.
@@ -256,7 +256,7 @@ The process as numbered operations 010, 020, 030, 040 in ink tabular figures, fo
 The head of every sheet: twelve column ticks hanging from the rule and the folio ("List NN" in Slovak, "Sheet NN" in English) set on the rule at the right. Has a white tone for red fields.
 
 ### Plates
-Photographs are shown in their natural colour, untreated (black-and-white was dropped at the client's request on 2026-11-21), and given a plain caption. Plate numbers ("FOTO 01") were dropped on 2026-11-22 because they read as placeholders. Captions sit on an ink bar under the hero plate and in mid grey under part photos.
+Photographs are shown in their natural colour, untreated (black-and-white was dropped at the client's request on 2026-11-21), and given a plain caption. Plate labels ("FOTO 01") were dropped on 2026-11-22 because they read as placeholders; on 2026-11-28 the parts register took bare running numbers in ink (01, 02…), set like the machine index, before each part name and in the photo viewer. Captions sit on an ink bar under the hero plate and in mid grey under part photos.
 
 The hero plate is not a photograph but a technical drawing (`src/components/drillPlate.astro`, timeline in `src/data/drillCycle.ts`): a section view, white 2px edges and 1px hatching and dash-dot centre lines on ink, of a G83 peck-drilling cycle putting four Ø8.5 holes into a part clamped in a vise. Above it sits the control readout, a register of X, Z, S and F in tabular figures with the current NC block under it (the block and the drawing annotation drop below a 480px plate). The spindle rises behind the readout. When the row is finished, a fresh part wipes in from the left (the site's wipe grammar) and the program runs again, about 23s per loop. It is drawn with no red. It plays at every width when motion is allowed, and it stops offscreen and in hidden tabs. The server renders a still frame (the second peck of hole 2) from the same timeline, and that frame is what reduced motion and no-JS show. A 44px ink square with the play/pause stroke icon sits at the right end of the ink bar under the plate and always lets the visitor start or stop it.
 
@@ -273,7 +273,7 @@ Full-width red fields that close a page with people or a request: white sheet ru
 - **Do** open every sheet with the 2px ink rule, the twelve-tick line and a folio on the rule at the right.
 - **Do** build content as registers, indexes and numbered sequences separated by 2px rules and 1px hairlines.
 - **Do** set every number in tabular figures and number things the way a manual does (01, 010).
-- **Do** show photography in natural colour with a plain caption, no plate number.
+- **Do** show photography in natural colour with a plain caption, no "FOTO 01" label.
 - **Do** keep motion to the tick-line wipe on load, the stepped procession track, the spec-sheet deploy, the page turn between pages (CSS cross-document view transition, 440ms wipe, 380ms bar travel) and short linear state changes; under reduced motion all of it stops (the hero drawing holds its still frame, the track shows complete and pages swap instantly).
 
 ### Don't:
@@ -281,7 +281,7 @@ Full-width red fields that close a page with people or a request: white sheet ru
 - **Don't** use shadows, blur, glass, rounded corners or cards.
 - **Don't** set a small uppercase label above a heading; folios belong on the rule, and labels key registers or name sub-lists.
 - **Don't** introduce a second typeface or a system display face; width and weight of Archivo carry the hierarchy.
-- **Don't** filter, tint, duotone or desaturate photographs, and don't add plate numbers ("FOTO 01") back to captions.
+- **Don't** filter, tint, duotone or desaturate photographs, and don't add "FOTO 01" plate labels back to captions; the parts register carries bare ink running numbers, set like the machine index.
 - **Don't** add icon glyphs beyond the drawn 2px arrow, the phone stroke and the play/pause stroke.
 
 ### Open items
