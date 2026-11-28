@@ -164,7 +164,7 @@
       {
         "name": "drill-cycle",
         "value": "JS timeline from src/data/drillCycle.ts, about 23s per loop; new part wipes in from the left between loops; pauses offscreen and in hidden tabs",
-        "purpose": "The looping hero plate: G83 peck-drilling section drawing with the X/Z/S/F readout. No red. Play/pause control on the caption bar."
+        "purpose": "The looping hero plate: G83 peck-drilling section drawing with the X/Z/S/F readout. No red. Play/pause control on the ink bar under the plate, no caption text."
       },
       {
         "name": "state-linear",
@@ -307,7 +307,7 @@
       "kind": "custom",
       "refersTo": "drill-plate",
       "description": "Ink caption bar under the hero drawing plate: plain caption left, 44px play/pause square right (hover red, white focus ring inset).",
-      "html": "<figcaption class=\"ds-cap\"><span>G83 cycle: peck drilling, four holes Ø8.5.</span><button class=\"ds-toggle\" aria-label=\"Pause animation\"><svg viewBox=\"0 0 20 20\" width=\"20\" height=\"20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"square\" aria-hidden=\"true\"><path d=\"M7 4v12M13 4v12\"/></svg></button></figcaption>",
+      "html": "<figcaption class=\"ds-cap\"><button class=\"ds-toggle\" aria-label=\"Pause animation\"><svg viewBox=\"0 0 20 20\" width=\"20\" height=\"20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"square\" aria-hidden=\"true\"><path d=\"M7 4v12M13 4v12\"/></svg></button></figcaption>",
       "css": ":host{--color-red:#e30016;--color-ink:#1b1918;--color-paper:#fff;--color-stone:#d9d6d0;--color-mid:#5f5a55;--gutter:clamp(16px,2.2vw,32px);--font:'Archivo Variable',ui-sans-serif,system-ui,sans-serif}.ds-cap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-left:24px;background:#1b1918;color:#fff;font-family:'Archivo Variable',ui-sans-serif,system-ui,sans-serif;font-size:.875rem;font-weight:600}.ds-toggle{flex:none;display:grid;place-items:center;width:44px;height:44px;color:#fff;background:#1b1918;border:0;border-left:1px solid #fff;border-radius:0;transition:background-color 120ms linear}.ds-toggle:hover{background:#e30016}.ds-toggle:focus-visible{outline:3px solid #fff;outline-offset:-4px}"
     },
     {

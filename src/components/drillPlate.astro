@@ -29,14 +29,12 @@ const locale = getLocale(Astro.url) === 'en' ? 'en' : 'sk'
 
 const copy = {
   en: {
-    caption: 'G83 cycle: peck drilling, four holes Ø8.5.',
     label: 'Animated drawing: a CNC spindle peck-drills four holes into a workpiece clamped in a vise.',
     callout: '4× Ø8.5',
     play: 'Play animation',
     pause: 'Pause animation',
   },
   sk: {
-    caption: 'Cyklus G83: vŕtanie s odvodom triesky, štyri otvory Ø8,5.',
     label: 'Animovaný výkres: vreteno CNC stroja vŕta štyri otvory do obrobku upnutého vo zveráku.',
     callout: '4× Ø8,5',
     play: 'Spustiť animáciu',
@@ -160,15 +158,14 @@ const CHIPS = 18
       </g>
     </svg>
   </div>
-  <figcaption>
-    <span>{t.caption}</span>
+  <div class="plate-bar">
     <button type="button" class="plate-toggle" aria-label={t.play} data-play={t.play} data-pause={t.pause}>
       <svg viewBox="0 0 20 20" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" aria-hidden="true">
         <path class="i-play" d="M6 4.5v11l9-5.5z"></path>
         <path class="i-pause" d="M7 4.5v11M13 4.5v11"></path>
       </svg>
     </button>
-  </figcaption>
+  </div>
 </figure>
 
 <script>
@@ -427,16 +424,10 @@ const CHIPS = 18
     stroke-dasharray: 14 3 2 3;
   }
 
-  .plate figcaption {
+  .plate-bar {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 0 0 0 var(--plate-pad-l, var(--gutter));
+    justify-content: flex-end;
     background: var(--color-ink);
-    color: #fff;
-    font-size: var(--text-small);
-    font-weight: 600;
   }
 
   .plate-toggle {
